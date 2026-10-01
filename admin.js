@@ -427,7 +427,7 @@ async function mediaTab(body) {
 
 function mediaSlotsEditor(form) {
   if (!work || Array.isArray(work) || typeof work !== "object") work = {};
-  const NAMES = { "hero-situation-room": "דף הבית – רקע עליון", "clients-world-map": "דף הבית – מפת לקוחות", "stage-a-assessment": "מתודולוגיה – שלב א׳", "stage-b-integration": "מתודולוגיה – שלב ב׳", "stage-c-readiness": "מתודולוגיה – שלב ג׳", "post-grid-attack": "פוסט – מתקפה על רשת החשמל", "bg-about": "רקע כותרת – אודות", "bg-projects": "רקע כותרת – פרויקטים", "bg-updates": "רקע כותרת – עדכונים", "bg-contact": "רקע כותרת – צור קשר", "project-mci": "פרויקט אר״ן בבית חולים" };
+  const NAMES = { "hero-situation-room": "דף הבית – רקע עליון", "clients-world-map": "דף הבית – מפת לקוחות", "stage-a-assessment": "מתודולוגיה – שלב א׳", "stage-b-integration": "מתודולוגיה – שלב ב׳", "stage-c-readiness": "מתודולוגיה – שלב ג׳", "post-grid-attack": "פוסט – מתקפה על רשת החשמל", "bg-about": "רקע כותרת – אודות", "bg-projects": "רקע כותרת – פרויקטים", "bg-updates": "רקע כותרת – עדכונים", "bg-contact": "רקע כותרת – צור קשר", "bg-civil-defense": "רקע כותרת – אתגרי הגנה אזרחית לאומית", "project-mci": "פרויקט אר״ן בבית חולים" };
   const names = [...new Set([...(STATIC.videos || []), ...Object.keys(work)])];
   form.append(h("p", { class: "help" }, "לכל מקום אפשר להעלות סרטון MP4 שקט (עד 10 שניות, עד 1280 פיקסלים) ותמונת פתיחה. אם לא מעלים, נשאר הקובץ המקורי."));
   names.forEach(n => {

@@ -405,4 +405,4 @@ S.covers = {
 })();
 
 /* Videos present in images/ (name.mp4 + name.jpg poster). A slot only renders when its name is listed here. */
-window.SITE.videos = ["hero-situation-room", "stage-a-assessment", "stage-b-integration", "stage-c-readiness", "post-grid-attack", "clients-world-map", "project-mci", "bg-contact", "bg-updates", "bg-projects", "bg-about", "threat-earthquake", "threat-tsunami", "threat-air", "threat-cyber", "threat-hazmat", "threat-wildfire", "threat-flood", "threat-collapse", "topic-shelters", "topic-training", "topic-infrastructure", "topic-drp", "topic-mci", "topic-population", "topic-civil-defense"];
+window.SITE.videos = ["hero-situation-room", "bg-civil-defense", "stage-a-assessment", "stage-b-integration", "stage-c-readiness", "post-grid-attack", "clients-world-map", "project-mci", "bg-contact", "bg-updates", "bg-projects", "bg-about", "threat-earthquake", "threat-tsunami", "threat-air", "threat-cyber", "threat-hazmat", "threat-wildfire", "threat-flood", "threat-collapse", "topic-shelters", "topic-training", "topic-infrastructure", "topic-drp", "topic-mci", "topic-population", "topic-civil-defense"];
