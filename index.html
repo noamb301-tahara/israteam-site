@@ -237,6 +237,15 @@ a.row:hover h3{color:var(--teal)}
 .logos div::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--signal);flex-shrink:0;transform:translateY(-2px)}
 @media (max-width:860px){.logos{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:520px){.logos{grid-template-columns:1fr}}
+.clogo{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:4px;flex-shrink:0;overflow:hidden}
+.clogo img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block}
+.clientlist .cn{display:flex;align-items:center;gap:12px}
+.clientlist .clogo{width:52px;height:34px;padding:3px}
+.row .clogo{width:120px;height:76px;padding:8px;border:1px solid var(--line)}
+.logos div{align-items:center}
+.logos div.has::before{display:none}
+.logos .clogo{width:88px;height:58px;padding:5px;border:1px solid var(--line)}
+.aside .clogo{display:flex;width:100%;height:130px;padding:18px;border:1px solid var(--line);margin-bottom:20px}
 
 .team{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .person{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;text-decoration:none}
@@ -613,6 +622,9 @@ const hasV=n=>VIDS.has(n)||!!MS(n).video;
 const TOPIC_VIDS={"national-civil-defense":"topic-civil-defense",population:"topic-population","mass-casualty":"topic-mci",infrastructure:"topic-infrastructure",drp:"topic-drp",training:"topic-training",shelters:"topic-shelters"};
 const PAGE_BG={about:"bg-about",projects:"bg-projects",updates:"bg-updates",contact:"bg-contact","project-mci-hospital":"project-mci"};
 const THREATS=[["threat-earthquake","Earthquake","רעידת אדמה"],["threat-collapse","Building collapse","קריסת מבנה"],["threat-flood","Flooding","הצפה"],["threat-wildfire","Wildfire","שריפת ענק"],["threat-hazmat","Hazardous materials","חומרים מסוכנים"],["threat-cyber","Cyber attack","מתקפת סייבר"],["threat-air","Aerial threats","איום מהאוויר"],["threat-tsunami","Tsunami","צונאמי"]];
+const LOGOS={imod:"imod",weizmann:"weizmann",bynet:"bynet",airports:"airports",environment:"environment","internal-security":"internal-security",icl:"icl","tel-aviv-metro":"tel-aviv-metro",
+"Home Front Command – IDF":"home-front-command","Ministry of Defense NBC Protection Division":"mod-nbc","Ministry of Health":"health","The Israeli Center for Disease Control":"icdc","Magen David Adom – EMS":"mda","Ministry of Construction & Housing":"construction-housing","Ministry of Interior":"interior","Israel Air Force":"air-force","Israel Police":"police","Atomic Energy Commission":"atomic-energy","Jerusalem Municipality – Water security systems and Moriah":"jerusalem","Development Company for Jerusalem":"jerusalem-development","United Local Authorities Administration":"local-authorities","MED-1 Israel":"med1","Azrieli Group":"azrieli","Korea – Seoul Metropolitan Government":"seoul","Turkey – Prime Ministry, Security Affairs":"turkey","China – Guangzhou Asian Games":"guangzhou","USA – Federal Transit Administration":"fta","USA – Transportation Security Administration":"tsa"};
+function clogo(k, alt){ const f=(S.clientLogos||{})[k]||LOGOS[k]; return f?'<span class="clogo"><img src="'+esc(/[/.]/.test(f)?f:"images/logos/"+f+".png")+'" alt="'+esc(alt||"")+'" loading="lazy"></span>':""; }
 let curRoute="home";
 const allTopicVids=()=>S.expertise.topics.every(t=>hasV(TOPIC_VIDS[t.id]));
 const topicVid=id=>allTopicVids()&&hasV(TOPIC_VIDS[id])?'<div class="tvid" aria-hidden="true">'+vid(TOPIC_VIDS[id])+'</div>':'';
@@ -658,7 +670,7 @@ function aboutMoreSection(){
 function pageHome(){
   const u=U(), h=L(S.home), t=S.team[0];
   const topics=S.expertise.topics.map(tp=>{const x=L(tp); const first=(x.body||"").split("\n").find(l=>l.startsWith("- ")); return '<a class="topic" href="'+href("expertise-"+tp.id)+'">'+topicVid(tp.id)+icon(tp.icon)+'<h3>'+esc(x.short)+'</h3>'+(first?'<p>'+esc(first.slice(2))+'</p>':'')+'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
-  const feat=S.clients.featured.map(c=>{const x=L(c); return '<li>'+(x.body?'<a href="'+href("client-"+c.id)+'"><span>'+esc(x.name)+'</span><small>'+esc(c.tag)+'</small></a>':'<span class="n"><span>'+esc(x.name)+'</span><small>'+esc(c.tag)+'</small></span>')+'</li>';}).join("");
+  const feat=S.clients.featured.map(c=>{const x=L(c); return '<li>'+(x.body?'<a href="'+href("client-"+c.id)+'"><span class="cn">'+clogo(c.id)+'<span>'+esc(x.name)+'</span></span><small>'+esc(c.tag)+'</small></a>':'<span class="n"><span class="cn">'+clogo(c.id)+'<span>'+esc(x.name)+'</span></span><small>'+esc(c.tag)+'</small></span>')+'</li>';}).join("");
   const ev=S.updates.events.map(e=>{const x=L(e); return '<a class="event" href="'+href("event-"+e.id)+'">'+(e.image?'<img src="'+esc(e.image)+'" alt="" loading="lazy">':'')+'<time>'+esc(e.date)+(x.place?' · '+esc(x.place):'')+'</time><h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
   return `
   <section class="band hero"><div class="bgv" aria-hidden="true">${vid("hero-situation-room")}</div><div class="wrap">
@@ -739,17 +751,17 @@ function pageTopic(id){
 }
 function pageClients(){
   const u=U(), c=L(S.clients);
-  const rows=S.clients.featured.map(f=>{const x=L(f); const inner='<span class="tag">'+esc(f.tag)+'</span><div><h3>'+esc(x.name)+'</h3>'+(x.teaser?'<p>'+esc(x.teaser)+'</p>':'')+'</div>'+(x.body?'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span>':'<span></span>'); return x.body?'<a class="row" href="'+href("client-"+f.id)+'">'+inner+'</a>':'<div class="row">'+inner+'</div>';}).join("");
+  const rows=S.clients.featured.map(f=>{const x=L(f); const inner=(clogo(f.id)||'<span class="tag">'+esc(f.tag)+'</span>')+'<div><h3>'+esc(x.name)+'</h3>'+(x.teaser?'<p>'+esc(x.teaser)+'</p>':'')+'</div>'+(x.body?'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span>':'<span></span>'); return x.body?'<a class="row" href="'+href("client-"+f.id)+'">'+inner+'</a>':'<div class="row">'+inner+'</div>';}).join("");
   return pagehead([[u.nav.home,"home"],[c.title,"clients"]], c.title, c.intro)+
   `<section class="sec"><div class="wrap"><div class="rows">${rows}</div>
    <h2 style="font-size:26px;margin-top:64px">${esc(c.othersTitle)}</h2>
-   <div class="logos">${S.clients.others.map(o=>'<div>'+esc(o[lang])+'</div>').join("")}</div></div></section>`+ctaBand();
+   <div class="logos">${S.clients.others.map(o=>{const lg=clogo(o.en); return '<div'+(lg?' class="has"':'')+'>'+lg+'<span>'+esc(o[lang])+'</span></div>';}).join("")}</div></div></section>`+ctaBand();
 }
 function pageClient(id){
   const u=U(), c=L(S.clients), f=S.clients.featured.find(x=>x.id===id); if(!f) return null; const x=L(f);
   const body=x.body?md(x.body):'<div class="empty">'+(lang==="he"?"פרטים נוספים יתווספו בקרוב.":"More details are coming soon.")+'</div>';
   return pagehead([[u.nav.home,"home"],[c.title,"clients"],[x.name,"client-"+id]], x.name, x.teaser)+
-  `<section class="sec"><div class="wrap layout"><div class="prose">${body}</div><div class="aside">${sideList(c.title, S.clients.featured.filter(f=>L(f).body).map(f=>[L(f).name,"client-"+f.id]), "client-"+id)}${contactCard()}</div></div></section>`+ctaBand();
+  `<section class="sec"><div class="wrap layout"><div class="prose">${body}</div><div class="aside">${clogo(id, x.name)}${sideList(c.title, S.clients.featured.filter(f=>L(f).body).map(f=>[L(f).name,"client-"+f.id]), "client-"+id)}${contactCard()}</div></div></section>`+ctaBand();
 }
 function pageProjects(){
   const u=U(), p=L(S.projects);
