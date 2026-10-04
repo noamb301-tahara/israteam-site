@@ -42,7 +42,7 @@ S.posts = [
     id: "hybrid-civilian-front", date: { en: "Feb 2026", he: "פבר׳ 2026" }, event: "hybrid-warfare-study",
     images: ["images/hybrid-study-cover.jpg"],
     en: { title: "Hybrid Warfare and the Civilian Front: Why National Resilience Has Become a Strategic Imperative",
-      text: "A summary of IsraTeam's broader study \"Hybrid Warfare and its Impact on Member States' Homeland Security\" (86 pages, December 2025), by Brig. Gen. Avi Bachar, Eng. Yoram Sofrin and Dr. Eyal Pinko, prepared for the ECR group in the European Parliament." },
+      text: "A summary of IsraTeam's broader study \"Hybrid Warfare and its Impact on Member States' Homeland Security\" (86 pages, December 2025), by Brig. Gen. Avi Bachar, Eng. Yoram Sofrin and Dr. Eyal Pinko, prepared for the ECR Group in the European Parliament." },
     he: { title: "לוחמה היברידית והחזית האזרחית: מדוע חוסן לאומי הפך להכרח אסטרטגי",
       text: "תקציר המחקר הרחב של ישראטים, ״לוחמה היברידית והשפעתה על ביטחון הפנים של המדינות החברות״ (86 עמודים, דצמבר 2025), מאת תא״ל אבי בכר, המהנדס יורם סופרין וד״ר אייל פינקו, שהוכן עבור קבוצת ECR בפרלמנט האירופי." }
   },
@@ -58,7 +58,7 @@ S.posts = [
     id: "uzbekistan", date: { en: "Dec 2025", he: "דצמ׳ 2025" },
     images: ["images/uzbekistan-visit.jpg", "images/uzbekistan-fic.jpg"],
     en: { title: "A successful visit to Uzbekistan",
-      text: "A highly successful visit to Uzbekistan, marked by productive meetings and clear opportunities for future cooperation. IsraTeam took part in the week of 15–21 December 2025 at the Secretariat of the Foreign Investors Council under the President of the Republic of Uzbekistan." },
+      text: "A highly successful visit to Uzbekistan, marked by productive meetings and clear opportunities for future cooperation. IsraTeam took part in meetings during the week of 15–21 December 2025 at the Secretariat of the Foreign Investors Council under the President of the Republic of Uzbekistan." },
     he: { title: "ביקור מוצלח באוזבקיסטן",
       text: "ביקור מוצלח במיוחד באוזבקיסטן, עם פגישות פוריות והזדמנויות ברורות לשיתוף פעולה בעתיד. ישראטים השתתפה בשבוע של 15–21 בדצמבר 2025 במזכירות מועצת המשקיעים הזרים שליד נשיא הרפובליקה של אוזבקיסטן." }
   },
@@ -66,7 +66,7 @@ S.posts = [
     id: "eu-sede-delegation", date: { en: "2025", he: "2025" }, event: "eu-sede-delegation",
     images: ["images/eu-sede-ict.jpg", "images/eu-sede-bynet.jpg", "images/eu-sede-esc-baz.jpg"],
     en: { title: "Hosting the European Parliament's Security and Defence Committee",
-      text: "As part of IsraTeam's hospitality of the delegation from the European Union's Committee on Security and Defence (SEDE), we visited the ICT – International Institute for Counter-Terrorism at Reichman University, the BYNET Data Centers and the ESC-BAZ company, where the delegation heard lectures on counter-terrorism, essential infrastructure and protection." },
+      text: "As part of IsraTeam's hosting of the delegation from the European Parliament's Security and Defence Committee (SEDE), we visited the ICT – International Institute for Counter-Terrorism at Reichman University, the BYNET Data Centers and the ESC-BAZ company, where the delegation heard lectures on counter-terrorism, essential infrastructure and protection." },
     he: { title: "אירוח ועדת הביטחון וההגנה של הפרלמנט האירופי",
       text: "במסגרת אירוח המשלחת של ועדת הביטחון וההגנה של האיחוד האירופי (SEDE) על ידי ישראטים, ביקרנו במכון הבינלאומי למדיניות נגד טרור (ICT) באוניברסיטת רייכמן, במרכזי הנתונים של בינת ובחברת ESC-BAZ, ושמענו הרצאות בנושאי מאבק בטרור, תשתיות חיוניות ומיגון." }
   },
@@ -74,7 +74,7 @@ S.posts = [
     id: "kanto-earthquake", date: { en: "Sep 2025", he: "ספט׳ 2025" },
     images: ["images/post-kanto-1923.jpg"],
     en: { title: "1 September: the lessons of the Great Kantō Earthquake",
-      text: "September 1st marks one of the most tragic days in Japan's history, and one of its greatest lessons. On this day in 1923, the Great Kantō Earthquake struck the Tokyo–Yokohama region with a magnitude of 7.9–8.2. The disaster claimed more than 100,000 lives, devastated infrastructure, and reshaped Japan's approach to urban planning and resilience. Since then, Japan has transformed this painful memory into strength. Every year, September 1 is observed as Disaster Prevention Day." },
+      text: "1 September marks one of the most tragic days in Japan's history, and one of its greatest lessons. On this day in 1923, the Great Kantō Earthquake struck the Tokyo–Yokohama region with a magnitude of 7.9–8.2. The disaster claimed more than 100,000 lives, devastated infrastructure, and reshaped Japan's approach to urban planning and resilience. Since then, Japan has transformed this painful memory into strength. Every year, 1 September is observed as Disaster Prevention Day." },
     he: { title: "1 בספטמבר: הלקחים של רעידת האדמה הגדולה בקאנטו",
       text: "1 בספטמבר הוא אחד הימים הטרגיים בתולדות יפן, ואחד הלקחים הגדולים שלה. ביום זה ב־1923 פגעה רעידת האדמה הגדולה בקאנטו באזור טוקיו–יוקוהמה, בעוצמה של 7.9–8.2. האסון גבה יותר מ־100,000 חיים, הרס תשתיות ושינה את גישתה של יפן לתכנון עירוני ולחוסן. מאז הפכה יפן את הזיכרון הכואב הזה לכוח: מדי שנה מצוין 1 בספטמבר כיום היערכות לאסונות." }
   },
@@ -139,13 +139,13 @@ if (hw) {
   hw.image = "images/hybrid-study-cover.jpg";
   hw.en.body = `A Research Study: Hybrid Warfare and its Impact on Member States' Homeland Security. IsraTeam – Brig. Gen. Avi Bachar, Eng. Yoram Sofrin, Dr. Eyal Pinko. December 2025.
 
-## Summary: context of the research and relevance to the ECR group's work
+## Summary: context of the research and relevance to the ECR Group's work
 
 Lessons drawn from the wars in Ukraine and the Middle East demonstrate the vulnerabilities of Europe's critical infrastructure, public and private institutions, and civil society.
 
-All of which require a comprehensive methodology and action plan to address the increasing hybrid threats facing Member States, as well as a step-by-step process to enhance national resilience, ensuring that countries can withstand and recover quickly from any attack.
+These lessons call for a comprehensive methodology and action plan to address the increasing hybrid threats facing Member States, as well as a step-by-step process to enhance national resilience, ensuring that countries can withstand and recover quickly from any attack.
 
-This study will be helpful for the ECR group and its Members working on SEDE matters, especially to MEP Reinis Pozņaks, who has been appointed Coordinator for the SEDE Committee, as this study will address key issues such as creating the process required for assessing threat scenarios and implementing protection means to ensure operational continuity and functional resilience policies. Of particular note are Latvia and other frontline states' concerns about the need for protective spaces, shelters, and other key infrastructure to ensure the protection of their civilian populations and their capacity to effectively plan for threat scenarios and the levels of protection needed. This report will be used to address the critical needs of public preparedness and community response to war and homeland security instability.`;
+This study will be helpful for the ECR Group and its Members working on SEDE matters, especially MEP Reinis Pozņaks, who has been appointed Coordinator for the SEDE Committee, as this study will address key issues such as creating the process required for assessing threat scenarios and implementing protective measures to ensure operational continuity and functional resilience policies. Of particular note are Latvia and other frontline states' concerns about the need for protective spaces, shelters, and other key infrastructure to ensure the protection of their civilian populations and their capacity to effectively plan for threat scenarios and the levels of protection needed. This report will be used to address the critical needs of public preparedness and community response to war and homeland security instability.`;
   hw.he.body = `מחקר: לוחמה היברידית והשפעתה על ביטחון הפנים של המדינות החברות. ישראטים – תא״ל אבי בכר, המהנדס יורם סופרין, ד״ר אייל פינקו. דצמבר 2025.
 
 ## תקציר: הקשר המחקר והרלוונטיות שלו לעבודת קבוצת ECR
@@ -164,11 +164,11 @@ S.articlesFull = [
     en: { title: "Increasing the National Civil Defense's Preparedness", author: "By Brig. Gen. (Res.) Avi Bachar",
       body: `## General
 
-Since the end of the Cold War, the issue of civil defense has been largely neglected in most countries. Systems built during World War II (WWII), including Civil Defence Units and shelters, have been abandoned, closed, and have disappeared in many regions, particularly in European countries.
+Since the end of the Cold War, the issue of civil defense has been largely neglected in most countries. Systems built during World War II (WWII), including civil defense units and shelters, have been abandoned, closed, and have disappeared in many regions, particularly in European countries.
 
-However, following the Russian invasion of Ukraine and the severe damage inflicted on urban areas and the population, a far-reaching change is occurring worldwide, especially in Europe, affecting the stability of numerous countries. The possibility of a multi-regional war breaking out is increasingly likely, making it a situation that must be assessed **urgently** before it is too late.
+However, following the Russian invasion of Ukraine and the severe damage inflicted on urban areas and the population, a far-reaching change is occurring worldwide, especially in Europe, affecting the stability of numerous countries. A multi-regional war is becoming increasingly likely, making it a situation that must be assessed **urgently** before it is too late.
 
-On Saturday, October 7th, 2023, thousands of fighters from the terrorist organization Hamas breached the border fence of the Gaza Strip in over thirty locations. This breach occurred in the early hours of the morning, coinciding with the firing of thousands of rockets at the State of Israel, targeting not only towns near the Gaza Strip but also as far as Tel Aviv. Immediately after the Hamas attack on Israel, Hezbollah from Lebanon joined the conflict, launching hundreds of missiles and UAVs into northern Israel.
+On Saturday, October 7th, 2023, thousands of fighters from the terrorist organization Hamas breached the border fence of the Gaza Strip in over thirty locations. This breach occurred in the early hours of the morning, coinciding with the firing of thousands of rockets at the State of Israel, targeting not only towns near the Gaza Strip but also areas as far away as Tel Aviv. Immediately after the Hamas attack on Israel, Hezbollah from Lebanon joined the conflict, launching hundreds of missiles and UAVs into northern Israel.
 
 These events demonstrate that wars can break out suddenly, even in seemingly stable regions. The attacks from Gaza and Lebanon on Israel illustrate that even seemingly weaker countries or organizations can initiate conflict against nations with advanced military and economic capabilities, often with the support of powerful allies such as the USA.
 
@@ -181,7 +181,7 @@ These events demonstrate that wars can break out suddenly, even in seemingly sta
 
 **Given these realities**, it is imperative for countries, particularly in Europe, to increase their defense budgets to ensure the capability to defend themselves **independently** and rapidly, without relying heavily on the USA or NATO.
 
-It is noteworthy that, despite the clear and imminent threats, there is minimal attention being given to the issue of Civil Defense.
+It is noteworthy that, despite the clear and imminent threats, little attention is being given to the issue of civil defense.
 
 **Furthermore**, history shows us that the true strength of a nation lies not only in its military power but, perhaps more critically, in the resilience and preparedness of its civilian population and the readiness to fight for freedom. This was evident in London's stance during WWII, in the resilience of Ukraine's population during the ongoing war, and now, regrettably, in Israel.
 
@@ -190,7 +190,7 @@ It is noteworthy that, despite the clear and imminent threats, there is minimal 
 To enhance preparedness for civil defense, particularly against wars, CBRNE (Chemical, Biological, Radiological, Nuclear, and Explosive) incidents and cyber threats, countries should consider the following steps and measures:
 
 1. **Strengthen intelligence and surveillance capabilities:** Enhance intelligence gathering and surveillance systems to detect and monitor potential war, CBRNE, and cyber threats. This includes investing in advanced technologies, such as sensors, detectors, and monitoring networks, to identify and track hazardous substances and potential enemy activities.
-1. **Conduct risk assessments and vulnerability analyses:** Regularly assess risks and vulnerabilities related to CBRNE threats, identify critical infrastructure and high-risk areas, **evaluate potential scenarios, including the level of damage that the policy makers are agreed to deal with!** Accordingly develop mitigation strategies. These assessments can help prioritize resource allocation and guide preparedness efforts.
+1. **Conduct risk assessments and vulnerability analyses:** Regularly assess risks and vulnerabilities related to CBRNE threats, identify critical infrastructure and high-risk areas, **evaluate potential scenarios, including the level of damage that policymakers are prepared to accept!** Accordingly, develop mitigation strategies. These assessments can help prioritize resource allocation and guide preparedness efforts.
 1. A clear policy decision regarding the chain of command and control and the organization leading the preparedness and management of the event if and when it occurs.
 1. Determining the concept of operation at the national level and in the various organizations, backing up the command and control system with an advanced technological system (C4I) suitable for the established concept of operation.
 1. **Improve coordination and communication:** Enhance coordination and communication among various agencies involved in civil defense and response to CBRNE threats. This includes fostering collaboration between law enforcement, first responders, emergency management, public health, and military organizations. Establishing clear protocols and communication channels will facilitate a swift and effective response.
@@ -202,7 +202,7 @@ To enhance preparedness for civil defense, particularly against wars, CBRNE (Che
 
 By implementing these steps and measures, countries can enhance their preparedness for civil defense, specifically in dealing with war and CBRNE threats. **It is essential that these steps be tailored to each country's specific context, considering unique risks, resources, and capabilities.**
 
-Avi Bachar, CEO IsraTeam. Former Chief of Staff, Home Front Command (HFC), the organization responsible for coordination of all first responders, medical response, and humanitarian aid. Former Chairman of the Israeli National Emergency Management Authority (NEMA), responsible for government and infrastructure resilience and civil defence.` },
+Avi Bachar, CEO of IsraTeam. Former Chief of Staff, Home Front Command (HFC), the organization responsible for coordination of all first responders, medical response, and humanitarian aid. Former Chairman of the Israeli National Emergency Management Authority (NEMA), responsible for government and infrastructure resilience and civil defense.` },
     he: { title: "הגברת המוכנות של ההגנה האזרחית הלאומית", author: "מאת תא״ל (במיל׳) אבי בכר",
       body: `## כללי
 
@@ -294,26 +294,26 @@ S.method = {
 S.aboutMore = {
   en: {
     tagline: "The Israeli Homeland Security Team",
-    architects: "We are architects of policy, strategy and implementation of Civil Defense, Emergency Management, Homeland Security, Operational Continuity and National Resilience. We will assign to the project the most experienced experts to deal with the key points of resilience.",
+    architects: "We are architects of policy, strategy and implementation of Civil Defense, Emergency Management, Homeland Security, Operational Continuity and National Resilience. We assign the most experienced experts to each project to address the key aspects of resilience.",
     objectiveT: "Our objective",
-    objective: "Establishment and/or improvement of a comprehensive plan for better civil defense system and management that shall be capable of adequate preparedness and mitigation of any emergency, incorporating national, regional and municipal levels as well as community and family protection.",
+    objective: "Establishment and/or improvement of a comprehensive plan for a better civil defense system and management, capable of adequate preparedness for and mitigation of any emergency, incorporating national, regional and municipal levels as well as community and family protection.",
     visionT: "Our vision",
-    vision: "With a proper Crises and Consequence Management system, planning and preparedness (community, organization, equipment and training), the impact of any threat can be prevented or mitigated.",
+    vision: "With a proper Crisis and Consequence Management system, planning and preparedness (community, organization, equipment and training), the impact of any threat can be prevented or mitigated.",
     missionT: "Our mission",
-    mission: "Disaster events can be modelled, analyzed, and displayed in a properly designed program in order to best mitigate the threat's effects.",
+    mission: "Disaster events can be modeled, analyzed, and displayed in a properly designed program in order to best mitigate the threat's effects.",
     strategyT: "Our strategy",
     strategy: [
       ["Key activities", "Emergency Management, Homeland Security, Operational Continuity, National Resilience, Civil Defense"],
-      ["Civil defence", "Systems and population training; organisation of various professional units: military, first-responder organisations, search and rescue units and emergency units within the communities"],
+      ["Civil defense", "Systems and population training; organization of various professional units: military, first-responder organizations, search and rescue units and emergency units within the communities"],
       ["Area of operation", "Worldwide"]
     ],
     tacticsT: "Key tactics",
     tactics: [
-      ["C4I", "Use of big data and Command, Control, Communication, Computerization and Intelligence technologies in order to assess any threats."],
-      ["NEMC", "Organisation of a National Emergency Management Center, professionally fully staffed, equipped, exercised and ready to respond to any emergency situation, measured at world-class standards."]
+      ["C4I", "Use of big data and Command, Control, Communication, Computerization and Intelligence technologies in order to assess threats."],
+      ["NEMC", "Organization of a National Emergency Management Center that is fully staffed by professionals, equipped, exercised and ready to respond to any emergency situation, to world-class standards."]
     ],
     futureT: "Future developments",
-    future: ["Civil defense and population protection", "Business and operational continuity", "Mitigating cyber threats on infrastructure", "Functional Resilience for First Responders/Soldiers/Communities Project, including mental assistance"]
+    future: ["Civil defense and population protection", "Business and operational continuity", "Mitigating cyber threats to infrastructure", "Functional Resilience for First Responders/Soldiers/Communities Project, including mental assistance"]
   },
   he: {
     tagline: "צוות ביטחון הפנים הישראלי",
@@ -350,15 +350,15 @@ S.expertise.topics.push({
 - Shelters with CBRNE requirements
 - M&E, filtering and HVAC systems, protective doors, and protection against EMP, shock, blast overpressure and vibration
 
-IsraTeam is a world leader in Civil Defense and National Resilience. We are launching a consultancy initiative to assist firms, organizations, and governments to prepare for severe security threats, with a focus on nuclear threats. This includes developing comprehensive contingency plans and optimizing the design of physical shelters to ensure preparedness.
+IsraTeam is a world leader in Civil Defense and National Resilience. We are launching a consultancy initiative to assist firms, organizations, and governments in preparing for severe security threats, with a focus on nuclear threats. This includes developing comprehensive contingency plans and optimizing the design of physical shelters to ensure preparedness.
 
 Since the end of the Cold War, international conflicts have persisted, escalating the risk of a new world war. Contrary to popular belief, the threats extend beyond nuclear weapons to include a range of risks that we meticulously address when constructing new shelters or reinforcing existing structures.
 
-IsraTeam, incorporated and registered in Israel, has expertise in shelter design and/or reinforcing of existing buildings, with extensive experience in consulting to best define the program and consult on the design of atomic shelters for families, organizations, corporations, and critical infrastructure. Our services include threat analysis, program definition, and the operation of shelters. We adopt technology to meet specific operational needs, providing architectural and engineering solutions for various types of shelters, including those with CBRNE requirements. Our expertise extends to continuous operational needs, such as M&E systems, filtering systems, HVAC systems, protective doors, and installations that mitigate EMP risks, shock, overpressure blast and vibrations.
+IsraTeam, incorporated and registered in Israel, has expertise in shelter design and/or the reinforcement of existing buildings, with extensive experience in defining the program for, and consulting on the design of, atomic shelters for families, organizations, corporations, and critical infrastructure. Our services include threat analysis, program definition, and the operation of shelters. We adapt technology to meet specific operational needs, providing architectural and engineering solutions for various types of shelters, including those with CBRNE requirements. Our expertise extends to continuous operational needs, such as M&E systems, filtering systems, HVAC systems, protective doors, and installations that mitigate EMP risks, shock, blast overpressure and vibration.
 
 ## Who we work with
 
-- If you are a construction company looking to market the construction of shelters or reinforce existing buildings for protection within your country, we invite you to partner with us.
+- If you are a construction company looking to market the construction of shelters or the reinforcement of existing buildings for protection within your country, we invite you to partner with us.
 - If you are a private citizen seeking to create a safe place for your family against future threats, we are here to assist.
 - For infrastructure companies and command and control centers aiming to ensure functional continuity, or government authorities preparing regulations on sheltering and national resilience, we offer our expertise and consultancy.` },
   he: { title: "תכנון מקלטים והנדסת מיגון", short: "מקלטים והנדסת מיגון",

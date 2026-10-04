@@ -123,9 +123,9 @@ window.SITE = {
   home: {
     en: {
       eyebrow: "Professional Crisis Management",
-      title: "We consult for preparedness and training",
-      lede: "Providing solutions to build more resilient communities and countries by best mitigating and planning for reduction of the potential threats made by Mother Nature or manmade.",
-      lede2: "We offer comprehensive and cost-effective solutions to complex threats and risks which are actual factors in our modern world.",
+      title: "Consulting on emergency preparedness and training",
+      lede: "Providing solutions to build more resilient communities and countries through mitigation and planning that reduce potential threats, whether natural or manmade.",
+      lede2: "We offer comprehensive and cost-effective solutions to complex threats and risks that are very real in today's world.",
       stats: [
         ["1998", "Founded and registered in Israel"],
         ["29", "Clients and agencies served"],
@@ -148,15 +148,15 @@ window.SITE = {
         "Business Continuity Planning (BCP) and Continuity of Government (COOP)",
         "Protection and resilience of critical infrastructures: energy, water, health, ICT, transport, data centers",
         "Establishment of National / Regional Emergency Management Centers (NEMC, C4I)",
-        "Population preparedness, public guidance, sheltering concepts, and risk communication, training, and activation of volunteers during emergencies, integrated with first responders",
+        "Population preparedness, public guidance, sheltering concepts and risk communication; training and activation of volunteers during emergencies, integrated with first responders",
         "Protection of senior decision-makers and national leadership continuity",
         "Border security and protection of critical facilities",
         "Training, exercises, and long-term capability building"
       ],
       globalTitle: "Global Experience",
       global: "IsraTeam advises governments, ministries, municipalities, and critical infrastructure operators across Europe, Asia, and the Middle East. The company supports clients in designing, implementing, and sustaining comprehensive resilience frameworks that ensure functional continuity, public safety, social cohesion, and national stability.",
-      expertiseTitle: "IsraTeam excels in a wide range of expertise",
-      clientsTitle: "We're proud to cooperate with our clients",
+      expertiseTitle: "IsraTeam excels across a wide range of fields",
+      clientsTitle: "We're proud to work with our clients",
       updatesTitle: "Updates & events",
       contactTitle: "Contact",
       contactName: "Brig. Gen. (Res.) Avi Bachar",
@@ -209,15 +209,15 @@ window.SITE = {
   about: {
     en: {
       title: "Who We Are",
-      body: `IsraTeam 98 Ltd. is one of the most skilled and professional companies who consult Emergency Management and Homeland Security Planning, based and registered in Israel since 1998.
+      body: `IsraTeam 98 Ltd. is one of the most skilled and professional consultancies in emergency management and homeland security planning, based and registered in Israel since 1998.
 
-IsraTeam is active in Israel and abroad in the field of Emergency Management and HLS: Consultation, Preparedness, and Training and has gained vast and unique "hands-on" experience in all kinds of crisis, especially in natural hazards mitigation, civil defense, War and CBRNE terror events.
+IsraTeam is active in Israel and abroad in the field of Emergency Management and HLS: Consultation, Preparedness, and Training and has gained vast and unique "hands-on" experience in all kinds of crises, especially in natural hazard mitigation, civil defense, war and CBRNE terror events.
 
 The team members have played an active role in emergency planning and preparedness in Israeli Homeland Security organizations, as well as in devising emergency strategies and doctrine. These organizations were put to actual tests in various complex emergencies.
 
 The company has established and implemented training programs for security and emergency organizations coping with war, CBRNE terrorism, earthquakes and other natural and manmade disasters.`,
       mgmtTitle: "Management",
-      mgmtIntro: "Providing solutions to build more resilient communities and countries by best mitigating and planning for reduction of the potential threats made by Mother Nature or manmade. We offer comprehensive and cost-effective solutions to complex threats and risks which are actual factors in our modern world."
+      mgmtIntro: "Providing solutions to build more resilient communities and countries through mitigation and planning that reduce potential threats, whether natural or manmade. We offer comprehensive and cost-effective solutions to complex threats and risks that are very real in today's world."
     },
     he: {
       title: "מי אנחנו",
@@ -237,17 +237,17 @@ The company has established and implemented training programs for security and e
     {
       id: "avi-bachar", initials: "AB",
       en: {
-        name: "Brig. Gen. (res.) Avraham (Avi) Bachar",
+        name: "Brig. Gen. (Res.) Avraham (Avi) Bachar",
         role: "CEO",
-        body: `Specializes in comprehensive organizational planning, responsible for the overall integration and coordination of team activities. He has extensive experience in the field of inter-organizational coordination, managing emergency events in command and communications. Training of commanders and senior managers in the management of emergency situations.
+        body: `He specializes in comprehensive organizational planning and is responsible for the overall integration and coordination of the team's activities. He has extensive experience in inter-organizational coordination and in managing emergency events in command and communications, and in training commanders and senior managers to manage emergency situations.
 
-He holds a master's degree in public policy from Tel Aviv University, and holds a master's degree in political science from the University of Haifa, a graduate of the National Security College and the high school of the US engineering corps.
+He holds a master's degree in public policy from Tel Aviv University and a master's degree in political science from the University of Haifa, and is a graduate of the National Security College and the US Army Engineer School.
 
-He has extensive experience in setting up and operating experts on issues related to emergency response of any kind, earthquake, general war, war against population and home front, mega terror including radiological and atomic biochemical, dealing with human and animal pandemics, and so on.
+He has extensive experience in setting up and running expert teams for every kind of emergency response: earthquakes, all-out war, war against the civilian population and the home front, mega-terrorism including radiological, nuclear, biological and chemical threats, human and animal pandemics, and more.
 
-In his last military position he served as the head of the Home Front Command. Has extensive experience and knowledge in the organization and coordination of large systems. With planning capabilities, including and managing projects on a national scale, organizing and performing exercises and training at the national level.
+In his last military position he served as Chief of Staff of the Home Front Command. He has extensive experience and knowledge in organizing and coordinating large systems, and planning capabilities that include managing national-scale projects and organizing and conducting national-level exercises and training.
 
-Between 2007 and 2009, Avi Bachar served as Head of the Malach Unit, where he was responsible for preparing the entire economy for emergency situations including war, earthquakes, pandemics and multi-casualty terror incidents, Infrastructure, and local authorities. He was also in charge of the entire issue of Israel's vital industries, strategic and strategic holdings.`
+Between 2007 and 2009, Avi Bachar served as Head of the Malach Unit, where he was responsible for preparing the entire economy, including infrastructure and local authorities, for emergency situations such as war, earthquakes, pandemics and mass-casualty terror incidents. He was also in charge of Israel's vital industries and strategic holdings.`
       },
       he: {
         name: "תא״ל (במיל׳) אברהם (אבי) בכר",
@@ -266,22 +266,22 @@ Between 2007 and 2009, Avi Bachar served as Head of the Malach Unit, where he wa
     {
       id: "yori-sofrin", initials: "YS",
       en: {
-        name: "Eng. Col. (res.) Yori Sofrin",
+        name: "Eng. Col. (Res.) Yori Sofrin",
         role: "Co-CEO",
-        body: `Yori Sofrin has extensive and proven experience in the design, research and testing of the durability of buildings and systems in various threats as well as the development of protection solutions against them. He has extensive knowledge and experience in characterizing, planning and managing the execution of complex projects in the field of civil engineering, tunneling and destruction of buildings in the explosion, as well as practical expertise and experience in the areas of population behavior in emergency situations, training, communication and public information.
+        body: `Yori Sofrin has extensive and proven experience in the design, research and testing of the resistance of buildings and systems to various threats, as well as in developing protective solutions against them. He has extensive knowledge and experience in characterizing, planning and managing the execution of complex projects in the field of civil engineering, tunneling and the demolition of buildings by explosives, as well as practical expertise and experience in population behavior in emergency situations, training, communication and public information.
 
-He was trained as an internal examiner to establish an environmental management system in the plants.
+He trained as an internal auditor for establishing environmental management systems in industrial plants.
 
-In his last military post he served as head of the Population Defense Department in the Home Front Command. In reserve service he served as spokesman for the Home Front in times of emergency and crisis.
+In his last military post he served as head of the Population Defense Department in the Home Front Command. In his reserve service he served as the Home Front Command spokesman in times of emergency and crisis.
 
-Col. Sofrin holds a master's degree in civil engineering from Northwestern University. Specializes mainly in the following fields:
+Col. Sofrin holds a master's degree in civil engineering from Northwestern University. He specializes mainly in the following fields:
 
-1. Analysis of scenarios and characterization of response to emergency events.
-1. Assessing risks to the population, infrastructures and structures and analyzing needs for continuity and functional continuity.
+1. Scenario analysis and definition of the response to emergency events.
+1. Assessing risks to the population, infrastructure and buildings, and analyzing business continuity and functional continuity needs.
 1. Means and methods for personal and collective protection.
 1. Training and preparing populations for emergencies.
 1. Preparing and training factories, institutions and emergency organizations.
-1. Implementation of integrative multi-disciplinary projects in the field of planning, complex project management and preparation of programs, operational files and facility files.`
+1. Implementation of integrated multidisciplinary projects in planning, complex project management, and the preparation of programs, operational files and facility files.`
       },
       he: {
         name: "אל״ם (במיל׳) מהנדס יורי סופרין",
@@ -305,24 +305,24 @@ Col. Sofrin holds a master's degree in civil engineering from Northwestern Unive
     {
       id: "itai-peleg", initials: "IP",
       en: {
-        name: "Col. (res.) Itai Peleg",
-        role: "Deputy General Manager",
+        name: "Col. (Res.) Itai Peleg",
+        role: "Deputy CEO",
         body: `Colonel Peleg has extensive experience in emergency preparedness, training and planning in the home front system, and holds a master's degree in law and a BA in behavioral sciences and business administration.
 
 Itai commanded the Lachish region of the Home Front Command (the Ashkelon region, Ashdod, Kiryat Gat, Kiryat Malachi) during Operation Protective Edge (Tzuk Eitan) and Operation Pillar of Defense (Amud Anan), and is currently a consultant to government ministries, leading the fields of knowledge development and training at the Israeli Center for Municipal Stability.
 
-Colonel Peleg has a very high training ability, excellent organizational ability, high awareness for providing quality service, and a system vision, and the ability to manage large projects.
+Colonel Peleg has outstanding training skills, excellent organizational ability, a strong commitment to quality service, a systems perspective and the ability to manage large projects.
 
 ## Company responsibilities
 
-Deputy CEO and Chief Operating Officer of the Company, responsible for all the projects carried out there, planning and organization consulting for emergency preparedness in the authorities and in government ministries, including preparation of plans, procedures and exercises.
+Deputy CEO and Chief Operating Officer of the Company, responsible for all of its projects, and for planning and organizational consulting on emergency preparedness for local authorities and government ministries, including the preparation of plans, procedures and exercises.
 
 ## Personal abilities
 
-- A center of knowledge on mental first aid, an expert in the field of seminar management, foreign relations and international activity.
+- A source of expertise on psychological first aid, and an expert in seminar management, foreign relations and international activity.
 - A large-scale planning and organization expert, from planning through execution to process control.
 - Managing large budgets for a large number of projects, in annual and multi-year planning.
-- The ability to command disaster events on the ground (a proven capability, with extensive experience) and manage the incident.`
+- The ability to command at disaster sites and manage the incident (a proven capability, with extensive experience).`
       },
       he: {
         name: "אל״ם (במיל׳) איתי פלג",
@@ -352,13 +352,13 @@ Deputy CEO and Chief Operating Officer of the Company, responsible for all the p
     en: {
       title: "Our Expertise",
       list: [
-        "Threats analyses and evaluation (natural, manmade, terror events, wars, pandemics, cyber-attacks etc.)",
+        "Threat analysis and evaluation (natural, manmade, terror events, wars, pandemics, cyber attacks, etc.)",
         "The steps needed to prepare a National Disaster Plan.",
         "Preparing national, municipal and agency management and civil defense plans for governments, municipalities and agencies.",
         "The Integrated Response to a CBRNE terror event.",
         "The Integrated Response to an earthquake.",
         "Defining Command, Control and Communication roles and technologies.",
-        "Planning Civil Defense national program and implementation."
+        "Planning and implementing a national civil defense program."
       ]
     },
     he: {
@@ -377,14 +377,14 @@ Deputy CEO and Chief Operating Officer of the Company, responsible for all the p
       {
         id: "national-civil-defense", icon: "shield",
         en: { title: "National Civil Defense Challenges", short: "National emergency preparedness",
-          body: `- Threats analyses and evaluation (natural, manmade, terror events, wars, pandemics, cyber-attacks etc.)
+          body: `- Threat analysis and evaluation (natural, manmade, terror events, wars, pandemics, cyber attacks, etc.)
 - The steps needed to prepare a National Disaster Plan.
 - Preparing national, municipal and agency management and civil defense plans for governments, municipalities and agencies.
 - The Integrated Response to a CBRNE terror event.
 - The Integrated Response to an earthquake.
 - Defining Command, Control and Communication roles and technologies.
-- Planning Civil Defense national program and implementation.
-- Tabletop exercises – presenting an operational problem, troubleshooting and round table solutions discussion.` },
+- Planning and implementing a national civil defense program.
+- Tabletop exercises – presenting an operational problem, troubleshooting and a round-table discussion of solutions.` },
         he: { title: "אתגרי ההגנה האזרחית הלאומית", short: "היערכות לאומית לחירום",
           body: `- ניתוח והערכת איומים (טבעיים, מעשה ידי אדם, אירועי טרור, מלחמות, מגפות, מתקפות סייבר ועוד)
 - השלבים הנדרשים להכנת תוכנית לאומית לאסונות.
@@ -397,13 +397,13 @@ Deputy CEO and Chief Operating Officer of the Company, responsible for all the p
       },
       {
         id: "population", icon: "people",
-        en: { title: "Preparing population for emergency", short: "Preparing population for emergency",
+        en: { title: "Preparing the population for emergencies", short: "Preparing the population for emergencies",
           body: `- Israeli lessons learned.
 - Principles for preparing communities for disasters.
 - Community social resilience.
 - "Help them help themselves"
 - Community psychosocial treatment.
-- Community confronting terror incidents.
+- Communities confronting terror incidents.
 - Simulations and workshops.` },
         he: { title: "הכנת האוכלוסייה לשעת חירום", short: "הכנת האוכלוסייה לשעת חירום",
           body: `- לקחים מהניסיון הישראלי.
@@ -417,13 +417,13 @@ Deputy CEO and Chief Operating Officer of the Company, responsible for all the p
       {
         id: "mass-casualty", icon: "cross",
         en: { title: "Responding to a mass casualty incident", short: "Responding to a mass casualty incident",
-          body: `- Hospital preparation for mass casualty event
+          body: `- Hospital preparation for a mass casualty event
 - Determining relevant scenarios for a hospital.
 - Infrastructure and site arrangements.
 - Organization of the 'staff and stuff'.
 - Shifting from routine to emergency in a short period of time.
 - Managing public information and media.
-- Design and implementation of Tabletop exercise.` },
+- Design and implementation of tabletop exercises.` },
         he: { title: "מענה לאירוע רב נפגעים", short: "מענה לאירוע רב נפגעים",
           body: `- היערכות בית החולים לאירוע רב נפגעים
 - קביעת התרחישים הרלוונטיים לבית החולים.
@@ -438,7 +438,7 @@ Deputy CEO and Chief Operating Officer of the Company, responsible for all the p
         en: { title: "Infrastructure resilience", short: "Infrastructure resilience",
           body: `- Physical Protection and Continuity Planning
 - Operational Continuity and DRP – Disaster Recovery Planning
-- Cyber Threats mitigation and recovery` },
+- Cyber threat mitigation and recovery` },
         he: { title: "חוסן תשתיות", short: "חוסן תשתיות",
           body: `- הגנה פיזית ותכנון המשכיות
 - רציפות תפקודית ותוכנית התאוששות מאסון (DRP)
@@ -446,7 +446,7 @@ Deputy CEO and Chief Operating Officer of the Company, responsible for all the p
       },
       {
         id: "drp", icon: "doc",
-        en: { title: "Building Disaster Response Plan (DRP)", short: "Building Disaster Response Plan (DRP)", body: "" },
+        en: { title: "Building a Disaster Response Plan (DRP)", short: "Building a Disaster Response Plan (DRP)", body: "" },
         he: { title: "בניית תוכנית מענה לאסון (DRP)", short: "בניית תוכנית מענה לאסון (DRP)", body: "" }
       },
       {
@@ -459,23 +459,23 @@ Deputy CEO and Chief Operating Officer of the Company, responsible for all the p
 
   /* ---------------- CLIENTS ---------------- */
   clients: {
-    en: { title: "Our Clients", intro: "IsraTeam is working at the national and local level in Israel and in other countries around the world.", othersTitle: "Also among our clients" },
+    en: { title: "Our Clients", intro: "IsraTeam works at the national and local levels in Israel and in other countries around the world.", othersTitle: "Also among our clients" },
     he: { title: "הלקוחות שלנו", intro: "ישראטים פועלת ברמה הלאומית והמקומית בישראל ובמדינות נוספות ברחבי העולם.", othersTitle: "עוד בין לקוחותינו" },
     featured: [
       {
         id: "imod", tag: "IMOD",
         en: { name: "The Israel Ministry of Defense – IMOD", teaser: "Operations manual for local authorities, civil defense advice to the Deputy Minister of Defense, and the national evaluation of Israel's civil defense system.",
-          body: `Preparation of Operation and Procedures Set Manual for local authorities. This project is under the guidance of the MOD – Emergency Economy Division, the Ministry of the Interior and the Home Front Command.
+          body: `Preparation of an operations and procedures manual for local authorities. This project is under the guidance of the MOD – Emergency Economy Division, the Ministry of the Interior and the Home Front Command.
 
-Emergency and Civil Defense consultation to the Deputy Minister of Defense.
+Emergency and civil defense consulting for the Deputy Minister of Defense.
 
 ## Membership and active participation in the National Body Evaluating the Israeli National Civil Defense System
 
-Although the Israel Home Front Command preparedness is well advanced and can be an instructive model for many other countries, the Prime Minister's Office has decided that an expert team should test the system and recommend ways to improve the country's ability to respond to all the threats constantly posed to the Home Front both at peace and during emergencies, and IsraTeam was chosen to provide this expertise.
+Although the Israel Home Front Command's preparedness is well advanced and can be an instructive model for many other countries, the Prime Minister's Office has decided that an expert team should test the system and recommend ways to improve the country's ability to respond to all the threats constantly posed to the Home Front both in peacetime and during emergencies, and IsraTeam was chosen to provide this expertise.
 
-In this project, IsraTeam has evaluated all the potential threats to the Home Front. It has analyzed their implications, tested the true ability of each of the existing organizations, located the weak and strong points, tested the organizational structure and the existing equipment, evaluated the existing resources and their utilization.
+In this project, IsraTeam has evaluated all the potential threats to the Home Front. It has analyzed their implications, tested the true ability of each of the existing organizations, identified the weak and strong points, tested the organizational structure and the existing equipment, and evaluated the existing resources and their utilization.
 
-At the end of this evaluation, a number of alternatives for building the national system were examined and recommendations made to the Prime Minister's office. This methodology of evaluating threats is applied by IsraTeam to all its other related emergency preparedness projects.` },
+At the end of this evaluation, a number of alternatives for building the national system were examined and recommendations made to the Prime Minister's Office. This methodology of evaluating threats is applied by IsraTeam to all its other related emergency preparedness projects.` },
         he: { name: "משרד הביטחון", teaser: "ספר נהלים לרשויות המקומיות, ייעוץ בהגנה אזרחית לסגן שר הביטחון, והערכה לאומית של מערך ההגנה האזרחית בישראל.",
           body: `הכנת ספר נהלי הפעלה לרשויות המקומיות. הפרויקט מתבצע בהנחיית משרד הביטחון – אגף משק לשעת חירום (מל״ח), משרד הפנים ופיקוד העורף.
 
@@ -491,13 +491,13 @@ At the end of this evaluation, a number of alternatives for building the nationa
       },
       {
         id: "weizmann", tag: "Weizmann",
-        en: { name: "Weizmann Institute of Science", teaser: "Ongoing consultancy services for physical protection of major facilities of Weizmann Institute including continuous operations and DRP, as well as preparing for emergencies.",
-          body: `Ongoing consultancy services for physical protection of major facilities of Weizmann Institute including continuous operations and DRP, as well as preparing for emergencies.
+        en: { name: "Weizmann Institute of Science", teaser: "Ongoing consultancy services for the physical protection of the Weizmann Institute's major facilities, including continuity of operations and DRP, as well as emergency preparedness.",
+          body: `Ongoing consultancy services for the physical protection of the Weizmann Institute's major facilities, including continuity of operations and DRP, as well as emergency preparedness.
 
 1. National emergency exercises
 1. DSW
 1. Blood Bank
-1. GTR – DataCenter
+1. GTR – Data Center
 1. Hospitals – ER protection
 1. Seoul Mondial Games – anti-terror preparedness` },
         he: { name: "מכון ויצמן למדע", teaser: "ייעוץ שוטף להגנה פיזית על המתקנים המרכזיים של מכון ויצמן, לרבות רציפות תפקודית ותוכנית התאוששות מאסון (DRP), והיערכות לשעת חירום.",
@@ -517,11 +517,11 @@ At the end of this evaluation, a number of alternatives for building the nationa
       },
       {
         id: "airports", tag: "IAA",
-        en: { name: "The Israeli Airports Authorities", teaser: "Establishing the concept of operation and the response plan for Ben Gurion Airport, dealing with a ChemBio terror event.",
-          body: `IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at macro and micro level of detail preparing a detailed response plan dealing with a ChemBio terror attack:
+        en: { name: "Israel Airports Authority", teaser: "Establishing the concept of operations and the response plan for a ChemBio terror event at Ben Gurion Airport.",
+          body: `IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at both macro and micro levels to prepare a detailed response plan for a ChemBio terror attack:
 
 1. With the Israel Police district command that is responsible for the airport area.
-1. With Israel's main airport authority (Ben Gurion Airport), which should give first aid to the casualties and population at the airport.
+1. With the Israel Airports Authority (Ben Gurion Airport), which is responsible for giving first aid to casualties and the population at the airport.
 
 ## The project included
 
@@ -529,10 +529,10 @@ At the end of this evaluation, a number of alternatives for building the nationa
 1. Evaluating existing emergency plans and equipment capabilities.
 1. Defining possible ChemBio terror scenarios.
 1. Establishing comprehensive emergency plans.
-1. Preparing manuals and Standard Operational Procedures.
+1. Preparing manuals and Standard Operating Procedures.
 1. Planning the evacuation of the casualties by the security personnel (with protective gear).
-1. Planning the evacuation of the population (with escape masks) and what to do with the majority of workers and people uninjured at the site, as well as other matters.
-1. Designing protected buildings, structure elements and alert systems, monitoring and scanning systems, etc.
+1. Planning the evacuation of the population (with escape masks) and the handling of the majority of workers and other uninjured people at the site, among other matters.
+1. Designing protected buildings, structural elements and alert systems, monitoring and scanning systems, etc.
 1. Consulting on protection gear, identification and decontamination equipment.
 1. Establishing and implementing training programs.
 1. Designing Command, Control and Communication systems for emergencies.
@@ -563,7 +563,7 @@ At the end of this evaluation, a number of alternatives for building the nationa
         en: { name: "Ministry of the Environment", teaser: "Developing the \"First Response\" Doctrine for Large-scale Hazmat (Hazardous Materials) Incidents.",
           body: `## Developing the "First Response" Doctrine for Large-scale Hazmat (Hazardous Materials) Incidents
 
-IsraTeam has carried out a national project for the Ministry of the Environment which is responsible for mitigating the consequences of Hazmat incidents in Israel. For this project, Col. Itai Peleg has written the operational doctrine for handling incidents with an emphasis on command, control and communication at the site. The Company has also given courses on theory and operational procedures for the Ministry of the Environment and other organizations handling Hazmat incidents.` },
+IsraTeam has carried out a national project for the Ministry of the Environment, which is responsible for mitigating the consequences of Hazmat incidents in Israel. For this project, Col. Itai Peleg has written the operational doctrine for handling incidents with an emphasis on command, control and communication at the site. The Company has also given courses on theory and operational procedures for the Ministry of the Environment and other organizations handling Hazmat incidents.` },
         he: { name: "המשרד להגנת הסביבה", teaser: "פיתוח תורת ״המענה הראשוני״ לאירועי חומרים מסוכנים (חומ״ס) בהיקף נרחב.",
           body: `## פיתוח תורת ״המענה הראשוני״ לאירועי חומרים מסוכנים (חומ״ס) בהיקף נרחב
 
@@ -578,7 +578,7 @@ After the 1999 earthquake in Turkey, the Israeli government decided that a gener
 
 IsraTeam has taken a major part in writing the national doctrine for handling an earthquake event.
 
-In this project, the Company and especially Col. Yori Sofrin, has had to define the role of each governmental office or agency, to develop the general doctrine and the integration of each one of the organizations within the operational doctrine.
+In this project, the Company, and especially Col. Yori Sofrin, defined the role of each government ministry or agency, developed the general doctrine and integrated each of the organizations into the operational doctrine.
 
 The Company has also conducted a number of courses to guide the organizations taking part in handling a national disaster incident such as an earthquake.` },
         he: { name: "המשרד לביטחון פנים", teaser: "הוועדה הבין־משרדית הלאומית להיערכות לרעידות אדמה: תפקיד פעיל בפיתוח תורת המיתון.",
@@ -595,9 +595,9 @@ The Company has also conducted a number of courses to guide the organizations ta
       {
         id: "icl", tag: "ICL",
         en: { name: "ICL", teaser: "Preparing the Dead Sea chemical industries for an earthquake.",
-          body: `## Preparing the Dead Sea Chemical Industries for Earthquake
+          body: `## Preparing the Dead Sea Chemical Industries for an Earthquake
 
-IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at macro and micro level of detail preparing a response plan dealing with an earthquake for the largest chemical industry in Israel, at the Dead Sea.
+IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at both macro and micro levels to prepare an earthquake response plan for Israel's largest chemical industry, at the Dead Sea.
 
 ## The project included
 
@@ -605,9 +605,9 @@ IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at macro and micro 
 1. Evaluating existing emergency plans and equipment capabilities.
 1. Defining possible scenarios for an earthquake.
 1. Establishing comprehensive emergency plans.
-1. Preparing manuals and Standard Operational Procedures for the different departments in the Company and all different plants.
+1. Preparing manuals and Standard Operating Procedures for the Company's various departments and all of its plants.
 1. Planning the evacuation of the casualties.
-1. Designing protected and strengthened buildings, structure elements and alert systems, monitoring and scanning systems, etc.
+1. Designing protected and strengthened buildings, structural elements and alert systems, monitoring and scanning systems, etc.
 1. Consulting on protection gear.
 1. Establishing and implementing training programs.
 1. Designing Command, Control and Communication systems for emergencies.
@@ -633,8 +633,8 @@ IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at macro and micro 
       },
       {
         id: "tel-aviv-metro", tag: "NTA",
-        en: { name: "Metropolitan Mass Transportation System for Tel-Aviv Area", teaser: "Consulting to the Tel-Aviv Metropolitan Area Rapid Transit System (METRO) on civil defense and ChemBio terror events.",
-          body: `The Government of Israel and Tel-Aviv Municipality have established a public company to carry out the METRO system project in the metropolitan area of Tel-Aviv. The Company has hired IsraTeam's services and expertise in order to define the concept of civil defense in this project. Col. Sofrin is involved in defining the threats, evaluating the potential scenarios and directing the design teams of the proper solutions for a protection system within the underground metro stations.` },
+        en: { name: "Metropolitan Mass Transit System for the Tel Aviv Area", teaser: "Consulting for the Tel Aviv Metropolitan Area Rapid Transit System (METRO) on civil defense and ChemBio terror events.",
+          body: `The Government of Israel and the Tel Aviv Municipality have established a public company to carry out the METRO system project in the Tel Aviv metropolitan area. The company hired IsraTeam's services and expertise to define the civil defense concept for this project. Col. Sofrin is involved in defining the threats, evaluating the potential scenarios and directing the design teams toward appropriate protection-system solutions for the underground metro stations.` },
         he: { name: "מערכת הסעת ההמונים במטרופולין תל אביב", teaser: "ייעוץ למערכת התחבורה העתירה במטרופולין תל אביב (המטרו) בנושאי הגנה אזרחית ואירועי טרור כימי־ביולוגי.",
           body: `ממשלת ישראל ועיריית תל אביב הקימו חברה ציבורית לביצוע פרויקט המטרו במטרופולין תל אביב. החברה שכרה את שירותיה ומומחיותה של ישראטים כדי להגדיר את תפיסת ההגנה האזרחית בפרויקט. אל״ם סופרין שותף בהגדרת האיומים, בהערכת התרחישים האפשריים ובהכוונת צוותי התכנון לפתרונות המתאימים למערכת מיגון בתחנות המטרו התת־קרקעיות.` }
       }
@@ -643,10 +643,10 @@ IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at macro and micro 
       { en: "Home Front Command – IDF", he: "פיקוד העורף – צה״ל" },
       { en: "Ministry of Defense NBC Protection Division", he: "משרד הביטחון – האגף להגנה אב״כ" },
       { en: "Ministry of Health", he: "משרד הבריאות" },
-      { en: "The Israeli Center for Disease Control", he: "המרכז הלאומי לבקרת מחלות" },
+      { en: "Israel Center for Disease Control", he: "המרכז הלאומי לבקרת מחלות" },
       { en: "Magen David Adom – EMS", he: "מגן דוד אדום" },
       { en: "Ministry of Construction & Housing", he: "משרד הבינוי והשיכון" },
-      { en: "Ministry of Interior", he: "משרד הפנים" },
+      { en: "Ministry of the Interior", he: "משרד הפנים" },
       { en: "Israel Air Force", he: "חיל האוויר" },
       { en: "Israel Police", he: "משטרת ישראל" },
       { en: "Atomic Energy Commission", he: "הוועדה לאנרגיה אטומית" },
@@ -666,7 +666,7 @@ IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at macro and micro 
 
   /* ---------------- PROJECTS ---------------- */
   projects: {
-    en: { title: "Projects & Case Studies", sub: "Projects of importance" },
+    en: { title: "Projects & Case Studies", sub: "Major projects" },
     he: { title: "פרויקטים וסיפורי מקרה", sub: "פרויקטים נבחרים" },
     items: [
       {
@@ -680,9 +680,9 @@ IsraTeam, led by Brig. Gen. Avi Bachar, is currently working at macro and micro 
         en: { title: "AUGGMED – Automated Serious Game Scenario Generator for Mixed Reality Training",
           client: "European Commission · Directorate-General Migration and Home Affairs · Migration, Mobility and Innovation · Innovation and Industry for Security",
           teaser: "A serious-game platform for training first responders against terrorist and organized crime threats, developed in an EU consortium led by BMT (UK).",
-          body: `IsraTeam has participated in the consortium led by BMT of UK in developing AUGGMED – Automated Serious Game Scenario Generator for Mixed Reality Training.
+          body: `IsraTeam participated in the consortium, led by BMT (UK), that developed AUGGMED – Automated Serious Game Scenario Generator for Mixed Reality Training.
 
-The aim of AUGGMED is to develop a serious game platform to enable single- and team-based training of end-users with different level of expertise from different organizations responding to terrorist and organized crime threats. The platform will automatically generate non-linear scenarios tailored to suit the needs of individual trainees with learning outcomes that will improve the acquisition of emotional management, analytical thinking, problem solving and decision making skills. The game scenarios will include advanced simulations of operational environments, agents, telecommunications and threats, and will be delivered through VR and MR environments with multimodal interfaces. This will result in highly realistic training scenarios allowing advanced interactivity while encouraging security staff and first responders to engage and actively participate in the training process. In addition, the AUGGMED platform will include tools for trainers enabling them to set learning objectives, define scenarios, monitor training sessions, modify scenarios and provide feedback in real-time, as well as evaluate trainee performance and set training curricula for individual personnel in the post-training session phase. Finally, the platform will be offered in affordable and cost-effective modes including Basic Mode (low VR fidelity and interactivity through mobile devices), Intermediate Mode (immersive multimodal VR) and Full Mode (immersive multimodal MR on-site).
+The aim of AUGGMED is to develop a serious game platform to enable single- and team-based training of end-users with different levels of expertise from different organizations responding to terrorist and organized crime threats. The platform will automatically generate non-linear scenarios tailored to suit the needs of individual trainees with learning outcomes that will improve the acquisition of emotional management, analytical thinking, problem solving and decision making skills. The game scenarios will include advanced simulations of operational environments, agents, telecommunications and threats, and will be delivered through VR and MR environments with multimodal interfaces. This will result in highly realistic training scenarios allowing advanced interactivity while encouraging security staff and first responders to engage and actively participate in the training process. In addition, the AUGGMED platform will include tools for trainers enabling them to set learning objectives, define scenarios, monitor training sessions, modify scenarios and provide feedback in real-time, as well as evaluate trainee performance and set training curricula for individual personnel in the post-training session phase. Finally, the platform will be offered in affordable and cost-effective modes including Basic Mode (low VR fidelity and interactivity through mobile devices), Intermediate Mode (immersive multimodal VR) and Full Mode (immersive multimodal MR on-site).
 
 The project has delivered excellent results and has achieved its objectives fully according to the DoA.
 
@@ -690,11 +690,11 @@ Although several demos (AR, multiple VR users, haptic vest) were not demonstrate
 
 What has to be specifically noted is the excellent engagement of end-users in the project, as well as the final quality of the Virtual Reality and Haptics serious game simulation platform and UX.
 
-It is generally acceptable that training of end-users with different level of expertise from different organizations responding to terrorist and organized crime threats will involve a Mixed Reality platform. AUGGMED has definitely allowed important advances from the state of the art in this field.
+It is generally accepted that training of end-users with different levels of expertise from different organizations responding to terrorist and organized crime threats will involve a Mixed Reality platform. AUGGMED has clearly advanced the state of the art in this field.
 
-The project has fully achieved its pilots/case studies as described in the DoA. IsraTeam have participated in defining the threats, assessing the physical and mental effects and developing potential courses of action to be employed by the trainee first responders. In doing so, IsraTeam have developed a unique assessment tool of modelling threat scenarios, physical effects on surroundings and in particular on the human body, and using statistical databases of actual events and attack scenarios, put into a vital assessment to the AR model.
+The project has fully achieved its pilots/case studies as described in the DoA. IsraTeam has participated in defining the threats, assessing the physical and mental effects and developing potential courses of action to be employed by the trainee first responders. In doing so, IsraTeam has developed a unique assessment tool for modeling threat scenarios and their physical effects on the surroundings, and in particular on the human body, using statistical databases of actual events and attack scenarios, and fed this vital assessment into the AR model.
 
-Three terroristic attacks have been analyzed and portrayed in the pilot project, describing attacks in an airport terminal, at a large cruise ship passenger terminal and at a large underground metro station.` },
+Three terrorist attacks have been analyzed and portrayed in the pilot project, describing attacks in an airport terminal, at a large cruise ship passenger terminal and at a large underground metro station.` },
         he: { title: "AUGGMED – מחולל תרחישים אוטומטי למשחק רציני לאימון במציאות מעורבת",
           client: "הנציבות האירופית · המנהלה הכללית להגירה ולענייני פנים · הגירה, ניידות וחדשנות · חדשנות ותעשייה לביטחון",
           teaser: "פלטפורמת משחק רציני לאימון כוחות חירום מול איומי טרור ופשיעה מאורגנת, שפותחה בקונסורציום אירופי בהובלת BMT הבריטית.",
@@ -716,11 +716,11 @@ Three terroristic attacks have been analyzed and portrayed in the pilot project,
       },
       {
         id: "mci-hospital",
-        en: { title: "Critical Infrastructure Resilience – MCI (Mass Casualty Incidents)", client: "Hospital – preparing and training program",
+        en: { title: "Critical Infrastructure Resilience – MCI (Mass Casualty Incidents)", client: "Hospital preparedness and training program",
           teaser: "A five-day program that prepares hospitals for earthquakes, CBRNE terror, cyber attacks and toxicological events.",
           body: `## The need
 
-Hospitals are the Critical Infrastructure of any large-scale disaster situation and therefore must maintain a perpetual state of readiness to deal with such events.
+Hospitals are the critical infrastructure in any large-scale disaster situation and therefore must maintain a perpetual state of readiness to deal with such events.
 
 Disaster training differs from standard emergency routine in that it aims to prepare the hospital and staff for extreme circumstances, as opposed to a normal hospital routine, which is characterized by a constant level of strain on hospital resources.
 
@@ -730,24 +730,24 @@ Disaster situations involving mass casualties include:
 
 - Earthquakes
 - Cyber attack
-- Wild fire
+- Wildfire
 - Large-scale accidents (train, plane, extreme weather, etc.)
 - Terrorist attacks including CBRNE
 - Toxicological incidents – leakage from a tanker carrying HAZMATs, or a factory explosion that exposes the workers and the public to an expanding cloud of hazardous material.
 
-Our program is designed to prepare hospitals to effectively respond to such situations through training personnel to operate under emergency procedures and extreme pressure. The program has been developed on the foundation of our hands-on experience with such events.
+Our program is designed to prepare hospitals to respond effectively to such situations by training personnel to operate under emergency procedures and extreme pressure. The program has been developed on the foundation of our hands-on experience with such events.
 
 ## Israel – a global expert in MCI medicine
 
-Israel has experienced many acts of terror over the years, which involved a large scale of casualties and injuries. Therefore, it must be up to par when it comes to the ability to provide real time, broad-scale emergency medical treatment under extreme conditions. The frequency of attacks has propelled Israel to develop innovative methods to address the constant threat of MCIs. Treating large numbers of physical trauma victims with immediate response times has given rise to the field of MCI medicine in Israel. In the past 20 years, professionals from Israel have been harnessing this knowledge and experience to become leading experts in the fields of Disaster Risk Management and Mass Casualty Incidents.
+Israel has experienced many acts of terror over the years involving large numbers of casualties and injuries. Therefore, it must be up to par when it comes to the ability to provide real-time, broad-scale emergency medical treatment under extreme conditions. The frequency of attacks has propelled Israel to develop innovative methods to address the constant threat of MCIs. Treating large numbers of physical trauma victims with immediate response times has given rise to the field of MCI medicine in Israel. In the past 20 years, professionals from Israel have been harnessing this knowledge and experience to become leading experts in the fields of Disaster Risk Management and Mass Casualty Incidents.
 
-As such, Israel is always the first to send aid missions to worldwide MCI events, such as India's earthquake (2001); China's earthquake in Sichuan (2008); Haiti's earthquake (2010); the typhoon in the Philippines (2013); and most recently, Nepal's earthquake (2015).
+Accordingly, Israel is always among the first to send aid missions to worldwide MCI events, such as India's earthquake (2001); China's earthquake in Sichuan (2008); Haiti's earthquake (2010); the typhoon in the Philippines (2013); and most recently, Nepal's earthquake (2015).
 
-In all of these events, Israel has efficiently provided immediate medical care for thousands of casualties in different levels of severity, and gained global recognition for its high rate of success in saving lives and treating severe injuries.
+In all of these events, Israel has efficiently provided immediate medical care for thousands of casualties with varying levels of severity, and gained global recognition for its high rate of success in saving lives and treating severe injuries.
 
-## MCI hospital preparing and training program
+## MCI hospital preparedness and training program
 
-Dealing with Mass Casualty Incidents (MCI) requires a multi-faceted approach; in an event of disasters such as terrorist attacks, earthquakes or toxicological events, hundreds of people are evacuated from the scene to the hospital, in need of treatment, information and psychological relief.
+Dealing with Mass Casualty Incidents (MCI) requires a multi-faceted approach; in disasters such as terrorist attacks, earthquakes or toxicological events, hundreds of people are evacuated from the scene to the hospital, in need of treatment, information and psychological relief.
 
 Our MCI hospital-training program includes:
 
@@ -755,13 +755,13 @@ Our MCI hospital-training program includes:
 1. Development of procedures that are customized to the specific hospital.
 1. Training hospital staff and conducting MCI management simulations.
 1. Procuring and storing MCI equipment (emergency supply container).
-1. Full exercise – simulation in the hospital premises and team-training.
+1. Full exercise – simulation on the hospital premises and team training.
 
 Our training program will be built around the most likely incident (according to the needs of the hospital or Ministry of Health), such as earthquakes, mass casualty terror events or toxicological events. Each of these events requires a different approach, organization method, and equipment.
 
-## Our program includes a five-day training as follows
+## Our program includes five days of training, as follows
 
-- Day 1–2: Lectures to the entire hospital staff.
+- Days 1–2: Lectures to the entire hospital staff.
 - Day 3: MCI management simulations.
 - Day 4: Simulation drill on hospital premises.
 - Day 5: Summary and conclusions.` },
@@ -826,7 +826,7 @@ Our training program will be built around the most likely incident (according to
       {
         id: "cannes-resilience-forum", date: "06.03.2022", image: "images/event-cannes-forum.jpg",
         en: { title: "Cannes International Resilience Forum", place: "Cannes",
-          body: "On behalf of the Mayor of Cannes and the Chair, General Abraham Bachar, we are pleased and honored to announce the first edition of the Cannes International Resilience Forum (CIRF). CIRF is an international congress dedicated to crisis management and resilience, which will take place at the Palais des Festivals et des Congrès in Cannes from Sunday 6th to Tuesday 8th, March 2022." },
+          body: "On behalf of the Mayor of Cannes and the Chair, General Abraham Bachar, we are pleased and honored to announce the first edition of the Cannes International Resilience Forum (CIRF). CIRF is an international congress dedicated to crisis management and resilience, which will take place at the Palais des Festivals et des Congrès in Cannes from Sunday 6 to Tuesday 8 March 2022." },
         he: { title: "פורום החוסן הבינלאומי של קאן", place: "קאן",
           body: "בשם ראש עיריית קאן ויו״ר הפורום, תא״ל אברהם בכר, אנו שמחים ומתכבדים להכריז על הכנס הראשון של פורום החוסן הבינלאומי של קאן (CIRF). CIRF הוא כנס בינלאומי המוקדש לניהול משברים ולחוסן, ויתקיים בארמון הפסטיבלים והכנסים בקאן מיום ראשון, 6 במרץ, ועד יום שלישי, 8 במרץ 2022." }
       },
@@ -850,7 +850,7 @@ Our training program will be built around the most likely incident (according to
     ],
     faq: [
       {
-        en: { q: "Can you control or prevent media publicity in emergency events?", a: "There is no way to prevent media publicity. However, the right way is to use the media as an efficient information channel to the public in need." },
+        en: { q: "Can you control or prevent media publicity in emergency events?", a: "There is no way to prevent media publicity. However, the right approach is to use the media as an effective channel for informing the public." },
         he: { q: "האם אפשר לשלוט בפרסום בתקשורת באירועי חירום או למנוע אותו?", a: "אין דרך למנוע פרסום בתקשורת. עם זאת, הדרך הנכונה היא להשתמש בתקשורת כערוץ מידע יעיל אל הציבור הזקוק לו." }
       }
     ]
