@@ -265,6 +265,7 @@ S.method = {
     loop: "Continuous integration & adaptation: threats, geopolitics, lessons learned, technology",
     note: "National capability is achieved through continuous strategic architecture design, system integration and technology implementation within a unified operational framework.",
     intl: "For more than 25 years, IsraTeam has advised governments, national authorities, municipalities, hospitals, emergency organizations and critical-infrastructure operators in Israel and internationally. In 2025, IsraTeam hosted a delegation from the European Parliament's Security and Defence Committee (SEDE), presenting its integrated methodology for civil defense and resilience in the hybrid-threat era.",
+    whyTitle: "Why IsraTeam",
     why: ["Strategic architecture linked directly to implementation", "Senior multidisciplinary experts across all required domains", "Tailored, integrated and locally adaptable solutions"],
     support: "Supported by specialists in doctrine, C4I, cyber, strategic influence, CBRNE, hospitals, communities, logistics, training and technology integration.",
     motto: "Integrated. Tailored. Implementable."
@@ -405,4 +406,4 @@ S.covers = {
 })();
 
 /* Videos present in images/ (name.mp4 + name.jpg poster). A slot only renders when its name is listed here. */
-window.SITE.videos = ["hero-situation-room", "bg-civil-defense", "stage-a-assessment", "stage-b-integration", "stage-c-readiness", "post-grid-attack", "clients-world-map", "project-mci", "bg-contact", "bg-updates", "bg-projects", "bg-about", "threat-earthquake", "threat-tsunami", "threat-air", "threat-cyber", "threat-hazmat", "threat-wildfire", "threat-flood", "threat-collapse", "topic-shelters", "topic-training", "topic-infrastructure", "topic-drp", "topic-mci", "topic-population", "topic-civil-defense"];
+window.SITE.videos = ["hero-situation-room", "bg-civil-defense", "stage-a-assessment", "stage-b-integration", "stage-c-readiness", "post-grid-attack", "clients-world-map", "project-mci", "bg-contact", "bg-updates", "bg-projects", "bg-about", "threat-war", "threat-terror", "threat-pandemic", "threat-earthquake", "threat-tsunami", "threat-air", "threat-cyber", "threat-hazmat", "threat-wildfire", "threat-flood", "threat-collapse", "topic-shelters", "topic-training", "topic-infrastructure", "topic-drp", "topic-mci", "topic-population", "topic-civil-defense"];

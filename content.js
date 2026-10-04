@@ -160,7 +160,16 @@ window.SITE = {
       updatesTitle: "Updates & events",
       contactTitle: "Contact",
       contactName: "Brig. Gen. (Res.) Avi Bachar",
-      contactRole: "Founder & CEO – IsraTeam 98 Ltd."
+      contactRole: "Founder & CEO – IsraTeam 98 Ltd.",
+      dossierOrg: "IsraTeam 98",
+      dossier: [
+        { label: "Former", text: "Chief of Staff, Israel Home Front Command" },
+        { label: "Former", text: "Head of the National Emergency Management Authority (NEMA)" },
+        { label: "2007–2009", text: "Head of the Malach Unit (Emergency Economy)" }
+      ],
+      coreEyebrow: "Expertise",
+      regions: ["Israel", "Europe", "Asia", "Middle East", "USA"],
+      updatesEyebrow: "Activity & updates"
     },
     he: {
       eyebrow: "ניהול משברים מקצועי",
@@ -820,7 +829,7 @@ Our training program will be built around the most likely incident (according to
 
   /* ---------------- UPDATES (events, articles, FAQ) ---------------- */
   updates: {
-    en: { title: "Updates & Knowledge", intro: "Events, publications and answers to common questions." },
+    en: { title: "Updates & Knowledge", intro: "Events, publications and answers to common questions.", galleryTitle: "Activity gallery" },
     he: { title: "עדכונים וידע", intro: "אירועים, פרסומים ותשובות לשאלות נפוצות." },
     events: [
       {
