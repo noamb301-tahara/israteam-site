@@ -1091,5 +1091,22 @@ If you find an accessibility problem on the site, or would like information in a
 Please describe the problem, the page where you found it, and the browser and assistive technology you used. We will respond within [[5]] business days.
 
 The site was checked with keyboard navigation, automated tests and narrow-screen testing. This statement will be updated at least once a year or when the site changes significantly.` }
+  },
+  threats: {
+    en: { eyebrow: "Reference scenarios", title: "The threats we prepare for", text: "Each of these scenarios calls for a plan, a system and drills in advance. That is what we build with our clients." },
+    he: { eyebrow: "תרחישי ייחוס", title: "האיומים שאנחנו נערכים אליהם", text: "כל תרחיש כזה דורש תוכנית, מערך ותרגול מראש. זה מה שאנחנו בונים עם הלקוחות שלנו." },
+    items: [
+      { video: "images/threat-war.mp4", poster: "images/threat-war.jpg", en: "War", he: "מלחמה" },
+      { video: "images/threat-terror.mp4", poster: "images/threat-terror.jpg", en: "Terror attack", he: "פיגוע טרור" },
+      { video: "images/threat-pandemic.mp4", poster: "images/threat-pandemic.jpg", en: "Pandemic", he: "מגפה" },
+      { video: "images/threat-earthquake.mp4", poster: "images/threat-earthquake.jpg", en: "Earthquake", he: "רעידת אדמה" },
+      { video: "images/threat-collapse.mp4", poster: "images/threat-collapse.jpg", en: "Building collapse", he: "קריסת מבנה" },
+      { video: "images/threat-flood.mp4", poster: "images/threat-flood.jpg", en: "Flooding", he: "הצפה" },
+      { video: "images/threat-wildfire.mp4", poster: "images/threat-wildfire.jpg", en: "Wildfire", he: "שריפת ענק" },
+      { video: "images/threat-hazmat.mp4", poster: "images/threat-hazmat.jpg", en: "Hazardous materials", he: "חומרים מסוכנים" },
+      { video: "images/threat-cyber.mp4", poster: "images/threat-cyber.jpg", en: "Cyber attack", he: "מתקפת סייבר" },
+      { video: "images/threat-air.mp4", poster: "images/threat-air.jpg", en: "Aerial threats", he: "איום מהאוויר" },
+      { video: "images/threat-tsunami.mp4", poster: "images/threat-tsunami.jpg", en: "Tsunami", he: "צונאמי" }
+    ]
   }
 };

@@ -358,6 +358,8 @@ html[dir="rtl"] .lbvis button span{display:inline-block;transform:scaleX(-1)}
 .tvid video,.tvid img,.threat video,.threat img{width:100%;height:100%;object-fit:cover;display:block}
 .threats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .threat{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:var(--radius);background:var(--deep);margin:0}
+.threat.novid{background:radial-gradient(120% 90% at 30% 20%,#1d3f5c,var(--deep))}
+.threat.novid figcaption{background:none;font-size:18px}
 .threat figcaption{position:absolute;inset-inline:0;bottom:0;padding:28px 14px 12px;background:linear-gradient(transparent,rgba(8,20,34,.9));color:#fff;font-weight:600;font-size:15px}
 @media (max-width:900px){.threats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .pagehead .bgv{opacity:.5}
@@ -523,6 +525,7 @@ function loadRemote(){
     .catch(()=>0).finally(()=>clearTimeout(t));
 }
 let lang = "en";
+const HE_ON = false; /* Hebrew version switched off at the owner's request (2026-10-04). Set to true to restore. */
 const A11Y=(()=>{let o={}; try{o=JSON.parse(localStorage.getItem("it-a11y")||"{}")||{};}catch(e){} return {size:+o.size||0,hc:!!o.hc,links:!!o.links,font:!!o.font,still:!!o.still};})();
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -621,7 +624,6 @@ const VIDS=new Set(S.videos||[]);
 const hasV=n=>VIDS.has(n)||!!MS(n).video;
 const TOPIC_VIDS={"national-civil-defense":"topic-civil-defense",population:"topic-population","mass-casualty":"topic-mci",infrastructure:"topic-infrastructure",drp:"topic-drp",training:"topic-training",shelters:"topic-shelters"};
 const PAGE_BG={about:"bg-about",projects:"bg-projects",updates:"bg-updates",contact:"bg-contact","project-mci-hospital":"project-mci","expertise-national-civil-defense":"bg-civil-defense"};
-const THREATS=[["threat-earthquake","Earthquake","רעידת אדמה"],["threat-collapse","Building collapse","קריסת מבנה"],["threat-flood","Flooding","הצפה"],["threat-wildfire","Wildfire","שריפת ענק"],["threat-hazmat","Hazardous materials","חומרים מסוכנים"],["threat-cyber","Cyber attack","מתקפת סייבר"],["threat-air","Aerial threats","איום מהאוויר"],["threat-tsunami","Tsunami","צונאמי"]];
 const LOGOS={imod:"imod",weizmann:"weizmann",bynet:"bynet",airports:"airports",environment:"environment","internal-security":"internal-security",icl:"icl","tel-aviv-metro":"tel-aviv-metro",
 "Home Front Command – IDF":"home-front-command","Ministry of Defense NBC Protection Division":"mod-nbc","Ministry of Health":"health","The Israeli Center for Disease Control":"icdc","Magen David Adom – EMS":"mda","Ministry of Construction & Housing":"construction-housing","Ministry of Interior":"interior","Israel Air Force":"air-force","Israel Police":"police","Atomic Energy Commission":"atomic-energy","Cross Israel Highway":"cross-israel-highway","Jerusalem Municipality – Water security systems and Moriah":"jerusalem","Development Company for Jerusalem":"jerusalem-development","United Local Authorities Administration":"local-authorities","MED-1 Israel":"med1","Azrieli Group":"azrieli","Korea – Seoul Metropolitan Government":"seoul","Turkey – Prime Ministry, Security Affairs":"turkey","China – Guangzhou Asian Games":"guangzhou","USA – Federal Transit Administration":"fta","USA – Transportation Security Administration":"tsa"};
 function clogo(k, alt){ const f=(S.clientLogos||{})[k]||LOGOS[k]; return f?'<span class="clogo"><img src="'+esc(/[/.]/.test(f)?f:"images/logos/"+f+".png")+'" alt="'+esc(alt||"")+'" loading="lazy"></span>':""; }
@@ -629,9 +631,14 @@ let curRoute="home";
 const allTopicVids=()=>S.expertise.topics.every(t=>hasV(TOPIC_VIDS[t.id]));
 const topicVid=id=>allTopicVids()&&hasV(TOPIC_VIDS[id])?'<div class="tvid" aria-hidden="true">'+vid(TOPIC_VIDS[id])+'</div>':'';
 function threatsSection(){
-  const list=THREATS.filter(t=>hasV(t[0])); if(!list.length) return "";
-  const he=lang==="he";
-  return '<section class="sec" id="threats"><div class="wrap"><div class="sechead"><div><div class="eyebrow">'+esc(he?"תרחישי ייחוס":"Reference scenarios")+'</div><h2>'+esc(he?"האיומים שאנחנו נערכים אליהם":"The threats we prepare for")+'</h2></div><p>'+esc(he?"כל תרחיש כזה דורש תוכנית, מערך ותרגול מראש. זה מה שאנחנו בונים עם הלקוחות שלנו.":"Each of these scenarios calls for a plan, a system and drills in advance. That is what we build with our clients.")+'</p></div><div class="threats">'+list.map(t=>'<figure class="threat">'+vid(t[0])+'<figcaption>'+esc(he?t[2]:t[1])+'</figcaption></figure>').join("")+'</div></div></section>';
+  const T0=S.threats; if(!T0||!(T0.items||[]).length) return "";
+  const x=L(T0)||{};
+  const tile=t=>{ const cap=esc(t[lang]||t.en||""); const nm=(t.video||"").match(/^images\/(.+)\.mp4$/);
+    const src=nm&&MS(nm[1]).video||t.video, poster=nm&&MS(nm[1]).poster||t.poster||"";
+    const v=!!src&&(!nm||hasV(nm[1]));
+    const m=!v?'':REDUCED?'<img src="'+esc(poster)+'" alt="" loading="lazy">':'<video src="'+esc(src)+'"'+(poster?' poster="'+esc(poster)+'"':'')+' preload="none" muted loop playsinline disablepictureinpicture aria-hidden="true"></video>';
+    return '<figure class="threat'+(v?'':' novid')+'">'+m+'<figcaption>'+cap+'</figcaption></figure>'; };
+  return '<section class="sec" id="threats"><div class="wrap"><div class="sechead"><div><div class="eyebrow">'+esc(x.eyebrow||"")+'</div><h2>'+esc(x.title||"")+'</h2></div><p>'+esc(x.text||"")+'</p></div><div class="threats">'+T0.items.map(tile).join("")+'</div></div></section>';
 }
 function playVisible(){
   if(REDUCED||!("IntersectionObserver" in window)) return;
@@ -843,8 +850,8 @@ function pageCustom(id){
 }
 function openAdmin(){
   document.documentElement.lang="he"; document.documentElement.dir="rtl";
-  window.ISRA={S,STATIC,CMS,route:()=>{location.hash="#home";}};
-  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=1"; document.body.appendChild(sc); }
+  window.ISRA={S,STATIC,CMS,HE_ON,route:()=>{location.hash="#home";}};
+  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=2"; document.body.appendChild(sc); }
   else if(window.ISRA_ADMIN) window.ISRA_ADMIN.show();
 }
 function pageLegal(key){
@@ -895,6 +902,7 @@ function renderChrome(route){
   const sect = {team:"about",client:"clients",project:"projects",event:"updates",post:"updates",article:"updates",expertise:"expertise"}[top] || top;
   const extra=(S.pages||[]).filter(p=>p.inNav&&L(p)&&L(p).title);
   $("#nav").innerHTML=["home","about","expertise","clients","projects","updates","contact"].map(k=>'<a href="'+href(k)+'"'+(sect===k?' aria-current="page"':'')+'>'+esc(u.nav[k])+'</a>').join("")+extra.map(p=>'<a href="'+href("page-"+p.id)+'"'+(route==="page-"+p.id?' aria-current="page"':'')+'>'+esc(L(p).title)+'</a>').join("");
+  $("#langbtn").style.display=HE_ON?"":"none";
   $("#langbtn").textContent=u.lang;
   $("#langbtn").setAttribute("lang", lang==="he"?"en":"he");
   $("#menubtn").textContent=u.menu;
@@ -919,6 +927,7 @@ function route(){
   if(h.startsWith("he.")){ lang="he"; h=h.slice(3); }
   else if(h==="he"){ lang="he"; h="home"; }
   else if(h && h!=="main") { lang="en"; }
+  if(!HE_ON && lang==="he"){ lang="en"; history.replaceState(null,"","#"+(h||"home")); }
   if(!h || h==="main") h="home";
   if(h!=="admin" && window.ISRA_ADMIN) window.ISRA_ADMIN.hide();
   const root=document.documentElement; root.lang=lang; root.dir=lang==="he"?"rtl":"ltr";
@@ -1054,7 +1063,7 @@ $("#langbtn").addEventListener("click",()=>{
 $("#menubtn").addEventListener("click",()=>{const n=$("#nav"),o=n.classList.toggle("open");$("#menubtn").setAttribute("aria-expanded",String(o));});
 $("#skip").addEventListener("click",e=>{e.preventDefault();$("#main").focus();});
 window.addEventListener("hashchange",()=>{ if(location.hash==="#main") return; route(); window.scrollTo(0,0); });
-if(!location.hash){ try{ if(localStorage.getItem("it-lang")==="he") lang="he"; }catch(e){} if(lang==="he") history.replaceState(null,"","#he.home"); }
+if(!location.hash && HE_ON){ try{ if(localStorage.getItem("it-lang")==="he") lang="he"; }catch(e){} if(lang==="he") history.replaceState(null,"","#he.home"); }
 { let done=false; const go=()=>{ if(!done){ done=true; route(); } };
   const rl=loadRemote(); rl.then(n=>{ if(done&&n) route(); else go(); }); setTimeout(go,900); }
 })();

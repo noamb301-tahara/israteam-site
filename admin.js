@@ -3,6 +3,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 const { S, STATIC, CMS } = window.ISRA;
+const HE = window.ISRA.HE_ON !== false; /* Hebrew fields are hidden while the site runs in English only */
 const sb = createClient(CMS.url, CMS.key, { auth: { persistSession: true, detectSessionInUrl: true } });
 
 const SECTIONS = [
@@ -14,6 +15,7 @@ const SECTIONS = [
   ["projects", "פרויקטים"],
   ["expertise", "תחומי מומחיות"],
   ["method", "מתודולוגיה (3 שלבים)"],
+  ["threats", "האיומים שאנחנו נערכים אליהם", "הרשימה בדף הבית: הוספה, מחיקה ושינוי שמות. לכל איום אפשר לצרף סרטון."],
   ["about", "אודות"],
   ["aboutMore", "אודות – חזון ומטרות"],
   ["team", "צוות"],
@@ -287,7 +289,9 @@ function blank(v) {
 const PAGE_TEMPLATE = () => ({ id: "page-" + Date.now().toString(36), inNav: false, image: "", en: { title: "", intro: "", body: "" }, he: { title: "", intro: "", body: "" } });
 function itemTitle(it, i) {
   if (it && typeof it === "object") {
-    const t = (it.he && (it.he.title || it.he.name)) || (it.en && (it.en.title || it.en.name)) || it.title || it.name || it.id;
+    const he = HE && (typeof it.he === "string" ? it.he : it.he && (it.he.title || it.he.name));
+    const en = typeof it.en === "string" ? it.en : it.en && (it.en.title || it.en.name);
+    const t = he || en || it.title || it.name || it.id;
     if (t) return String(t).slice(0, 80);
   }
   if (typeof it === "string") return it.slice(0, 80);
@@ -339,7 +343,8 @@ function renderObject(obj, path, key) {
   const field = k => renderValue(obj[k], [...path, k], k, v => { obj[k] = v; });
   const rest = keys.filter(k => k !== "en" && k !== "he");
   rest.filter(k => typeof obj[k] !== "object" || obj[k] === null).forEach(k => box.append(field(k)));
-  if (keys.includes("en") && keys.includes("he")) box.append(h("div", { class: "bi" }, h("div", { dir: "rtl" }, field("he")), h("div", { dir: "ltr" }, field("en"))));
+  if (!HE) { if (keys.includes("en")) box.append(h("div", { dir: "ltr" }, field("en"))); }
+  else if (keys.includes("en") && keys.includes("he")) box.append(h("div", { class: "bi" }, h("div", { dir: "rtl" }, field("he")), h("div", { dir: "ltr" }, field("en"))));
   else ["en", "he"].filter(k => keys.includes(k)).forEach(k => box.append(field(k)));
   rest.filter(k => obj[k] && typeof obj[k] === "object").forEach(k => box.append(field(k)));
   return box;
