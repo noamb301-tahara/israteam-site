@@ -225,7 +225,7 @@ IsraTeam is active in Israel and abroad in the field of Emergency Management and
 The team members have played an active role in emergency planning and preparedness in Israeli Homeland Security organizations, as well as in devising emergency strategies and doctrine. These organizations were put to actual tests in various complex emergencies.
 
 The company has established and implemented training programs for security and emergency organizations coping with war, CBRNE terrorism, earthquakes and other natural and manmade disasters.`,
-      mgmtTitle: "Management",
+      mgmtEyebrow: "IsraTeam 98", mgmtTitle: "Management",
       mgmtIntro: "Providing solutions to build more resilient communities and countries through mitigation and planning that reduce potential threats, whether natural or manmade. We offer comprehensive and cost-effective solutions to complex threats and risks that are very real in today's world."
     },
     he: {

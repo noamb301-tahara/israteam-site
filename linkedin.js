@@ -250,6 +250,7 @@ Avi Bachar, CEO of IsraTeam. Former Chief of Staff, Home Front Command (HFC), th
 
 /* ---------- Methodology (from the 2026 one-page overview) ---------- */
 S.method = {
+  morePage: "",
   en: {
     eyebrow: "Our methodology",
     title: "From strategic architecture to operational readiness",
@@ -266,6 +267,7 @@ S.method = {
     note: "National capability is achieved through continuous strategic architecture design, system integration and technology implementation within a unified operational framework.",
     intl: "For more than 25 years, IsraTeam has advised governments, national authorities, municipalities, hospitals, emergency organizations and critical-infrastructure operators in Israel and internationally. In 2025, IsraTeam hosted a delegation from the European Parliament's Security and Defence Committee (SEDE), presenting its integrated methodology for civil defense and resilience in the hybrid-threat era.",
     whyTitle: "Why IsraTeam",
+    moreText: "Read the full methodology",
     why: ["Strategic architecture linked directly to implementation", "Senior multidisciplinary experts across all required domains", "Tailored, integrated and locally adaptable solutions"],
     support: "Supported by specialists in doctrine, C4I, cyber, strategic influence, CBRNE, hospitals, communities, logistics, training and technology integration.",
     motto: "Integrated. Tailored. Implementable."

@@ -572,7 +572,8 @@ const ICONS = {
 const icon = k => '<svg viewBox="0 0 30 30" aria-hidden="true">'+(ICONS[k]||"")+'</svg>';
 const WA_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.5-.3z"/></svg>';
 const LI_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zM9.5 9.75h3.8v1.5h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.61 0-1.85 1.25-1.85 2.55v4.91h-4z"/></svg>';
-const waLink = () => "https://wa.me/" + S.contact.phoneRaw;
+const phoneDigits = () => String(S.contact.phoneRaw || S.contact.phone || "").replace(/\D/g,"");
+const waLink = () => "https://wa.me/" + phoneDigits();
 
 function crumbs(items){
   return '<nav class="crumbs" aria-label="Breadcrumb">' + items.map((it,i)=> i<items.length-1
@@ -584,14 +585,14 @@ function pagehead(trail, title, sub, extra){
 }
 function ctaBand(){
   const u=U(), h=L(S.home);
-  return '<section class="band ctaband"><div class="wrap"><div><h2>'+esc(u.talk)+'</h2><p>'+esc(h.contactName)+' · '+esc(h.contactRole)+'</p></div><div class="ctas" style="margin:0"><a class="btn primary" href="'+href("contact")+'">'+esc(u.contactUs)+' '+arrow+'</a><a class="btn ghost" href="'+waLink()+'" target="_blank" rel="noopener">'+esc(u.whatsapp)+'</a></div></div></section>';
+  return '<section class="band ctaband"><div class="wrap"><div><h2>'+esc(u.talk)+'</h2><p>'+esc(h.contactName)+' · '+esc(h.contactRole)+'</p></div><div class="ctas" style="margin:0">'+(u.contactUs?'<a class="btn primary" href="'+href("contact")+'">'+esc(u.contactUs)+' '+arrow+'</a>':'')+(u.whatsapp?'<a class="btn ghost" href="'+waLink()+'" target="_blank" rel="noopener">'+esc(u.whatsapp)+'</a>':'')+'</div></div></section>';
 }
 function sideList(title, items, current){
   return '<div class="card"><h4>'+esc(title)+'</h4><ul>'+items.map(([t,r])=>'<li><a href="'+href(r)+'"'+(r===current?' aria-current="page"':'')+'>'+esc(t)+'</a></li>').join("")+'</ul></div>';
 }
 function contactCard(){
   const u=U(), h=L(S.home);
-  return '<div class="card"><h4>'+esc(h.contactTitle)+'</h4><p style="font-weight:600">'+esc(h.contactName)+'</p><p class="muted" style="font-size:14px;margin-bottom:14px">'+esc(h.contactRole)+'</p><a class="btn primary" style="width:100%;justify-content:center" href="'+href("contact")+'">'+esc(u.contactUs)+'</a></div>';
+  return '<div class="card"><h4>'+esc(h.contactTitle)+'</h4><p style="font-weight:600">'+esc(h.contactName)+'</p><p class="muted" style="font-size:14px;margin-bottom:14px">'+esc(h.contactRole)+'</p>'+(u.contactUs?'<a class="btn primary" style="width:100%;justify-content:center" href="'+href("contact")+'">'+esc(u.contactUs)+'</a>':'')+'</div>';
 }
 
 
@@ -603,6 +604,7 @@ const T = () => TX[lang];
 const posts = () => S.posts || [];
 const findPost = id => posts().find(p=>p.id===id);
 const postByImg = src => posts().find(p=>(p.images||[]).includes(src));
+const cardText = x => x.card!=null&&x.card!=="" ? x.card : (((x.body||"").split("\n").find(l=>l.startsWith("- "))||"").slice(2));
 const firstPara = s => ((s||"").split("\n").map(l=>l.trim()).find(l=>l && !l.startsWith("## ") && !l.startsWith("- ")) || "").replace(/\*\*/g,"");
 function postLinks(p){
   const t=T(), out=[];
@@ -659,12 +661,16 @@ const STAGE_VIDS=["stage-a-assessment","stage-b-integration","stage-c-readiness"
 function methodSection(){
   if(!S.method) return "";
   const x=L(S.method), t=T();
+  const stages=(x.stages||[]).filter(s=>s&&(s.title||s.tag||(s.items||[]).some(i=>i&&i.trim())));
+  const mp=S.method.morePage;
+  const pg=mp?(S.pages||[]).find(p=>p.id===mp):(S.pages||[]).find(p=>/methodolog/i.test((L(p)||{}).title||""));
+  const more=pg&&x.moreText!==""?'<p style="margin-top:22px"><a class="btn primary" href="'+href("page-"+pg.id)+'">'+esc(x.moreText||"Read the full methodology")+' '+arrow+'</a></p>':'';
   return `<section class="sec" id="method"><div class="wrap">
     <div class="sechead"><div><div class="eyebrow">${esc(x.eyebrow)}</div><h2>${esc(x.title)}</h2></div><p class="motto">${esc(x.motto)}</p></div>
-    <p class="leadp">${esc(x.intro)}</p>
-    <ol class="stages">${x.stages.map((s,k)=>'<li>'+(STAGE_VIDS[k]?'<div class="svid" aria-hidden="true">'+vid(STAGE_VIDS[k])+'</div>':'')+'<span class="stag">'+esc(s.tag)+'</span><h3>'+esc(s.title)+'</h3><p class="ssub">'+esc(s.sub)+'</p><ul>'+s.items.map(i=>'<li>'+esc(i)+'</li>').join("")+'</ul></li>').join("")}</ol>
+    ${x.intro?'<p class="leadp">'+esc(x.intro)+'</p>':''}
+    <ol class="stages">${stages.map((s,k)=>'<li>'+(STAGE_VIDS[k]?'<div class="svid" aria-hidden="true">'+vid(STAGE_VIDS[k])+'</div>':'')+'<span class="stag">'+esc(s.tag)+'</span><h3>'+esc(s.title)+'</h3><p class="ssub">'+esc(s.sub)+'</p><ul>'+(s.items||[]).filter(i=>i&&i.trim()).map(i=>'<li>'+esc(i)+'</li>').join("")+'</ul></li>').join("")}</ol>
     <p class="loop"><span aria-hidden="true">↻ </span>${esc(x.loop)}</p>
-    <div class="mfoot"><div><p class="mnote">${esc(x.note)}</p><p class="muted">${esc(x.intl)}</p><p class="muted">${esc(x.support)}</p></div>
+    <div class="mfoot"><div><p class="mnote">${esc(x.note)}</p>${x.intl?'<p class="muted">'+esc(x.intl)+'</p>':''}${x.support?'<p class="muted">'+esc(x.support)+'</p>':''}${more}</div>
       <div class="why"><h3>${esc(x.whyTitle||t.whyUs)}</h3><ol>${x.why.map(w=>'<li>'+esc(w)+'</li>').join("")}</ol></div></div>
   </div></section>`;
 }
@@ -686,7 +692,7 @@ function aboutMoreSection(){
 /* ---------- pages ---------- */
 function pageHome(){
   const u=U(), h=L(S.home), t=S.team[0];
-  const topics=S.expertise.topics.map(tp=>{const x=L(tp); const first=(x.body||"").split("\n").find(l=>l.startsWith("- ")); return '<a class="topic" href="'+href("expertise-"+tp.id)+'">'+topicVid(tp.id)+icon(tp.icon)+'<h3>'+esc(x.short)+'</h3>'+(first?'<p>'+esc(first.slice(2))+'</p>':'')+'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
+  const topics=S.expertise.topics.map(tp=>{const x=L(tp); const first=cardText(x); return '<a class="topic" href="'+href("expertise-"+tp.id)+'">'+topicVid(tp.id)+icon(tp.icon)+'<h3>'+esc(x.short||x.title)+'</h3>'+(first?'<p>'+esc(first)+'</p>':'')+'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
   const feat=S.clients.featured.map(c=>{const x=L(c); return '<li>'+(x.body?'<a href="'+href("client-"+c.id)+'"><span class="cn">'+clogo(c.id)+'<span>'+esc(x.name)+'</span></span><small>'+esc(c.tag)+'</small></a>':'<span class="n"><span class="cn">'+clogo(c.id)+'<span>'+esc(x.name)+'</span></span><small>'+esc(c.tag)+'</small></span>')+'</li>';}).join("");
   const ev=S.updates.events.map(e=>{const x=L(e); return '<a class="event" href="'+href("event-"+e.id)+'">'+(e.image?'<img src="'+esc(e.image)+'" alt="" loading="lazy">':'')+'<time>'+esc(e.date)+(x.place?' · '+esc(x.place):'')+'</time><h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
   return `
@@ -738,7 +744,7 @@ function pageAbout(){
   `<section class="sec"><div class="wrap layout"><div class="prose">${md(a.body)}</div><div class="aside">${contactCard()}</div></div></section>
    ${aboutMoreSection()}
    <section class="sec" id="management"><div class="wrap">
-     <div class="sechead"><div><div class="eyebrow">IsraTeam 98</div><h2>${esc(a.mgmtTitle)}</h2></div><p>${esc(a.mgmtIntro)}</p></div>
+     <div class="sechead"><div>${a.mgmtEyebrow?'<div class="eyebrow">'+esc(a.mgmtEyebrow)+'</div>':''}<h2>${esc(a.mgmtTitle)}</h2></div><p>${esc(a.mgmtIntro||"")}</p></div>
      <div class="team">${people}</div>
    </div></section>`+ctaBand();
 }
@@ -749,11 +755,10 @@ function pageTeam(id){
 }
 function pageExpertise(){
   const u=U(), e=L(S.expertise), h=L(S.home);
-  const topics=S.expertise.topics.map(tp=>{const x=L(tp); const first=(x.body||"").split("\n").find(l=>l.startsWith("- ")); return '<a class="topic" href="'+href("expertise-"+tp.id)+'">'+topicVid(tp.id)+icon(tp.icon)+'<h3>'+esc(x.title)+'</h3>'+(first?'<p>'+esc(first.slice(2))+'</p>':'')+'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
+  const topics=S.expertise.topics.map(tp=>{const x=L(tp); const first=cardText(x); return '<a class="topic" href="'+href("expertise-"+tp.id)+'">'+topicVid(tp.id)+icon(tp.icon)+'<h3>'+esc(x.title)+'</h3>'+(first?'<p>'+esc(first)+'</p>':'')+'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
   return pagehead([[u.nav.home,"home"],[e.title,"expertise"]], e.title, h.expertiseTitle)+
-  `<section class="sec"><div class="wrap layout"><div class="prose"><ul>${e.list.map(i=>'<li>'+esc(i)+'</li>').join("")}</ul></div><div class="aside">${contactCard()}</div></div></section>
-   <section class="sec"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(e.title)}</div><h2>${esc(h.coreTitle)}</h2></div><p></p></div><div class="core">${h.core.map((c,i)=>'<div><span>'+String(i+1).padStart(2,"0")+'</span>'+esc(c)+'</div>').join("")}</div></div></section>
-   ${methodSection()}
+  ((e.list||[]).filter(i=>i&&i.trim()).length?`<section class="sec"><div class="wrap"><div class="prose"><ul>${e.list.filter(i=>i&&i.trim()).map(i=>'<li>'+esc(i)+'</li>').join("")}</ul></div></div></section>`:'')+
+  `   ${methodSection()}
    <section class="sec"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(e.title)}</div><h2>${esc(h.expertiseTitle)}</h2></div><p></p></div><div class="topics">${topics}</div></div></section>${threatsSection()}`+ctaBand();
 }
 function pageTopic(id){
@@ -841,7 +846,7 @@ function pageContact(){
     <div>
       <div class="eyebrow">${esc(u.reachDirect)}</div>
       <dl class="direct" style="margin-top:14px">
-        <div><dt>${esc(u.phoneL)}</dt><dd><a class="ltr" href="tel:+${C.phoneRaw}">${esc(C.phone)}</a></dd></div>
+        <div><dt>${esc(u.phoneL)}</dt><dd><a class="ltr" href="tel:+${phoneDigits()}">${esc(C.phone)}</a></dd></div>
         <div><dt>${esc(u.emailL)}</dt><dd><a class="ltr" id="mail" href="mailto:${esc(C.email)}">${esc(C.email)}</a><button type="button" class="copy" id="copymail">${esc(u.copy)}</button></dd></div>
         <div><dt>${esc(u.addressL)}</dt><dd>${esc(u.address)}</dd></div>
       </dl>
@@ -852,12 +857,12 @@ function pageContact(){
 function pageCustom(id){
   const pg=(S.pages||[]).find(p=>p.id===id); if(!pg) return null;
   const x=L(pg)||{}, u=U();
-  return pagehead([[u.nav.home,"home"],[x.title,"page-"+id]], x.title, x.intro||"")+`<section class="sec"><div class="wrap"><div class="prose">${pg.image?'<img class="figimg" src="'+esc(pg.image)+'" alt="" loading="lazy" style="margin-bottom:24px">':''}${md(x.body)}</div></div></section>`+ctaBand();
+  return pagehead([[u.nav.home,"home"],[x.title,"page-"+id]], x.title, x.intro||"")+`<section class="sec"><div class="wrap"><div class="prose">${pg.image?(/\.pdf(\?|$)/i.test(pg.image)?'<p style="margin-bottom:24px"><a class="btn line" href="'+esc(pg.image)+'" target="_blank" rel="noopener">'+esc(x.fileText||"Download the PDF")+' '+arrow+'</a></p>':'<img class="figimg" src="'+esc(pg.image)+'" alt="" loading="lazy" style="margin-bottom:24px">'):''}${md(x.body)}</div></div></section>`+ctaBand();
 }
 function openAdmin(){
   document.documentElement.lang="en"; document.documentElement.dir="ltr";
   window.ISRA={S,STATIC,CMS,HE_ON,route:()=>{location.hash="#home";}};
-  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=3"; document.body.appendChild(sc); }
+  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=4"; document.body.appendChild(sc); }
   else if(window.ISRA_ADMIN) window.ISRA_ADMIN.show();
 }
 function pageLegal(key){
@@ -919,7 +924,7 @@ function renderChrome(route){
   $("#footer").innerHTML=`<div class="wrap"><div class="fcols">
     <div><a class="brand" href="${href("home")}"><img src="images/logo-mark.svg" alt="" width="42" height="40"><span><span class="word">Isra<i>Team</i></span><small>98 LTD.</small></span></a>
       <p style="max-width:34ch">${esc(u.tagline)}</p>
-      <p style="margin-top:14px"><a class="ltr" href="tel:+${C.phoneRaw}">${esc(C.phone)}</a><br><a class="ltr" href="mailto:${esc(C.email)}">${esc(C.email)}</a><br>${esc(u.address)}</p>
+      <p style="margin-top:14px"><a class="ltr" href="tel:+${phoneDigits()}">${esc(C.phone)}</a><br><a class="ltr" href="mailto:${esc(C.email)}">${esc(C.email)}</a><br>${esc(u.address)}</p>
       ${C.linkedin?'<p style="margin-top:12px"><a href="'+esc(C.linkedin)+'" target="_blank" rel="noopener">'+esc(u.linkedin)+'</a></p>':''}</div>
     <div><h4>${esc(u.footerAbout)}</h4><ul><li><a href="${href("about")}">${esc(L(S.about).title)}</a></li><li><a href="${href("clients")}">${esc(L(S.clients).title)}</a></li><li><a href="${href("about")}">${esc(L(S.about).mgmtTitle)}</a></li><li><a href="${href("contact")}">${esc(u.nav.contact)}</a></li></ul></div>
     <div><h4>${esc(u.footerExpertise)}</h4><ul><li><a href="${href("expertise")}">${esc(L(S.expertise).title)}</a></li><li><a href="${href("projects")}">${esc(L(S.projects).title)}</a></li><li><a href="${href("updates")}">${esc(L(S.updates).title)}</a></li></ul></div>

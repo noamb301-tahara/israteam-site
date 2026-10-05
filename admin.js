@@ -307,13 +307,15 @@ const SEC = {
     F("home", ["en", "coreEyebrow"], "Small line above the heading"), F("home", ["en", "coreTitle"], "Heading"), F("home", ["en", "core"], "Core areas", "list")] }),
   method: () => ({ head: () => E("method").title, where: "Methodology (three stages)", also: "Shown on the Home page and the Expertise page", fields: [
     F("method", ["en", "eyebrow"], "Small line above the heading"), F("method", ["en", "title"], "Heading"), F("method", ["en", "motto"], "Line next to the heading", "long"),
-    F("method", ["en", "intro"], "Intro paragraph", "long"), F("method", ["en", "stages"], "The three stages", "items"),
+    F("method", ["en", "intro"], "Intro paragraph", "long"), F("method", ["en", "stages"], "The stages", "items", "Empty stages are not shown on the site."),
     F("method", ["en", "loop"], "Line under the stages (↻)", "long"), F("method", ["en", "note"], "Note at the bottom", "long"),
     F("method", ["en", "intl"], "International line", "long"), F("method", ["en", "support"], "Support line", "long"),
     F("method", ["en", "whyTitle"], "Heading of the box on the right"), F("method", ["en", "why"], "Points in the box", "list"),
+    F("method", ["morePage"], "“Continue reading” button opens this page", "pagepick", "Pick one of your pages. “Automatic” picks the page whose title contains “Methodology”."),
+    F("method", ["en", "moreText"], "Text on the button", "text", "Leave empty to hide the button."),
     M("stage-a-assessment", "Stage A video"), M("stage-b-integration", "Stage B video"), M("stage-c-readiness", "Stage C video")] }),
   contactBox: () => ({ head: () => E("home").contactTitle, where: "Contact box on the side of inner pages", also: "Same box on About, Expertise, Clients, Projects and other inner pages", fields: [
-    F("home", ["en", "contactTitle"], "Box heading"), F("home", ["en", "contactName"], "Name"), F("home", ["en", "contactRole"], "Role"), F("ui", ["en", "contactUs"], "Button text")] }),
+    F("home", ["en", "contactTitle"], "Box heading"), F("home", ["en", "contactName"], "Name"), F("home", ["en", "contactRole"], "Role"), F("ui", ["en", "contactUs"], "Button text", "text", "Leave empty to hide the button (also in the dark strip at the bottom).")] }),
   bottom: () => ({ head: () => UI().talk, where: "Dark strip at the bottom of every page", also: "Appears at the bottom of every page", fields: [
     F("ui", ["en", "talk"], "Heading (also the main button in the Home banner)"), F("ui", ["en", "contactUs"], "First button"), F("ui", ["en", "whatsapp"], "Second button (WhatsApp)"),
     { info: "The name and role under the heading come from “Box with your name” on the Home page." }] })
@@ -343,7 +345,7 @@ const PAGES = [
       F("home", ["en", "expertiseTitle"], "Heading"),
       F("expertise", ["en", "title"], "Small line above the heading", "text", "Same text is the title of the Expertise page and its link in the footer."),
       ...(W.expertise && W.expertise.topics || []).map((t, i) => F("expertise", ["topics", i, "en", "short"], "Card " + (i + 1) + " title (" + ((t.en && t.en.title) || t.id) + ")")),
-      { info: "The text on each card is the first bullet (“- ”) of that topic's page. Edit it on the Expertise page, in the topic cards section." }] },
+      { info: "The text on each card and its “Learn more” page are edited on the Expertise page, one section per topic." }] },
     { head: () => E("home").clientsTitle || E("home").globalTitle || "(no heading)", where: "Clients band with the world map", fields: [
       F("home", ["en", "globalTitle"], "Small line above the heading"), F("home", ["en", "clientsTitle"], "Heading"), F("home", ["en", "global"], "Paragraph", "long"),
       F("home", ["en", "regions"], "Regions (small tags)", "list"),
@@ -360,25 +362,31 @@ const PAGES = [
       F("about", ["en", "title"], "Page title", "text", "Also used in the footer."),
       F("home", ["en", "eyebrow"], "Line under the title", "text", "Same text as the small line above the Home headline."),
       M("bg-about", "Background behind the banner")] },
-    { head: () => "Main text", where: "Text of the About page", fields: [F("about", ["en", "body"], "Text", "md", MD_HELP)] },
+    { head: () => "Main text", where: "Text of the About page, left column", fields: [F("about", ["en", "body"], "Text", "md", MD_HELP)] },
     SEC.contactBox(),
     { head: () => E("about").mgmtTitle, where: "Management team", fields: [
-      F("about", ["en", "mgmtTitle"], "Heading"), F("about", ["en", "mgmtIntro"], "Line next to the heading", "long"),
+      F("about", ["en", "mgmtEyebrow"], "Small line above the heading", "text", "Leave empty to hide it."), F("about", ["en", "mgmtTitle"], "Heading"), F("about", ["en", "mgmtIntro"], "Text next to the heading", "long", "Leave empty to hide it."),
       F("team", [], "People", "items", "Each person gets a card here and a page of their own. An entry with no name is shown as a note card.")] },
     SEC.bottom()
   ] },
   { id: "expertise", group: "Pages", name: "Expertise", route: "expertise", sections: () => [
     { head: () => E("expertise").title, where: "Page banner", open: true, fields: [
-      F("expertise", ["en", "title"], "Page title", "text", "Also the small line above the expertise cards on Home, and the footer link."),
-      F("home", ["en", "expertiseTitle"], "Line under the title", "text", "Same text is the heading of the expertise cards (Home and this page).")] },
-    { head: () => "Bullet list", where: "List under the banner", fields: [F("expertise", ["en", "list"], "Bullets", "list")] },
-    SEC.core(),
+      F("expertise", ["en", "title"], "Page title", "text", "Also the small line above the topic cards, and the footer link."),
+      F("home", ["en", "expertiseTitle"], "Line under the title", "text", "Same text is the heading above the topic cards (Home and this page). Leave empty to hide it.")] },
+    { head: () => "Bullet list", where: "List under the banner (hidden while it is empty)", fields: [F("expertise", ["en", "list"], "Bullets", "list")] },
     SEC.method(),
-    { head: () => E("home").expertiseTitle, where: "Topic cards and topic pages", fields: [
-      { info: "Each topic has a card here, a card on Home (with its short title), and its own page. The text on the cards is the first “- ” bullet of the page text." },
-      F("expertise", ["topics"], "Topics", "items"),
-      ...(W.expertise && W.expertise.topics || []).filter(t => TOPIC_VIDS[t.id]).map(t => M(TOPIC_VIDS[t.id], "Video: " + ((t.en && t.en.title) || t.id))),
-      M("bg-civil-defense", "Banner background of the “National Civil Defense” topic page")] },
+    ...(W.expertise && W.expertise.topics || []).map((t, i) => ({ head: () => (((W.expertise.topics[i] || {}).en) || {}).title, where: "Topic card " + (i + 1) + " and its “" + (UI().learnMore || "Learn more") + "” page", fields: [
+      F("expertise", ["topics", i, "en", "title"], "Title (on this card and at the top of the topic page)"),
+      F("expertise", ["topics", i, "en", "short"], "Title on the Home page card"),
+      F("expertise", ["topics", i, "en", "card"], "Text on the card", "long", "Leave empty to show the first “- ” line of the page text."),
+      F("expertise", ["topics", i, "en", "body"], "Page text (what opens from “" + (UI().learnMore || "Learn more") + "”)", "md", MD_HELP),
+      F("expertise", ["topics", i, "image"], "Picture on the side of the topic page", "media"),
+      ...(TOPIC_VIDS[t.id] ? [M(TOPIC_VIDS[t.id], "Video on the card and the topic page", "Cards show videos only while every topic has one.")] : []),
+      ...(t.id === "national-civil-defense" ? [M("bg-civil-defense", "Banner background of this topic page")] : []),
+      F("ui", ["en", "learnMore"], "Link text on every card", "text")] })),
+    { head: () => "Add, remove or reorder topics", where: "All topic cards", fields: [
+      { info: "After adding or removing a topic, open another page here and come back to see it as its own section." },
+      F("expertise", ["topics"], "Topics", "items")] },
     { head: () => E("threats").title, where: "Threats we prepare for (tiles with videos)", fields: [
       F("threats", ["en", "eyebrow"], "Small line above the heading"), F("threats", ["en", "title"], "Heading"), F("threats", ["en", "text"], "Line next to the heading", "long"),
       F("threats", ["items"], "Threats", "items", "Each threat has a name and an optional video and still image. Without a video it shows as a plain tile.")] },
@@ -413,8 +421,10 @@ const PAGES = [
       F("ui", ["en", "reachDirect"], "Heading"), F("contact", ["phone"], "Phone as shown"), F("contact", ["phoneRaw"], "Phone for calls and WhatsApp (digits only, with country code)"),
       F("contact", ["email"], "Email"), F("contact", ["linkedin"], "LinkedIn link"), F("ui", ["en", "address"], "Address")] }
   ] },
-  { id: "pages", group: "Pages", name: "Extra pages", route: "home", sections: () => [
-    { head: () => "Extra pages", where: "Pages you create; they can appear in the main menu", open: true, fields: [F("pages", [], "Pages", "items", MD_HELP)] }
+  { id: "pages", group: "Pages", name: "+ New page", route: "home", sections: () => [
+    { head: () => "Your pages", where: "Create, remove or reorder your own pages", open: true, fields: [
+      { info: "Each page you create appears in the list on the left under its own title. Press “+ Add item” to create one, then open it from the list." },
+      F("pages", [], "Pages", "items", MD_HELP)] }
   ] },
   { id: "legal", group: "Every page", name: "Legal pages", route: "privacy", sections: () => [
     { head: () => E("privacy").title, where: "Privacy policy page", fields: [F("privacy", ["updated"], "Last updated"), F("privacy", ["en", "title"], "Title"), F("privacy", ["en", "body"], "Text", "md", MD_HELP)] },
@@ -433,6 +443,21 @@ const PAGES = [
   ] }
 ];
 
+/* Each page you created gets its own entry, listed under its own title. */
+function customPage(i) {
+  const P = () => W.pages[i] || {};
+  const T = () => (P().en && P().en.title) || "Untitled page";
+  return { id: "page:" + i, group: "Pages", name: T(), route: "page-" + P().id, sections: () => [
+    { head: T, where: "Page banner", open: true, fields: [
+      F("pages", [i, "en", "title"], "Page title (also in the main menu)"), F("pages", [i, "en", "intro"], "Line under the title", "long"),
+      F("pages", [i, "inNav"], "Show in the main menu", "bool"),
+      F("pages", [i, "image"], "Picture or PDF at the top of the page", "media", "A PDF shows as a download button."),
+      F("pages", [i, "en", "fileText"], "Text on the PDF button", "text", "Leave empty for “Download the PDF”.")] },
+    { head: () => "Page text", where: "Main text", open: true, fields: [F("pages", [i, "en", "body"], "Text", "md", MD_HELP)] }
+  ] };
+}
+const pagesList = () => PAGES.flatMap(p => p.id === "pages" ? [...(W.pages || []).map((_, i) => customPage(i)), p] : [p]);
+
 /* ---------- content tab ---------- */
 function blocksOf(page) {
   const ks = new Set();
@@ -444,7 +469,7 @@ function contentTab(body) {
   const pane = h("div");
   body.append(h("div", { class: "cols" }, nav, pane));
   let grp = "";
-  PAGES.forEach(p => {
+  pagesList().forEach(p => {
     if (p.group !== grp) { grp = p.group; nav.append(h("div", { class: "grp" }, grp)); }
     nav.append(h("button", { type: "button", "data-p": p.id, "data-keys": blocksOf(p).join(","), "aria-current": String(pageId === p.id), onclick: () => {
       pageId = p.id; nav.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", String(b.dataset.p === p.id)));
@@ -454,7 +479,7 @@ function contentTab(body) {
 }
 
 function renderPage(pane) {
-  const page = PAGES.find(p => p.id === pageId) || PAGES[0];
+  const page = pagesList().find(p => p.id === pageId) || PAGES[0];
   const keys = blocksOf(page).filter(k => META[k]);
   const last = keys.map(k => META[k]).sort((a, b) => (a.at < b.at ? 1 : -1))[0];
   pane.replaceChildren(
@@ -487,6 +512,12 @@ function fieldEditor(f) {
   const id = "f-" + f.k + "-" + f.p.join("-");
   const wrap = h("div");
   const help = f.help ? h("p", { class: "help" }, f.help) : "";
+  if (f.type === "bool") { const cb = h("input", { type: "checkbox", id, checked: val ? true : null, onchange: e => set(e.target.checked) }); wrap.append(h("div", { class: "check" }, cb, h("label", { for: id, style: "margin:0" }, f.lbl)), help); return wrap; }
+  if (f.type === "media") { const el = renderString(val || "", [f.k, ...f.p], "image", set); const l = el.querySelector("label"); if (l) l.textContent = f.lbl; wrap.append(el, help); return wrap; }
+  if (f.type === "pagepick") {
+    const sel = h("select", { id, onchange: e => set(e.target.value) }, h("option", { value: "" }, "Automatic"), ...(W.pages || []).map(p => h("option", { value: p.id, selected: p.id === val ? true : null }, (p.en && p.en.title) || p.id)));
+    wrap.append(h("label", { for: id }, f.lbl), sel, help); return wrap;
+  }
   if (f.type === "pairs") { if (!Array.isArray(val)) set([]); wrap.append(h("label", {}, f.lbl), pairsEditor(getP(f.k, f.p)), help); return wrap; }
   if (f.type === "list" || f.type === "items" || f.type === "object") {
     let v = val;
