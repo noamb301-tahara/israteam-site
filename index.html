@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="images/logo-mark.svg" type="image/svg+xml">
 <meta property="og:title" content="IsraTeam 98 Ltd.">
 <meta property="og:description" content="Emergency management, civil defense and national resilience consultancy since 1998.">
@@ -538,6 +540,9 @@ const HE_ON = false; /* Hebrew version switched off at the owner's request (2026
 const A11Y=(()=>{let o={}; try{o=JSON.parse(localStorage.getItem("it-a11y")||"{}")||{};}catch(e){} return {size:+o.size||0,hc:!!o.hc,links:!!o.links,font:!!o.font,still:!!o.still};})();
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// Links and media from the CMS: only web, mail and phone links or site-relative paths; anything else (javascript:, data:...) becomes "#".
+const safeUrl = u => { u=String(u ?? ""); const m=u.replace(/[\u0000-\u0020]/g,"").match(/^([a-z][a-z0-9+.-]*):/i); return !m||/^(https?|mailto|tel)$/i.test(m[1]) ? u : "#"; };
+const escU = u => esc(safeUrl(u));
 const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\[\[(.+?)\]\]/g,'<span class="ph">$1</span>');
 function md(src){
   if(!src) return "";
@@ -610,27 +615,27 @@ function postLinks(p){
   const t=T(), out=[];
   if(p.article) out.push('<a class="btn primary" href="'+href("article-"+p.article)+'">'+esc(t.readArticle)+' '+arrow+'</a>');
   if(p.event) out.push('<a class="btn line" href="'+href("event-"+p.event)+'">'+esc(t.eventPage)+' '+arrow+'</a>');
-  if(S.contact.linkedin) out.push('<a class="btn line" href="'+esc(S.contact.linkedin)+'" target="_blank" rel="noopener">'+esc(t.onLinkedIn)+'</a>');
+  if(S.contact.linkedin) out.push('<a class="btn line" href="'+escU(S.contact.linkedin)+'" target="_blank" rel="noopener">'+esc(t.onLinkedIn)+'</a>');
   return '<div class="ctas">'+out.join("")+'</div>';
 }
 function gallery(p, cls){
   if(!p || !(p.images||[]).length) return "";
   const x=L(p);
-  return '<div class="gal'+(cls?' '+cls:'')+'">'+p.images.map((src,i)=>'<a class="gthumb" href="'+href("post-"+p.id)+'" data-post="'+esc(p.id)+'" data-idx="'+i+'"><img src="'+esc(src)+'" alt="'+esc(x.title+(p.images.length>1?' – '+(i+1)+'/'+p.images.length:''))+'" loading="lazy"></a>').join("")+'</div>';
+  return '<div class="gal'+(cls?' '+cls:'')+'">'+p.images.map((src,i)=>'<a class="gthumb" href="'+href("post-"+p.id)+'" data-post="'+esc(p.id)+'" data-idx="'+i+'"><img src="'+escU(src)+'" alt="'+esc(x.title+(p.images.length>1?' – '+(i+1)+'/'+p.images.length:''))+'" loading="lazy"></a>').join("")+'</div>';
 }
 function imgFig(src){
-  const p=postByImg(src); if(!p) return '<img class="figimg" src="'+esc(src)+'" alt="" loading="lazy">';
+  const p=postByImg(src); if(!p) return '<img class="figimg" src="'+escU(src)+'" alt="" loading="lazy">';
   const i=p.images.indexOf(src), x=L(p);
-  return '<div class="gal"><a class="gthumb" href="'+href("post-"+p.id)+'" data-post="'+esc(p.id)+'" data-idx="'+i+'"><img src="'+esc(src)+'" alt="'+esc(x.title)+'" loading="lazy"></a></div>';
+  return '<div class="gal"><a class="gthumb" href="'+href("post-"+p.id)+'" data-post="'+esc(p.id)+'" data-idx="'+i+'"><img src="'+escU(src)+'" alt="'+esc(x.title)+'" loading="lazy"></a></div>';
 }
 const SYS_REDUCED=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
 let REDUCED=SYS_REDUCED||A11Y.still;
 const MS=n=>(S.mediaSlots||{})[n]||{};
 function vid(name, alt){
   const poster=MS(name).poster||("images/"+name+".jpg"), src=MS(name).video||("images/"+name+".mp4");
-  if(REDUCED||MS(name).video==="none") return '<img src="'+esc(poster)+'" alt="'+esc(alt||"")+'" loading="lazy">';
+  if(REDUCED||MS(name).video==="none") return '<img src="'+escU(poster)+'" alt="'+esc(alt||"")+'" loading="lazy">';
   const eager=name==="hero-situation-room";
-  return '<video src="'+esc(src)+'" poster="'+esc(poster)+'"'+(eager?' autoplay preload="auto"':' preload="none"')+' muted loop playsinline disablepictureinpicture'+(alt?' aria-label="'+esc(alt)+'"':' aria-hidden="true"')+'></video>';
+  return '<video src="'+escU(src)+'" poster="'+escU(poster)+'"'+(eager?' autoplay preload="auto"':' preload="none"')+' muted loop playsinline disablepictureinpicture'+(alt?' aria-label="'+esc(alt)+'"':' aria-hidden="true"')+'></video>';
 }
 const VIDS=new Set(S.videos||[]);
 const hasV=n=>VIDS.has(n)||!!MS(n).video;
@@ -638,7 +643,7 @@ const TOPIC_VIDS={"national-civil-defense":"topic-civil-defense",population:"top
 const PAGE_BG={about:"bg-about",projects:"bg-projects",updates:"bg-updates",contact:"bg-contact","project-mci-hospital":"project-mci","expertise-national-civil-defense":"bg-civil-defense"};
 const LOGOS={imod:"imod",weizmann:"weizmann",bynet:"bynet",airports:"airports",environment:"environment","internal-security":"internal-security",icl:"icl","tel-aviv-metro":"tel-aviv-metro",
 "Home Front Command – IDF":"home-front-command","Ministry of Defense NBC Protection Division":"mod-nbc","Ministry of Health":"health","The Israeli Center for Disease Control":"icdc","Magen David Adom – EMS":"mda","Ministry of Construction & Housing":"construction-housing","Ministry of Interior":"interior","Israel Air Force":"air-force","Israel Police":"police","Atomic Energy Commission":"atomic-energy","Cross Israel Highway":"cross-israel-highway","Jerusalem Municipality – Water security systems and Moriah":"jerusalem","Development Company for Jerusalem":"jerusalem-development","United Local Authorities Administration":"local-authorities","MED-1 Israel":"med1","Azrieli Group":"azrieli","Korea – Seoul Metropolitan Government":"seoul","Turkey – Prime Ministry, Security Affairs":"turkey","China – Guangzhou Asian Games":"guangzhou","USA – Federal Transit Administration":"fta","USA – Transportation Security Administration":"tsa"};
-function clogo(k, alt){ const f=(S.clientLogos||{})[k]||LOGOS[k]; return f?'<span class="clogo"><img src="'+esc(/[/.]/.test(f)?f:"images/logos/"+f+".png")+'" alt="'+esc(alt||"")+'" loading="lazy"></span>':""; }
+function clogo(k, alt){ const f=(S.clientLogos||{})[k]||LOGOS[k]; return f?'<span class="clogo"><img src="'+escU(/[/.]/.test(f)?f:"images/logos/"+f+".png")+'" alt="'+esc(alt||"")+'" loading="lazy"></span>':""; }
 let curRoute="home";
 const allTopicVids=()=>S.expertise.topics.every(t=>hasV(TOPIC_VIDS[t.id]));
 const topicVid=id=>allTopicVids()&&hasV(TOPIC_VIDS[id])?'<div class="tvid" aria-hidden="true">'+vid(TOPIC_VIDS[id])+'</div>':'';
@@ -648,7 +653,7 @@ function threatsSection(){
   const tile=t=>{ const cap=esc(t[lang]||t.en||""); const nm=(t.video||"").match(/^images\/(.+)\.mp4$/);
     const src=nm&&MS(nm[1]).video||t.video, poster=nm&&MS(nm[1]).poster||t.poster||"";
     const v=!!src&&(!nm||hasV(nm[1]));
-    const m=!v?'':REDUCED?'<img src="'+esc(poster)+'" alt="" loading="lazy">':'<video src="'+esc(src)+'"'+(poster?' poster="'+esc(poster)+'"':'')+' preload="none" muted loop playsinline disablepictureinpicture aria-hidden="true"></video>';
+    const m=!v?'':REDUCED?'<img src="'+escU(poster)+'" alt="" loading="lazy">':'<video src="'+escU(src)+'"'+(poster?' poster="'+escU(poster)+'"':'')+' preload="none" muted loop playsinline disablepictureinpicture aria-hidden="true"></video>';
     return '<figure class="threat'+(v?'':' novid')+'">'+m+'<figcaption>'+cap+'</figcaption></figure>'; };
   return '<section class="sec" id="threats"><div class="wrap"><div class="sechead"><div><div class="eyebrow">'+esc(x.eyebrow||"")+'</div><h2>'+esc(x.title||"")+'</h2></div><p>'+esc(x.text||"")+'</p></div><div class="threats">'+T0.items.map(tile).join("")+'</div></div></section>';
 }
@@ -694,7 +699,7 @@ function pageHome(){
   const u=U(), h=L(S.home), t=S.team[0];
   const topics=S.expertise.topics.map(tp=>{const x=L(tp); const first=cardText(x); return '<a class="topic" href="'+href("expertise-"+tp.id)+'">'+topicVid(tp.id)+icon(tp.icon)+'<h3>'+esc(x.short||x.title)+'</h3>'+(first?'<p>'+esc(first)+'</p>':'')+'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
   const feat=S.clients.featured.map(c=>{const x=L(c); return '<li>'+(x.body?'<a href="'+href("client-"+c.id)+'"><span class="cn">'+clogo(c.id)+'<span>'+esc(x.name)+'</span></span><small>'+esc(c.tag)+'</small></a>':'<span class="n"><span class="cn">'+clogo(c.id)+'<span>'+esc(x.name)+'</span></span><small>'+esc(c.tag)+'</small></span>')+'</li>';}).join("");
-  const ev=S.updates.events.map(e=>{const x=L(e); return '<a class="event" href="'+href("event-"+e.id)+'">'+(e.image?'<img src="'+esc(e.image)+'" alt="" loading="lazy">':'')+'<time>'+esc(e.date)+(x.place?' · '+esc(x.place):'')+'</time><h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
+  const ev=S.updates.events.map(e=>{const x=L(e); return '<a class="event" href="'+href("event-"+e.id)+'">'+(e.image?'<img src="'+escU(e.image)+'" alt="" loading="lazy">':'')+'<time>'+esc(e.date)+(x.place?' · '+esc(x.place):'')+'</time><h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
   return `
   <section class="band hero"><div class="bgv" aria-hidden="true">${vid("hero-situation-room")}</div><div class="wrap">
     <div>
@@ -739,7 +744,7 @@ function pageHome(){
 
 function pageAbout(){
   const u=U(), a=L(S.about);
-  const people=S.team.map(p=>{const x=L(p); if(!x.name) return x.body?'<div class="person tnote"><p>'+esc(x.body)+'</p></div>':''; return '<a class="person" href="'+href("team-"+p.id)+'"><div class="mono-av" aria-hidden="true">'+p.initials+'</div><div class="r">'+esc(x.role)+'</div><h3>'+esc(x.name)+'</h3><p>'+esc(x.body.split("\n")[0])+'</p><span class="more">'+esc(u.readMore)+' '+arrow+'</span></a>';}).join("");
+  const people=S.team.map(p=>{const x=L(p); if(!x.name) return x.body?'<div class="person tnote"><p>'+esc(x.body)+'</p></div>':''; return '<a class="person" href="'+href("team-"+p.id)+'"><div class="mono-av" aria-hidden="true">'+esc(p.initials)+'</div><div class="r">'+esc(x.role)+'</div><h3>'+esc(x.name)+'</h3><p>'+esc(x.body.split("\n")[0])+'</p><span class="more">'+esc(u.readMore)+' '+arrow+'</span></a>';}).join("");
   return pagehead([[u.nav.home,"home"],[a.title,"about"]], a.title, L(S.home).eyebrow)+
   `<section class="sec"><div class="wrap layout"><div class="prose">${md(a.body)}</div><div class="aside">${contactCard()}</div></div></section>
    ${aboutMoreSection()}
@@ -788,14 +793,14 @@ function pageProjects(){
 }
 function pageProject(id){
   const u=U(), p=L(S.projects), it=S.projects.items.find(x=>x.id===id); if(!it) return null; const x=L(it);
-  const vids=it.videos?'<div class="card"><h4>'+esc(u.videos)+'</h4><div class="vids">'+it.videos.map(v=>'<a href="'+esc(v[1])+'" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><span class="ltr">'+esc(v[0])+'</span></a>').join("")+'</div></div>':'';
+  const vids=it.videos?'<div class="card"><h4>'+esc(u.videos)+'</h4><div class="vids">'+it.videos.map(v=>'<a href="'+escU(v[1])+'" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><span class="ltr">'+esc(v[0])+'</span></a>').join("")+'</div></div>':'';
   return pagehead([[u.nav.home,"home"],[p.title,"projects"],[x.title,"project-"+id]], x.title, x.client)+
   `<section class="sec"><div class="wrap layout"><div class="prose">${md(x.body)}</div><div class="aside">${vids}${sideList(p.title, S.projects.items.map(i=>[L(i).title,"project-"+i.id]), "project-"+id)}${contactCard()}</div></div></section>`+ctaBand();
 }
 function pageUpdates(){
   const u=U(), up=L(S.updates);
-  const ev=S.updates.events.map(e=>{const x=L(e); return '<a class="event" href="'+href("event-"+e.id)+'">'+(e.image?'<img src="'+esc(e.image)+'" alt="" loading="lazy">':'')+'<time>'+esc(e.date)+(x.place?' · '+esc(x.place):'')+'</time><h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
-  const docs=(S.articlesFull||[]).map(a=>{const x=L(a); return '<a class="doc" href="'+href("article-"+a.id)+'"><span class="ic" aria-hidden="true">'+esc(T().article)+'</span><span><b>'+esc(x.title)+'</b><small>'+esc(x.author)+' · '+esc(a.date)+'</small></span></a>';}).join("")+S.updates.articles.map(a=>'<a class="doc" href="'+esc(a.url)+'" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">PDF</span><span><b>'+esc(a[lang])+'</b><small>'+esc(u.pdf)+'</small></span></a>').join("");
+  const ev=S.updates.events.map(e=>{const x=L(e); return '<a class="event" href="'+href("event-"+e.id)+'">'+(e.image?'<img src="'+escU(e.image)+'" alt="" loading="lazy">':'')+'<time>'+esc(e.date)+(x.place?' · '+esc(x.place):'')+'</time><h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
+  const docs=(S.articlesFull||[]).map(a=>{const x=L(a); return '<a class="doc" href="'+href("article-"+a.id)+'"><span class="ic" aria-hidden="true">'+esc(T().article)+'</span><span><b>'+esc(x.title)+'</b><small>'+esc(x.author)+' · '+esc(a.date)+'</small></span></a>';}).join("")+S.updates.articles.map(a=>'<a class="doc" href="'+escU(a.url)+'" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">PDF</span><span><b>'+esc(a[lang])+'</b><small>'+esc(u.pdf)+'</small></span></a>').join("");
   const faq=S.updates.faq.map(f=>{const x=L(f); return '<details><summary>'+esc(x.q)+'</summary><p>'+esc(x.a)+'</p></details>';}).join("");
   return pagehead([[u.nav.home,"home"],[up.title,"updates"]], up.title, up.intro)+carousel(up.galleryTitle||"Activity gallery", up.title, "activity")+
   `<section class="sec" id="events"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(up.title)}</div><h2>${esc(u.eventsTitle)}</h2></div><p></p></div><div class="events">${ev}</div></div></section>
@@ -805,9 +810,9 @@ function pageUpdates(){
 function pageEvent(id){
   const u=U(), up=L(S.updates), e=S.updates.events.find(x=>x.id===id); if(!e) return null; const x=L(e);
   const meta='<div class="meta"><span>'+esc(u.date)+': <b>'+esc(e.date)+'</b></span>'+(x.place?'<span>'+esc(u.place)+': <b>'+esc(x.place)+'</b></span>':'')+'</div>';
-  const pdf = id==="hybrid-warfare-study" ? S.updates.articles.map(a=>'<a class="doc" href="'+esc(a.url)+'" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">PDF</span><span><b>'+esc(a[lang])+'</b><small>'+esc(u.pdf)+'</small></span></a>').join("") : "";
+  const pdf = id==="hybrid-warfare-study" ? S.updates.articles.map(a=>'<a class="doc" href="'+escU(a.url)+'" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">PDF</span><span><b>'+esc(a[lang])+'</b><small>'+esc(u.pdf)+'</small></span></a>').join("") : "";
   const post=posts().find(p=>p.event===id);
-  const pics = post ? gallery(post) : (e.image ? '<img class="figimg" src="'+esc(e.image)+'" alt="" loading="lazy">' : '');
+  const pics = post ? gallery(post) : (e.image ? '<img class="figimg" src="'+escU(e.image)+'" alt="" loading="lazy">' : '');
   const body = (x.body||pdf) ? (x.body?md(x.body):'')+(pdf?'<div style="display:grid;gap:12px">'+pdf+'</div>':'')+pics+(post?postLinks(Object.assign({},post,{event:null})):'') : '<div class="empty">'+(lang==="he"?"פרטים נוספים יתווספו בקרוב.":"More details are coming soon.")+'</div>';
   return pagehead([[u.nav.home,"home"],[up.title,"updates"],[x.title,"event-"+id]], x.title, "", meta)+
   `<section class="sec"><div class="wrap layout"><div class="prose">${body}</div><div class="aside">${sideList(u.eventsTitle, S.updates.events.map(v=>[L(v).title,"event-"+v.id]), "event-"+id)}</div></div></section>`+ctaBand();
@@ -826,7 +831,7 @@ function pageArticle(id){
 }
 function pageContact(){
   const u=U(), f=u.form, c=L(S.contactPage), C=S.contact;
-  const li = C.linkedin ? '<a href="'+esc(C.linkedin)+'" target="_blank" rel="noopener">'+LI_SVG+esc(u.linkedin)+'</a>' : '';
+  const li = C.linkedin ? '<a href="'+escU(C.linkedin)+'" target="_blank" rel="noopener">'+LI_SVG+esc(u.linkedin)+'</a>' : '';
   return pagehead([[u.nav.home,"home"],[c.title,"contact"]], c.title, c.intro)+
   `<section class="sec"><div class="wrap contactgrid">
     <form class="cf" id="cf" novalidate>
@@ -857,12 +862,13 @@ function pageContact(){
 function pageCustom(id){
   const pg=(S.pages||[]).find(p=>p.id===id); if(!pg) return null;
   const x=L(pg)||{}, u=U();
-  return pagehead([[u.nav.home,"home"],[x.title,"page-"+id]], x.title, x.intro||"")+`<section class="sec"><div class="wrap"><div class="prose">${pg.image?(/\.pdf(\?|$)/i.test(pg.image)?'<p style="margin-bottom:24px"><a class="btn line" href="'+esc(pg.image)+'" target="_blank" rel="noopener">'+esc(x.fileText||"Download the PDF")+' '+arrow+'</a></p>':'<img class="figimg" src="'+esc(pg.image)+'" alt="" loading="lazy" style="margin-bottom:24px">'):''}${md(x.body)}</div></div></section>`+ctaBand();
+  return pagehead([[u.nav.home,"home"],[x.title,"page-"+id]], x.title, x.intro||"")+`<section class="sec"><div class="wrap"><div class="prose">${pg.image?(/\.pdf(\?|$)/i.test(pg.image)?'<p style="margin-bottom:24px"><a class="btn line" href="'+escU(pg.image)+'" target="_blank" rel="noopener">'+esc(x.fileText||"Download the PDF")+' '+arrow+'</a></p>':'<img class="figimg" src="'+escU(pg.image)+'" alt="" loading="lazy" style="margin-bottom:24px">'):''}${md(x.body)}</div></div></section>`+ctaBand();
 }
 function openAdmin(){
+  if(window.top!==window.self){ document.body.textContent="The admin panel cannot be opened inside another page."; return; } // no clickjacking
   document.documentElement.lang="en"; document.documentElement.dir="ltr";
   window.ISRA={S,STATIC,CMS,HE_ON,route:()=>{location.hash="#home";}};
-  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=4"; document.body.appendChild(sc); }
+  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=5"; document.body.appendChild(sc); }
   else if(window.ISRA_ADMIN) window.ISRA_ADMIN.show();
 }
 function pageLegal(key){
@@ -883,8 +889,8 @@ function activityItems(){
 }
 function carousel(title, eyebrow, id){
   const items=activityItems();
-  const slides=items.map(it=>'<a class="slide" href="'+esc(it.url)+'"'+(it.ext?' target="_blank" rel="noopener"':'')+(it.post?' data-post="'+esc(it.post)+'"':'')+'><div class="vis">'+(it.vid?vid(it.vid):it.img?'<img class="bg" src="'+esc(it.img)+'" alt="" aria-hidden="true" loading="lazy"><img class="fg" src="'+esc(it.img)+'" alt="" loading="lazy">':'<span class="cover">'+icon(it.icon)+'<b>'+esc(((S.covers||{})[it.key]||{})[lang]||it.title)+'</b></span>')+'<span class="kind">'+esc(it.kind)+'</span>'+(it.count>1?'<span class="cnt" dir="ltr">+'+(it.count-1)+'</span>':'')+'</div><div class="txt">'+(it.date?'<time>'+esc(it.date)+'</time>':'')+'<h3>'+esc(it.title)+'</h3>'+(it.text?'<p>'+esc(it.text)+'</p>':'')+'</div></a>').join("");
-  const li=S.contact.linkedin?'<a class="more" href="'+esc(S.contact.linkedin)+'" target="_blank" rel="noopener">'+esc(lang==="he"?"לפרופיל של אבי בלינקדאין":"Avi Bachar on LinkedIn")+' '+arrow+'</a>':'';
+  const slides=items.map(it=>'<a class="slide" href="'+escU(it.url)+'"'+(it.ext?' target="_blank" rel="noopener"':'')+(it.post?' data-post="'+esc(it.post)+'"':'')+'><div class="vis">'+(it.vid?vid(it.vid):it.img?'<img class="bg" src="'+escU(it.img)+'" alt="" aria-hidden="true" loading="lazy"><img class="fg" src="'+escU(it.img)+'" alt="" loading="lazy">':'<span class="cover">'+icon(it.icon)+'<b>'+esc(((S.covers||{})[it.key]||{})[lang]||it.title)+'</b></span>')+'<span class="kind">'+esc(it.kind)+'</span>'+(it.count>1?'<span class="cnt" dir="ltr">+'+(it.count-1)+'</span>':'')+'</div><div class="txt">'+(it.date?'<time>'+esc(it.date)+'</time>':'')+'<h3>'+esc(it.title)+'</h3>'+(it.text?'<p>'+esc(it.text)+'</p>':'')+'</div></a>').join("");
+  const li=S.contact.linkedin?'<a class="more" href="'+escU(S.contact.linkedin)+'" target="_blank" rel="noopener">'+esc(lang==="he"?"לפרופיל של אבי בלינקדאין":"Avi Bachar on LinkedIn")+' '+arrow+'</a>':'';
   return '<section class="sec" id="'+id+'"><div class="wrap"><div class="carhead"><div><div class="eyebrow">'+esc(eyebrow)+'</div><h2>'+esc(title)+'</h2></div><div class="carnav">'+li+'<button type="button" data-car="prev" aria-label="'+(lang==="he"?"הקודם":"Previous")+'"><span aria-hidden="true">←</span></button><button type="button" data-car="next" aria-label="'+(lang==="he"?"הבא":"Next")+'"><span aria-hidden="true">→</span></button></div></div><div class="car" tabindex="0" role="region" aria-label="'+esc(title)+'">'+slides+'</div><div class="cardots" aria-hidden="true">'+items.map((_,i)=>'<i'+(i===0?' class="on"':'')+'></i>').join("")+'</div></div></section>';
 }
 function fitImg(img){
@@ -925,7 +931,7 @@ function renderChrome(route){
     <div><a class="brand" href="${href("home")}"><img src="images/logo-mark.svg" alt="" width="42" height="40"><span><span class="word">Isra<i>Team</i></span><small>98 LTD.</small></span></a>
       <p style="max-width:34ch">${esc(u.tagline)}</p>
       <p style="margin-top:14px"><a class="ltr" href="tel:+${phoneDigits()}">${esc(C.phone)}</a><br><a class="ltr" href="mailto:${esc(C.email)}">${esc(C.email)}</a><br>${esc(u.address)}</p>
-      ${C.linkedin?'<p style="margin-top:12px"><a href="'+esc(C.linkedin)+'" target="_blank" rel="noopener">'+esc(u.linkedin)+'</a></p>':''}</div>
+      ${C.linkedin?'<p style="margin-top:12px"><a href="'+escU(C.linkedin)+'" target="_blank" rel="noopener">'+esc(u.linkedin)+'</a></p>':''}</div>
     <div><h4>${esc(u.footerAbout)}</h4><ul><li><a href="${href("about")}">${esc(L(S.about).title)}</a></li><li><a href="${href("clients")}">${esc(L(S.clients).title)}</a></li><li><a href="${href("about")}">${esc(L(S.about).mgmtTitle)}</a></li><li><a href="${href("contact")}">${esc(u.nav.contact)}</a></li></ul></div>
     <div><h4>${esc(u.footerExpertise)}</h4><ul><li><a href="${href("expertise")}">${esc(L(S.expertise).title)}</a></li><li><a href="${href("projects")}">${esc(L(S.projects).title)}</a></li><li><a href="${href("updates")}">${esc(L(S.updates).title)}</a></li></ul></div>
     <div><h4>${esc(u.footerLegal)}</h4><ul><li><a href="${href("privacy")}">${esc(u.privacy)}</a></li><li><a href="${href("accessibility")}">${esc(u.accessibility)}</a></li><li><a href="${href("terms")}">${esc(u.terms)}</a></li></ul></div>
@@ -997,7 +1003,7 @@ let lbs=null;
 const lb=$("#lb");
 function renderLB(focusSel){
   const p=lbs.p, i=lbs.i, x=L(p), t=T(), imgs=p.images||[], n=imgs.length;
-  const vis = (!n && p.video) ? '<div class="lbvis">'+vid(p.video, x.title)+'</div>' : n ? '<div class="lbvis"><img src="'+esc(imgs[i])+'" alt="'+esc(x.title+(n>1?' – '+(i+1)+'/'+n:''))+'">'+(n>1?'<button type="button" class="lp" data-lb="-1" aria-label="'+esc(t.prevImg)+'"><span aria-hidden="true">←</span></button><button type="button" class="ln" data-lb="1" aria-label="'+esc(t.nextImg)+'"><span aria-hidden="true">→</span></button><span class="lbcount" dir="ltr">'+(i+1)+' / '+n+'</span>':'')+'</div>' : '';
+  const vis = (!n && p.video) ? '<div class="lbvis">'+vid(p.video, x.title)+'</div>' : n ? '<div class="lbvis"><img src="'+escU(imgs[i])+'" alt="'+esc(x.title+(n>1?' – '+(i+1)+'/'+n:''))+'">'+(n>1?'<button type="button" class="lp" data-lb="-1" aria-label="'+esc(t.prevImg)+'"><span aria-hidden="true">←</span></button><button type="button" class="ln" data-lb="1" aria-label="'+esc(t.nextImg)+'"><span aria-hidden="true">→</span></button><span class="lbcount" dir="ltr">'+(i+1)+' / '+n+'</span>':'')+'</div>' : '';
   lb.innerHTML='<button type="button" class="lbx" data-lb="x" aria-label="'+esc(t.close)+'"><span aria-hidden="true">×</span></button><div class="lbin'+(n||p.video?'':' noimg')+'">'+vis+'<div class="lbtxt"><time>LinkedIn</time><h2 id="lbt">'+esc(x.title)+'</h2><p>'+esc(x.text)+'</p>'+postLinks(p)+'</div></div>';
   lb.querySelectorAll("video").forEach(v=>{const p=v.play(); if(p&&p.catch) p.catch(()=>{});});
   const f=focusSel&&lb.querySelector(focusSel); if(f) f.focus();

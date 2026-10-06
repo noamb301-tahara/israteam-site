@@ -2,7 +2,7 @@
    (one row per top-level key of window.SITE); anything without a row falls back to content.js.
    The editor is organised like the site itself: page by page, section by section, with each
    section titled by the heading visitors actually see. */
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/+esm";
 
 const { S, STATIC, CMS } = window.ISRA;
 const HE = window.ISRA.HE_ON !== false; /* Hebrew fields are hidden while the site runs in English only */
