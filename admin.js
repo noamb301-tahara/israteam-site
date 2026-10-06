@@ -108,17 +108,41 @@ const css = `
 #adm .check{display:flex;gap:8px;align-items:center;font-weight:600;margin:12px 0}
 #adm .pairs .row{display:grid;grid-template-columns:110px 1fr auto;gap:8px;align-items:center;margin:6px 0}
 @media(max-width:820px){#adm .cols{grid-template-columns:1fr}#adm nav.secs{position:static;display:flex;overflow-x:auto;gap:6px;padding-bottom:6px}#adm nav.secs .grp{display:none}#adm nav.secs button{white-space:nowrap;flex:none}#adm .top{flex-wrap:wrap;padding:10px 14px}#adm .top .tabs{order:3;width:100%}#adm .tabs button{padding:6px 9px;font-size:13.5px}#adm .wrapa{padding:16px 12px 120px}#adm .pairs .row{grid-template-columns:80px 1fr}#adm .pairs .row .bar{grid-column:1/-1}}
+
+html.editing #main [data-e]{outline:1px dashed color-mix(in srgb,var(--signal) 60%,transparent);outline-offset:2px;cursor:text;border-radius:2px;min-width:1.5em}
+html.editing #main [data-e]:hover{outline-style:solid}
+html.editing #main [data-e]:focus{outline:2px solid var(--signal);background:color-mix(in srgb,var(--signal) 10%,transparent)}
+html.editing #main [data-e][data-md]{cursor:pointer}
+html.editing #main [data-e]:empty::before{content:"Click to type";opacity:.5;font-style:italic}
+html.editing #main [data-li],html.editing #main [data-img]{cursor:pointer}
+html.editing #main .ve-sel{outline:3px solid var(--teal)!important;outline-offset:3px}
+html.editing #main{padding-bottom:110px}
+html.editing #wa,html.editing .a11yb,html.editing #editbtn{display:none!important}
+#adm.ve{position:static;inset:auto;background:none;overflow:visible;z-index:auto;font-size:15px}
+#adm .vebar{position:fixed;left:0;right:0;bottom:0;z-index:250;padding:10px 16px;background:var(--surface);color:var(--ink);border-top:3px solid var(--signal);display:flex;gap:10px 16px;flex-wrap:wrap;align-items:center;justify-content:space-between;box-shadow:0 -6px 18px rgba(0,0,0,.15)}
+#adm .vebar .velbl{display:grid;gap:2px}
+#adm .vesave{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}#adm .vesave[hidden]{display:none}
+#adm .vesave [role=status]{font-size:12.5px;color:var(--ink-2);max-width:260px}
+#adm .vemsg{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:255;width:min(560px,92vw)}
+#adm .vetb{position:fixed;z-index:240;display:flex;flex-wrap:wrap;gap:4px;align-items:center;max-width:calc(100vw - 16px);background:var(--deep);color:var(--deep-ink);padding:5px;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+#adm .vetb[hidden]{display:none}
+#adm .vetb .tbl{font-size:12px;padding:0 6px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--deep-ink)}
+#adm .vetb .btn{background:var(--surface);color:var(--ink);border-color:transparent}
+#adm .vetb .btn.danger{color:#B3261E}
+#adm .vedrawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100vw);z-index:260;background:var(--surface);color:var(--ink);overflow:auto;box-shadow:-8px 0 24px rgba(0,0,0,.2);padding:16px 16px 120px;border-left:1px solid var(--line)}
+#adm .vedrawer[hidden]{display:none}
+@media(max-width:700px){#adm .vebar .velbl{display:none}#adm .vebar{padding:8px 10px}#adm .vebar>.bar,#adm .vesave{flex-wrap:nowrap}#adm .vebar>.bar{overflow-x:auto;width:100%}#adm .vesave [role=status]{display:none}#adm .vebar .btn{padding:7px 10px;font-size:13.5px;white-space:nowrap;flex:none}#adm .vetb .tbl{display:none}#adm .vemsg{bottom:64px}#adm .vedrawer{top:auto;height:78vh;border-left:0;border-top:3px solid var(--signal);border-radius:12px 12px 0 0}}
 `;
 document.head.append(h("style", { html: css }));
 const root = h("div", { id: "adm", role: "main", dir: "ltr", lang: "en" });
 document.body.append(root);
 const siteEls = ["header.top", "#main", "#footer", "#wa", "#a11yb", "#skip"].map(s => document.querySelector(s)).filter(Boolean);
-function show() { root.hidden = false; siteEls.forEach(e => e.hidden = true); document.documentElement.lang = "en"; document.documentElement.dir = "ltr"; document.title = "Site admin · IsraTeam"; }
-function hide() { root.hidden = true; siteEls.forEach(e => e.hidden = false); }
-window.ISRA_ADMIN = { show, hide };
-show();
-
+function show() { if (editing) leaveEdit(); root.hidden = false; siteEls.forEach(e => e.hidden = true); if (me && me.role !== "pending" && !root.querySelector(".wrapa")) frame(); document.documentElement.lang = "en"; document.documentElement.dir = "ltr"; document.title = "Site admin · IsraTeam"; }
+function hide() { if (!editing) root.hidden = true; siteEls.forEach(e => e.hidden = false); }
+window.ISRA_ADMIN = { show, hide, edit: r => enterEdit(r), afterRender: r => afterRender(r) };
+let editing = false;
 let me = null, tab = "content", pageId = "home";
+show();
 /* Working copies of every stored block, the saved version of each, and who saved it last. */
 const W = {}, ORIG = {}, META = {};
 const dirtyKeys = () => Object.keys(W).filter(k => JSON.stringify(W[k]) !== ORIG[k]);
@@ -194,6 +218,9 @@ async function boot(info) {
     return;
   }
   await loadAll();
+  const r = window.ISRA.editRoute; window.ISRA.editRoute = null;
+  if (r !== undefined && r !== null) return enterEdit(r);
+  if (!info && /^#admin$/.test(location.hash)) return enterEdit("home"); /* the editor opens on the site itself; "Admin tools" leads here */
   frame(info);
 }
 async function signOut() { await sb.auth.signOut(); me = null; authView("login"); }
@@ -222,7 +249,7 @@ function frame(info) {
   const top = h("div", { class: "top" },
     h("b", {}, "IsraTeam · Site admin"),
     h("div", { class: "tabs", role: "navigation", "aria-label": "Admin tabs" }, tabs.map(([k, t]) => h("button", { type: "button", "aria-current": tab === k ? "page" : null, onclick: () => { tab = k; frame(); } }, t))),
-    h("div", { class: "bar" }, h("span", { class: "muted", style: "color:var(--deep-2);font-size:13px" }, me.email), h("a", { href: "#home", target: "_blank", rel: "noopener" }, "View site ↗")));
+    h("div", { class: "bar" }, h("button", { class: "btn sm pri", type: "button", onclick: () => enterEdit(((pagesList().find(p => p.id === pageId) || {}).route) || "home") }, "✎ Edit on the page"), h("span", { class: "muted", style: "color:var(--deep-2);font-size:13px" }, me.email), h("a", { href: "#home", target: "_blank", rel: "noopener" }, "View site ↗")));
   const body = h("div", { class: "wrapa" });
   saveBar = buildSaveBar();
   root.append(top, body, saveBar);
@@ -235,7 +262,7 @@ function frame(info) {
 function buildSaveBar() {
   const status = h("span", { role: "status" });
   const saveBtn = h("button", { class: "btn pri", type: "button", onclick: () => saveAll(saveBtn) }, "Save & publish");
-  const undo = h("button", { class: "btn", type: "button", onclick: () => { if (!confirm("Discard all unsaved changes?")) return; for (const k of dirtyKeys()) W[k] = JSON.parse(ORIG[k]); frame(); } }, "Discard changes");
+  const undo = h("button", { class: "btn", type: "button", onclick: () => { if (!confirm("Discard all unsaved changes?")) return; for (const k of dirtyKeys()) { W[k] = JSON.parse(ORIG[k]); if (editing) S[k] = W[k]; } if (editing) { undoStack.length = 0; closeDrawer(); window.ISRA.rerender(); refreshDirty(); } else frame(); } }, "Discard changes");
   const bar = h("div", { class: "savebar", hidden: true }, status, saveBtn, undo);
   bar.status = status;
   return bar;
@@ -245,7 +272,7 @@ function refreshDirty() {
   const d = dirtyKeys();
   if (!saveBar) return;
   saveBar.hidden = !d.length;
-  saveBar.status.textContent = d.length ? "Unsaved changes: " + d.map(k => KEY_NAMES[k] || k).join(", ") : "";
+  saveBar.status.textContent = d.length ? (editing ? "Unsaved: " : "Unsaved changes: ") + d.map(k => KEY_NAMES[k] || k).join(", ") : "";
   document.querySelectorAll("#adm nav.secs button[data-keys]").forEach(b => { const ks = b.dataset.keys.split(","); const on = ks.some(k => d.includes(k)); const dot = b.querySelector("i"); if (on && !dot) b.append(h("i", { title: "Unsaved changes" })); if (!on && dot) dot.remove(); });
   document.querySelectorAll("#adm [data-head]").forEach(el => { try { el.textContent = el.headFn() || "(no heading)"; } catch (e) {} });
 }
@@ -264,14 +291,14 @@ async function saveAll(btn) {
   for (const k of keys) {
     const { data, error } = await sb.from("site_sections").upsert({ key: k, data: W[k] }).select("updated_at,updated_by").maybeSingle();
     if (error) { failed.push((KEY_NAMES[k] || k) + ": " + errText(error)); continue; }
-    ORIG[k] = JSON.stringify(W[k]); S[k] = clone(W[k]);
+    ORIG[k] = JSON.stringify(W[k]); S[k] = editing ? W[k] : clone(W[k]);
     META[k] = data ? { at: data.updated_at, by: data.updated_by } : META[k];
   }
   btn.disabled = false; refreshDirty();
-  const body = root.querySelector(".wrapa");
+  const body = root.querySelector(".wrapa") || root.querySelector(".vemsg");
   if (failed.length) note(body, "Some changes were not saved. " + failed.join(" · "), "err");
-  else note(body, "Saved. The changes are live on the site now (refresh the site tab to see them).", "ok");
-  body.scrollIntoView({ block: "start" });
+  else note(body, editing ? "Saved. The changes are live on the site now." : "Saved. The changes are live on the site now (refresh the site tab to see them).", "ok");
+  if (!editing) body.scrollIntoView({ block: "start" });
 }
 
 function findDupIds(v) {
@@ -485,7 +512,7 @@ function renderPage(pane) {
   pane.replaceChildren(
     h("div", { class: "bar", style: "justify-content:space-between;margin-bottom:12px" },
       h("div", {}, h("h1", {}, page.name), h("p", { class: "help", style: "margin:0" }, "Sections are listed in the order they appear on the page, under the heading visitors see." + (last ? " Last saved " + fmtDate(last.at) + (last.by ? " by " + last.by : "") + "." : ""))),
-      h("a", { class: "btn sm", href: "#" + page.route, target: "_blank", rel: "noopener" }, "Open this page ↗")));
+      h("span", { class: "bar" }, h("button", { class: "btn sm pri", type: "button", onclick: () => enterEdit(page.route) }, "✎ Edit on the page"), h("a", { class: "btn sm", href: "#" + page.route, target: "_blank", rel: "noopener" }, "Open this page ↗"))));
   page.sections().forEach((s, i) => pane.append(sectionCard(s, i)));
 }
 
@@ -799,6 +826,234 @@ function accountTab(body) {
       h("button", { class: "btn", type: "button", onclick: signOut }, "Sign out")));
   body.replaceChildren(card);
 }
+
+/* ---------- editing on the page itself ----------
+   The site renders as visitors see it, with data-e (text), data-li/data-i (list item) and data-img (picture) marks that name the stored
+   field. Short texts are typed in place; long texts open a box; list items get a small toolbar: edit all fields, duplicate, add new,
+   move, delete. While editing, the site reads the working copies directly (S[k] === W[k]), so every change shows at once. */
+const undoStack = [];
+let sel = null, tb = null, drawer = null, veBar = null, veTimer = 0;
+const splitPath = p => p.split(".").map(x => (/^\d+$/.test(x) ? Number(x) : x));
+const getPath = p => { const [k, ...r] = splitPath(p); return r.length ? getP(k, r) : W[k]; };
+const setPath = (p, v) => { const [k, ...r] = splitPath(p); setP(k, r, v); S[k] = W[k]; };
+const keyOf = p => p.split(".")[0];
+function pushUndo(k) { undoStack.push({ k, v: JSON.stringify(W[k] ?? null) }); if (undoStack.length > 200) undoStack.shift(); updateBar(); }
+function rerender() { const y = scrollY; window.ISRA.rerender(); scrollTo(0, y); refreshDirty(); }
+const later = () => { clearTimeout(veTimer); veTimer = setTimeout(rerender, 250); };
+
+function enterEdit(route) {
+  if (!me || me.role === "pending") { window.ISRA.editRoute = route; location.hash = "#admin"; return; }
+  editing = true; window.ISRA.setEdit(true);
+  for (const k of Object.keys(W)) S[k] = W[k];
+  root.hidden = false; root.classList.add("ve"); siteEls.forEach(e => e.hidden = false);
+  tb = h("div", { class: "vetb", hidden: true, role: "toolbar", "aria-label": "Item actions" });
+  drawer = h("aside", { class: "vedrawer", hidden: true, "aria-label": "Edit item" });
+  veBar = buildEditBar();
+  root.replaceChildren(h("div", { class: "vemsg" }), tb, drawer, veBar);
+  document.documentElement.lang = "en"; document.documentElement.dir = "ltr";
+  const target = "#" + (route || "home");
+  if (location.hash !== target) location.hash = target; else window.ISRA.rerender();
+  refreshDirty();
+}
+function leaveEdit() {
+  editing = false; window.ISRA.setEdit(false); sel = null;
+  root.classList.remove("ve"); root.replaceChildren(); saveBar = null;
+}
+function doneEditing() {
+  if (dirtyKeys().length && !confirm("You have changes that are not published yet. Leave and discard them?")) return;
+  for (const k of dirtyKeys()) W[k] = JSON.parse(ORIG[k]);
+  for (const k of Object.keys(W)) S[k] = clone(W[k]);
+  undoStack.length = 0; leaveEdit(); root.hidden = true; window.ISRA.rerender();
+}
+function buildEditBar() {
+  saveBar = buildSaveBar();
+  saveBar.classList.remove("savebar"); saveBar.classList.add("vesave");
+  const undoBtn = h("button", { class: "btn", type: "button", onclick: undoLast, title: "Undo the last change" }, "↶ Undo");
+  const bar = h("div", { class: "vebar" },
+    h("span", { class: "velbl" }, h("b", {}, "✎ Editing"), h("span", { class: "help", style: "margin:0" }, "Click any text to change it. Click a card or picture for more options.")),
+    h("span", { class: "bar" }, undoBtn, saveBar,
+      h("button", { class: "btn", type: "button", onclick: doneEditing, title: "Stop editing and return to the site" }, "Done"),
+      h("button", { class: "btn", type: "button", onclick: newPage }, "+ New page"),
+      h("a", { class: "btn", href: "#admin" }, "⚙ Admin tools")));
+  bar.undoBtn = undoBtn;
+  return bar;
+}
+function updateBar() { if (veBar) veBar.undoBtn.disabled = !undoStack.length; }
+function undoLast() {
+  const u = undoStack.pop(); if (!u) return;
+  W[u.k] = JSON.parse(u.v); S[u.k] = W[u.k]; closeDrawer(); rerender(); updateBar();
+}
+function newPage() {
+  pushUndo("pages");
+  const pg = PAGE_TEMPLATE(); pg.en.title = "New page";
+  if (!Array.isArray(W.pages)) W.pages = [];
+  W.pages.push(pg); S.pages = W.pages;
+  location.hash = "#page-" + pg.id;
+  setTimeout(() => openItemDrawer("pages", W.pages.length - 1), 50);
+}
+function afterRender() {
+  if (!editing) return;
+  closeDrawerIfStale();
+  const el = sel && findItem(sel);
+  if (el) select(el, sel.img); else { sel = null; tb.hidden = true; }
+}
+function findItem(s) {
+  if (s.img && !s.li) return document.querySelector('#main [data-img="' + s.img + '"]');
+  return [...document.querySelectorAll('#main [data-li="' + s.li + '"]')].find(e => +e.dataset.i === s.i) || null;
+}
+
+/* ----- text ----- */
+let before = "";
+document.addEventListener("focusin", e => { const el = e.target.closest && e.target.closest("#main [data-e]:not([data-md])"); if (editing && el) before = el.textContent; });
+document.addEventListener("focusout", e => {
+  if (!editing) return;
+  const el = e.target.closest && e.target.closest("#main [data-e]:not([data-md])"); if (!el) return;
+  const v = el.textContent.replace(/\u00a0/g, " ").replace(/\s*\n\s*/g, " ").trim(), p = el.dataset.e;
+  if (v === String(getPath(p) ?? "").trim()) return;
+  pushUndo(keyOf(p)); setPath(p, v);
+  if (p === "contact.phone") setPath("contact.phoneRaw", v);
+  document.querySelectorAll('#main [data-e="' + p + '"]').forEach(o => { if (o !== el) o.textContent = v; });
+  refreshDirty();
+  if (!(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest("[data-e]"))) later();
+});
+document.addEventListener("keydown", e => {
+  if (!editing) return;
+  const el = e.target.closest && e.target.closest("#main [data-e]:not([data-md])"); if (!el) return;
+  if (e.key === "Enter") { e.preventDefault(); el.blur(); }
+  if (e.key === "Escape") { el.textContent = before; el.blur(); }
+});
+function openTextBox(el) {
+  const p = el.dataset.e, val = String(getPath(p) ?? "");
+  const ta = h("textarea", { rows: 16, style: "min-height:50vh" }); ta.value = val;
+  const isMd = /\.(body)$/.test(p);
+  showDrawer("Edit text", [h("label", {}, "Text"), ta, isMd ? h("p", { class: "help" }, MD_HELP) : "",
+    h("div", { class: "bar", style: "margin-top:12px" },
+      h("button", { class: "btn pri", type: "button", onclick: () => { if (ta.value !== val) { pushUndo(keyOf(p)); setPath(p, ta.value); rerender(); } closeDrawer(); } }, "Apply"),
+      h("button", { class: "btn", type: "button", onclick: closeDrawer }, "Cancel"))]);
+  ta.focus();
+}
+
+/* ----- items ----- */
+function select(el, img) {
+  document.querySelectorAll("#main .ve-sel").forEach(e => e.classList.remove("ve-sel"));
+  const li = el.closest("[data-li]");
+  const imgEl = img ? el.closest("[data-img]") || el.querySelector("[data-img]") : el.matches("[data-img]") ? el : null;
+  sel = { li: li && li.dataset.li, i: li ? +li.dataset.i : null, img: imgEl && imgEl.dataset.img };
+  (li || imgEl).classList.add("ve-sel");
+  drawToolbar(li, imgEl);
+}
+function drawToolbar(li, imgEl) {
+  const b = (txt, title, fn, cls) => h("button", { class: "btn sm" + (cls ? " " + cls : ""), type: "button", title, onclick: e => { e.preventDefault(); e.stopPropagation(); fn(); } }, txt);
+  const kids = [];
+  if (li) {
+    const arr = getPath(li.dataset.li), i = +li.dataset.i, it = arr && arr[i];
+    if (!Array.isArray(arr)) { tb.hidden = true; return; }
+    const obj = it && typeof it === "object" && !Array.isArray(it);
+    const link = li.matches("a[href]") ? li.getAttribute("href") : null;
+    kids.push(h("span", { class: "tbl" }, (obj ? itemTitle(it, i) : "Item") + " · " + (i + 1) + "/" + arr.length));
+    if (obj) kids.push(b("✎ Edit", "Edit all the details of this item", () => openItemDrawer(li.dataset.li, i)));
+    kids.push(b("⧉ Duplicate", "Make a copy right after this one", () => duplicateItem(li.dataset.li, i)));
+    kids.push(b("+ New", "Add a new empty item after this one", () => addItem(li.dataset.li, i)));
+    kids.push(b("↑", "Move earlier", () => moveItem(li.dataset.li, i, -1)), b("↓", "Move later", () => moveItem(li.dataset.li, i, 1)));
+    if (link && link.startsWith("#") && !li.classList.contains("pagehead")) kids.push(b("Open ↗", "Go to this item's page", () => { location.hash = link; }));
+    kids.push(b("🗑 Delete", "Delete this item", () => deleteItem(li.dataset.li, i), "danger"));
+  }
+  if (imgEl) {
+    const p = imgEl.dataset.img;
+    const set = url => { pushUndo(keyOf(p)); setPath(p, url); rerender(); };
+    kids.push(h("span", { class: "tbl" }, "Picture"), uploadButton(set, "image/*,application/pdf", "⇪ Upload new"), b("Library", "Choose a file already uploaded", () => pickFromLibrary(set)));
+    if (!(li && li.dataset.li.endsWith(".images"))) kids.push(b("Remove", "Remove the picture", () => set(""), "danger"));
+  }
+  kids.push(b("✕", "Close", () => { sel = null; tb.hidden = true; document.querySelectorAll("#main .ve-sel").forEach(e => e.classList.remove("ve-sel")); }));
+  tb.replaceChildren(...kids); tb.hidden = false; placeToolbar();
+}
+function placeToolbar() {
+  if (!tb || tb.hidden || !sel) return;
+  const el = findItem(sel); if (!el) { tb.hidden = true; return; }
+  const r = el.getBoundingClientRect(), w = tb.offsetWidth, ht = tb.offsetHeight;
+  let top = r.top - ht - 6; if (top < 8) top = Math.min(Math.max(r.top + 6, 8), innerHeight - ht - 90);
+  tb.style.top = top + "px"; tb.style.left = Math.max(8, Math.min(r.right - w, innerWidth - w - 8)) + "px";
+}
+addEventListener("scroll", () => requestAnimationFrame(placeToolbar), { passive: true, capture: true });
+addEventListener("resize", () => requestAnimationFrame(placeToolbar));
+
+const isPageItem = (p, i) => { const el = findItem({ li: p, i }); return el && el.classList.contains("pagehead"); };
+function uniqueId(arr, base) { base = String(base).replace(/-copy\d*$/, ""); let n = 1, id = base + "-copy"; while (arr.some(x => x && x.id === id)) id = base + "-copy" + (++n); return id; }
+const routeFor = id => location.hash.replace(/^#/, "").replace(/-[^]*$/, "") + "-" + id;
+function duplicateItem(p, i) {
+  const arr = getPath(p), c = clone(arr[i]), page = isPageItem(p, i);
+  pushUndo(keyOf(p));
+  if (c && typeof c === "object" && c.id) c.id = uniqueId(arr, c.id);
+  arr.splice(i + 1, 0, c); sel = { li: p, i: i + 1 };
+  if (page && c.id) location.hash = "#" + routeFor(c.id); else rerender();
+}
+function addItem(p, i) {
+  const arr = getPath(p), it = arr[i], page = isPageItem(p, i);
+  pushUndo(keyOf(p));
+  let n;
+  if (p === "pages") { n = PAGE_TEMPLATE(); n.en.title = "New page"; }
+  else if (Array.isArray(it)) n = it.map(() => "");
+  else if (it && typeof it === "object") {
+    n = blank(it);
+    if (n.id !== undefined) n.id = uniqueId(arr, "new");
+    const t = n.en && typeof n.en === "object" ? n.en : n;
+    if (typeof n.en === "string") n.en = "New item";
+    else for (const k of ["title", "name", "q"]) if (k in t) { t[k] = "New item"; break; }
+  } else n = "New item";
+  arr.splice(i + 1, 0, n); sel = { li: p, i: i + 1 };
+  if (page && n.id) { location.hash = "#" + routeFor(n.id); setTimeout(() => openItemDrawer(p, i + 1), 50); return; }
+  rerender();
+  if (n && typeof n === "object" && !Array.isArray(n)) openItemDrawer(p, i + 1);
+  else { const el = findItem(sel); const t = el && (el.matches("[data-e]") ? el : el.querySelector("[data-e]")); if (t) { t.focus(); document.getSelection().selectAllChildren(t); } }
+}
+function moveItem(p, i, d) {
+  const arr = getPath(p), j = i + d; if (j < 0 || j >= arr.length) return;
+  pushUndo(keyOf(p)); [arr[i], arr[j]] = [arr[j], arr[i]]; sel = { li: p, i: j }; rerender();
+}
+function deleteItem(p, i) {
+  const arr = getPath(p), page = isPageItem(p, i);
+  if (!confirm("Delete “" + itemTitle(arr[i], i) + "”? You can bring it back with Undo until you leave this screen.")) return;
+  pushUndo(keyOf(p)); arr.splice(i, 1); sel = null; tb.hidden = true; closeDrawer();
+  if (page) { const up = document.querySelectorAll("#main .crumbs a"); location.hash = up.length ? up[up.length - 1].getAttribute("href") : "#home"; }
+  else rerender();
+}
+function openItemDrawer(p, i) {
+  const arr = getPath(p), it = arr && arr[i]; if (!it || typeof it !== "object") return;
+  pushUndo(keyOf(p));
+  /* Offer fields that other items in the same list have (a picture, a card text...) even when this one has none yet. */
+  const added = [];
+  const addMissing = (o, path) => arr.forEach(sib => { const src = path.reduce((x, k) => x && x[k], sib); if (!src || typeof src !== "object" || Array.isArray(src)) return;
+    for (const [key, v] of Object.entries(src)) if (!(key in o) && (typeof v === "string" || typeof v === "boolean")) { o[key] = typeof v === "boolean" ? false : ""; added.push([o, key]); } });
+  addMissing(it, []); if (it.en && typeof it.en === "object") addMissing(it.en, ["en"]);
+  const [k, ...r] = splitPath(p);
+  const form = renderValue(it, [k, ...r, i], i, v => { arr[i] = v; });
+  form.addEventListener("input", later); form.addEventListener("change", later);
+  showDrawer(itemTitle(it, i), [h("p", { class: "help" }, "Changes show on the page as you type. Use Undo to go back."), form,
+    h("div", { class: "bar", style: "margin-top:14px" }, h("button", { class: "btn pri", type: "button", onclick: () => { closeDrawer(); rerender(); } }, "Done"))]);
+  drawer.item = { p, it, added };
+}
+function showDrawer(title, kids) {
+  drawer.replaceChildren(h("div", { class: "bar", style: "justify-content:space-between;margin-bottom:8px" }, h("h2", { style: "margin:0" }, title), h("button", { class: "btn sm", type: "button", onclick: closeDrawer }, "Close")), ...kids);
+  drawer.hidden = false; drawer.item = null; drawer.scrollTop = 0;
+}
+function closeDrawer() {
+  if (!drawer) return;
+  if (drawer.item && drawer.item.added) drawer.item.added.forEach(([o, key]) => { if (o[key] === "" || o[key] === false) delete o[key]; });
+  drawer.hidden = true; drawer.replaceChildren(); drawer.item = null; refreshDirty();
+}
+function closeDrawerIfStale() { if (drawer && drawer.item && !(getPath(drawer.item.p) || []).includes(drawer.item.it)) closeDrawer(); }
+
+/* ----- clicks: edit instead of following links ----- */
+document.addEventListener("click", e => {
+  if (!editing || !e.target.closest || !e.target.closest("#main")) return;
+  const t = e.target.closest("[data-e]"), im = e.target.closest("[data-img]"), li = e.target.closest("[data-li]");
+  if (!t && !im && !li) return;
+  e.preventDefault(); e.stopPropagation();
+  if (t && t.hasAttribute("data-md")) return openTextBox(t);
+  if (t) { if (li || im) select(t, !!im && !li); return; }
+  select(im || li, !!im);
+}, true);
+document.addEventListener("submit", e => { if (editing && e.target.closest("#main")) e.preventDefault(); }, true);
 
 /* ---------- start ---------- */
 sb.auth.onAuthStateChange(ev => { if (ev === "PASSWORD_RECOVERY") setTimeout(() => authView("recover"), 0); });

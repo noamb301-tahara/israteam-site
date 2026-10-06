@@ -192,7 +192,7 @@ html[lang="he"] .dossier dt{font-family:var(--body);font-size:12.5px}
 
 .core{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
 .core div{background:var(--surface);padding:22px;font-size:15px;display:flex;flex-direction:column;gap:12px}
-.core div span{font-family:var(--mono);font-size:12px;color:var(--teal)}
+.core div>span:first-child{font-family:var(--mono);font-size:12px;color:var(--teal)}
 @media (max-width:980px){.core{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:520px){.core{grid-template-columns:1fr}}
 
@@ -580,24 +580,36 @@ const LI_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
 const phoneDigits = () => String(S.contact.phoneRaw || S.contact.phone || "").replace(/\D/g,"");
 const waLink = () => "https://wa.me/" + phoneDigits();
 
+/* On-page editing (owners and editors only, switched on by admin.js). These add data attributes that tell the editor which stored field
+   each text, image or list item comes from; for visitors they add nothing. Paths are "block.key.index...", e.g. "expertise.topics.2.en.title". */
+let EDIT=false;
+const pl=(...a)=>a.join(".");
+const ed=p=>EDIT?' data-e="'+p+'" contenteditable="plaintext-only" spellcheck="true"':'';   /* short text, typed in place */
+const edm=p=>EDIT?' data-e="'+p+'" data-md=""':'';                                          /* long or formatted text, edited in a box */
+const eli=(p,i)=>EDIT?' data-li="'+p+'" data-i="'+i+'"':'';                                  /* one item of a list: edit, duplicate, delete, add, move */
+const eim=p=>EDIT?' data-img="'+p+'"':'';                                                     /* a picture that can be replaced */
+const sp=(p,v)=>'<span'+ed(p)+'>'+esc(v)+'</span>';
+
 function crumbs(items){
   return '<nav class="crumbs" aria-label="Breadcrumb">' + items.map((it,i)=> i<items.length-1
     ? '<a href="'+href(it[1])+'">'+esc(it[0])+'</a><span aria-hidden="true">/</span>'
     : '<span aria-current="page">'+esc(it[0])+'</span>').join("") + '</nav>';
 }
-function pagehead(trail, title, sub, extra){
-  const bg=PAGE_BG[curRoute]; return '<section class="band pagehead">'+(bg&&hasV(bg)?'<div class="bgv" aria-hidden="true">'+vid(bg)+'</div>':'')+'<div class="wrap">'+crumbs(trail)+'<h1>'+esc(title)+'</h1>'+(sub?'<p class="sub">'+esc(sub)+'</p>':'')+(extra||'')+'</div></section>';
+/* o: {t: path of the title, s: path of the line under it, li: [list path, index] when the whole page is one item of a list} */
+function pagehead(trail, title, sub, extra, o){
+  o=o||{};
+  const bg=PAGE_BG[curRoute]; return '<section class="band pagehead"'+(o.li?eli(o.li[0],o.li[1]):'')+'>'+(bg&&hasV(bg)?'<div class="bgv" aria-hidden="true">'+vid(bg)+'</div>':'')+'<div class="wrap">'+crumbs(trail)+'<h1'+(o.t?ed(o.t):'')+'>'+esc(title)+'</h1>'+(sub||(EDIT&&o.s)?'<p class="sub"'+(o.s?ed(o.s):'')+'>'+esc(sub)+'</p>':'')+(extra||'')+'</div></section>';
 }
 function ctaBand(){
   const u=U(), h=L(S.home);
-  return '<section class="band ctaband"><div class="wrap"><div><h2>'+esc(u.talk)+'</h2><p>'+esc(h.contactName)+' · '+esc(h.contactRole)+'</p></div><div class="ctas" style="margin:0">'+(u.contactUs?'<a class="btn primary" href="'+href("contact")+'">'+esc(u.contactUs)+' '+arrow+'</a>':'')+(u.whatsapp?'<a class="btn ghost" href="'+waLink()+'" target="_blank" rel="noopener">'+esc(u.whatsapp)+'</a>':'')+'</div></div></section>';
+  return '<section class="band ctaband"><div class="wrap"><div><h2'+ed(pl("ui",lang,"talk"))+'>'+esc(u.talk)+'</h2><p>'+sp(pl("home",lang,"contactName"),h.contactName)+' · '+sp(pl("home",lang,"contactRole"),h.contactRole)+'</p></div><div class="ctas" style="margin:0">'+(u.contactUs?'<a class="btn primary" href="'+href("contact")+'">'+sp(pl("ui",lang,"contactUs"),u.contactUs)+' '+arrow+'</a>':'')+(u.whatsapp?'<a class="btn ghost" href="'+waLink()+'" target="_blank" rel="noopener">'+sp(pl("ui",lang,"whatsapp"),u.whatsapp)+'</a>':'')+'</div></div></section>';
 }
 function sideList(title, items, current){
   return '<div class="card"><h4>'+esc(title)+'</h4><ul>'+items.map(([t,r])=>'<li><a href="'+href(r)+'"'+(r===current?' aria-current="page"':'')+'>'+esc(t)+'</a></li>').join("")+'</ul></div>';
 }
 function contactCard(){
   const u=U(), h=L(S.home);
-  return '<div class="card"><h4>'+esc(h.contactTitle)+'</h4><p style="font-weight:600">'+esc(h.contactName)+'</p><p class="muted" style="font-size:14px;margin-bottom:14px">'+esc(h.contactRole)+'</p>'+(u.contactUs?'<a class="btn primary" style="width:100%;justify-content:center" href="'+href("contact")+'">'+esc(u.contactUs)+'</a>':'')+'</div>';
+  return '<div class="card"><h4'+ed(pl("home",lang,"contactTitle"))+'>'+esc(h.contactTitle)+'</h4><p style="font-weight:600"'+ed(pl("home",lang,"contactName"))+'>'+esc(h.contactName)+'</p><p class="muted" style="font-size:14px;margin-bottom:14px"'+ed(pl("home",lang,"contactRole"))+'>'+esc(h.contactRole)+'</p>'+(u.contactUs?'<a class="btn primary" style="width:100%;justify-content:center" href="'+href("contact")+'">'+sp(pl("ui",lang,"contactUs"),u.contactUs)+'</a>':'')+'</div>';
 }
 
 
@@ -620,8 +632,8 @@ function postLinks(p){
 }
 function gallery(p, cls){
   if(!p || !(p.images||[]).length) return "";
-  const x=L(p);
-  return '<div class="gal'+(cls?' '+cls:'')+'">'+p.images.map((src,i)=>'<a class="gthumb" href="'+href("post-"+p.id)+'" data-post="'+esc(p.id)+'" data-idx="'+i+'"><img src="'+escU(src)+'" alt="'+esc(x.title+(p.images.length>1?' – '+(i+1)+'/'+p.images.length:''))+'" loading="lazy"></a>').join("")+'</div>';
+  const x=L(p), pi=posts().indexOf(p), ip=pl("posts",pi,"images");
+  return '<div class="gal'+(cls?' '+cls:'')+'">'+p.images.map((src,i)=>'<a class="gthumb" href="'+href("post-"+p.id)+'" data-post="'+esc(p.id)+'" data-idx="'+i+'"'+(pi>=0?eli(ip,i)+eim(pl(ip,i)):'')+'><img src="'+escU(src)+'" alt="'+esc(x.title+(p.images.length>1?' – '+(i+1)+'/'+p.images.length:''))+'" loading="lazy"></a>').join("")+'</div>';
 }
 function imgFig(src){
   const p=postByImg(src); if(!p) return '<img class="figimg" src="'+escU(src)+'" alt="" loading="lazy">';
@@ -647,15 +659,18 @@ function clogo(k, alt){ const f=(S.clientLogos||{})[k]||LOGOS[k]; return f?'<spa
 let curRoute="home";
 const allTopicVids=()=>S.expertise.topics.every(t=>hasV(TOPIC_VIDS[t.id]));
 const topicVid=id=>allTopicVids()&&hasV(TOPIC_VIDS[id])?'<div class="tvid" aria-hidden="true">'+vid(TOPIC_VIDS[id])+'</div>':'';
+/* Pairs each list item with its position in the stored list, so hidden (empty) items don't shift the editor's numbering. */
+const withIdx=(arr,keep)=>(arr||[]).map((v,i)=>[v,i]).filter(([v])=>!keep||keep(v));
+const filled=v=>v&&String(v).trim();
 function threatsSection(){
   const T0=S.threats; if(!T0||!(T0.items||[]).length) return "";
   const x=L(T0)||{};
-  const tile=t=>{ const cap=esc(t[lang]||t.en||""); const nm=(t.video||"").match(/^images\/(.+)\.mp4$/);
+  const tile=(t,i)=>{ const cap=esc(t[lang]||t.en||""); const nm=(t.video||"").match(/^images\/(.+)\.mp4$/);
     const src=nm&&MS(nm[1]).video||t.video, poster=nm&&MS(nm[1]).poster||t.poster||"";
     const v=!!src&&(!nm||hasV(nm[1]));
     const m=!v?'':REDUCED?'<img src="'+escU(poster)+'" alt="" loading="lazy">':'<video src="'+escU(src)+'"'+(poster?' poster="'+escU(poster)+'"':'')+' preload="none" muted loop playsinline disablepictureinpicture aria-hidden="true"></video>';
-    return '<figure class="threat'+(v?'':' novid')+'">'+m+'<figcaption>'+cap+'</figcaption></figure>'; };
-  return '<section class="sec" id="threats"><div class="wrap"><div class="sechead"><div><div class="eyebrow">'+esc(x.eyebrow||"")+'</div><h2>'+esc(x.title||"")+'</h2></div><p>'+esc(x.text||"")+'</p></div><div class="threats">'+T0.items.map(tile).join("")+'</div></div></section>';
+    return '<figure class="threat'+(v?'':' novid')+'"'+eli("threats.items",i)+'>'+m+'<figcaption'+ed(pl("threats.items",i,lang))+'>'+cap+'</figcaption></figure>'; };
+  return '<section class="sec" id="threats"><div class="wrap"><div class="sechead"><div><div class="eyebrow"'+ed(pl("threats",lang,"eyebrow"))+'>'+esc(x.eyebrow||"")+'</div><h2'+ed(pl("threats",lang,"title"))+'>'+esc(x.title||"")+'</h2></div><p'+ed(pl("threats",lang,"text"))+'>'+esc(x.text||"")+'</p></div><div class="threats">'+T0.items.map(tile).join("")+'</div></div></section>';
 }
 function playVisible(){
   if(REDUCED||!("IntersectionObserver" in window)) return;
@@ -665,233 +680,240 @@ function playVisible(){
 const STAGE_VIDS=["stage-a-assessment","stage-b-integration","stage-c-readiness"];
 function methodSection(){
   if(!S.method) return "";
-  const x=L(S.method), t=T();
-  const stages=(x.stages||[]).filter(s=>s&&(s.title||s.tag||(s.items||[]).some(i=>i&&i.trim())));
+  const x=L(S.method), t=T(), mp0=pl("method",lang);
+  const stages=withIdx(x.stages, s=>s&&(s.title||s.tag||(s.items||[]).some(filled)));
   const mp=S.method.morePage;
   const pg=mp?(S.pages||[]).find(p=>p.id===mp):(S.pages||[]).find(p=>/methodolog/i.test((L(p)||{}).title||""));
-  const more=pg&&x.moreText!==""?'<p style="margin-top:22px"><a class="btn primary" href="'+href("page-"+pg.id)+'">'+esc(x.moreText||"Read the full methodology")+' '+arrow+'</a></p>':'';
+  const more=pg&&x.moreText!==""?'<p style="margin-top:22px"><a class="btn primary" href="'+href("page-"+pg.id)+'">'+sp(pl(mp0,"moreText"),x.moreText||"Read the full methodology")+' '+arrow+'</a></p>':'';
+  const opt=(k,cls)=>x[k]||EDIT?'<p class="'+cls+'"'+ed(pl(mp0,k))+'>'+esc(x[k])+'</p>':'';
   return `<section class="sec" id="method"><div class="wrap">
-    <div class="sechead"><div><div class="eyebrow">${esc(x.eyebrow)}</div><h2>${esc(x.title)}</h2></div><p class="motto">${esc(x.motto)}</p></div>
-    ${x.intro?'<p class="leadp">'+esc(x.intro)+'</p>':''}
-    <ol class="stages">${stages.map((s,k)=>'<li>'+(STAGE_VIDS[k]?'<div class="svid" aria-hidden="true">'+vid(STAGE_VIDS[k])+'</div>':'')+'<span class="stag">'+esc(s.tag)+'</span><h3>'+esc(s.title)+'</h3><p class="ssub">'+esc(s.sub)+'</p><ul>'+(s.items||[]).filter(i=>i&&i.trim()).map(i=>'<li>'+esc(i)+'</li>').join("")+'</ul></li>').join("")}</ol>
-    <p class="loop"><span aria-hidden="true">↻ </span>${esc(x.loop)}</p>
-    <div class="mfoot"><div><p class="mnote">${esc(x.note)}</p>${x.intl?'<p class="muted">'+esc(x.intl)+'</p>':''}${x.support?'<p class="muted">'+esc(x.support)+'</p>':''}${more}</div>
-      <div class="why"><h3>${esc(x.whyTitle||t.whyUs)}</h3><ol>${x.why.map(w=>'<li>'+esc(w)+'</li>').join("")}</ol></div></div>
+    <div class="sechead"><div><div class="eyebrow"${ed(pl(mp0,"eyebrow"))}>${esc(x.eyebrow)}</div><h2${ed(pl(mp0,"title"))}>${esc(x.title)}</h2></div><p class="motto"${ed(pl(mp0,"motto"))}>${esc(x.motto)}</p></div>
+    ${opt("intro","leadp")}
+    <ol class="stages">${stages.map(([s,i],k)=>{const sp0=pl(mp0,"stages",i); return '<li'+eli(pl(mp0,"stages"),i)+'>'+(STAGE_VIDS[k]?'<div class="svid" aria-hidden="true">'+vid(STAGE_VIDS[k])+'</div>':'')+'<span class="stag"'+ed(pl(sp0,"tag"))+'>'+esc(s.tag)+'</span><h3'+ed(pl(sp0,"title"))+'>'+esc(s.title)+'</h3><p class="ssub"'+ed(pl(sp0,"sub"))+'>'+esc(s.sub)+'</p><ul>'+withIdx(s.items,filled).map(([it,j])=>'<li'+eli(pl(sp0,"items"),j)+ed(pl(sp0,"items",j))+'>'+esc(it)+'</li>').join("")+'</ul></li>';}).join("")}</ol>
+    <p class="loop"><span aria-hidden="true">↻ </span>${sp(pl(mp0,"loop"),x.loop)}</p>
+    <div class="mfoot"><div><p class="mnote"${ed(pl(mp0,"note"))}>${esc(x.note)}</p>${opt("intl","muted")}${opt("support","muted")}${more}</div>
+      <div class="why"><h3${ed(pl(mp0,"whyTitle"))}>${esc(x.whyTitle||t.whyUs)}</h3><ol>${x.why.map((w,i)=>'<li'+eli(pl(mp0,"why"),i)+ed(pl(mp0,"why",i))+'>'+esc(w)+'</li>').join("")}</ol></div></div>
   </div></section>`;
 }
 function aboutMoreSection(){
   if(!S.aboutMore) return "";
-  const x=L(S.aboutMore), t=T();
-  const kv=rows=>'<dl class="kv">'+rows.map(r=>'<div><dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd></div>').join("")+'</dl>';
+  const x=L(S.aboutMore), t=T(), ap=pl("aboutMore",lang);
+  const kv=(rows,k)=>'<dl class="kv">'+rows.map((r,i)=>'<div'+eli(pl(ap,k),i)+'><dt'+ed(pl(ap,k,i,0))+'>'+esc(r[0])+'</dt><dd'+ed(pl(ap,k,i,1))+'>'+esc(r[1])+'</dd></div>').join("")+'</dl>';
   const deck=posts().find(p=>(p.images||[]).includes(S.aboutMore.images[0]));
   return `<section class="sec" id="approach"><div class="wrap">
-    <div class="sechead"><div><div class="eyebrow">${esc(x.tagline)}</div><h2>${esc(t.architects)}</h2></div><p></p></div>
-    <p class="leadp">${esc(x.architects)}</p>
-    <div class="pillars">${[["objectiveT","objective"],["visionT","vision"],["missionT","mission"]].map(([a,b],i)=>'<div><span>'+String(i+1).padStart(2,"0")+'</span><h3>'+esc(x[a])+'</h3><p>'+esc(x[b])+'</p></div>').join("")}</div>
-    <div class="two"><div><h3 class="subh">${esc(x.strategyT)}</h3>${kv(x.strategy)}</div><div><h3 class="subh">${esc(x.tacticsT)}</h3>${kv(x.tactics)}</div></div>
-    <h3 class="subh">${esc(x.futureT)}</h3><div class="core">${x.future.map((c,i)=>'<div><span>'+String(i+1).padStart(2,"0")+'</span>'+esc(c)+'</div>').join("")}</div>
+    <div class="sechead"><div><div class="eyebrow"${ed(pl(ap,"tagline"))}>${esc(x.tagline)}</div><h2>${esc(t.architects)}</h2></div><p></p></div>
+    <p class="leadp"${ed(pl(ap,"architects"))}>${esc(x.architects)}</p>
+    <div class="pillars">${[["objectiveT","objective"],["visionT","vision"],["missionT","mission"]].map(([a,b],i)=>'<div><span>'+String(i+1).padStart(2,"0")+'</span><h3'+ed(pl(ap,a))+'>'+esc(x[a])+'</h3><p'+ed(pl(ap,b))+'>'+esc(x[b])+'</p></div>').join("")}</div>
+    <div class="two"><div><h3 class="subh"${ed(pl(ap,"strategyT"))}>${esc(x.strategyT)}</h3>${kv(x.strategy,"strategy")}</div><div><h3 class="subh"${ed(pl(ap,"tacticsT"))}>${esc(x.tacticsT)}</h3>${kv(x.tactics,"tactics")}</div></div>
+    <h3 class="subh"${ed(pl(ap,"futureT"))}>${esc(x.futureT)}</h3><div class="core">${x.future.map((c,i)=>'<div'+eli(pl(ap,"future"),i)+'><span>'+String(i+1).padStart(2,"0")+'</span>'+sp(pl(ap,"future",i),c)+'</div>').join("")}</div>
     ${deck?'<h3 class="subh">'+esc(t.deck)+'</h3>'+gallery(deck,"deck"):''}
   </div></section>`;
+}
+function topicCard(tp, i, useShort){
+  const u=U(), x=L(tp), first=cardText(x), tpp=pl("expertise.topics",i,lang);
+  const tk=useShort&&x.short?"short":"title";
+  return '<a class="topic" href="'+href("expertise-"+tp.id)+'"'+eli("expertise.topics",i)+'>'+topicVid(tp.id)+icon(tp.icon)+'<h3'+ed(pl(tpp,tk))+'>'+esc(x[tk])+'</h3>'+(first||EDIT?'<p'+ed(pl(tpp,"card"))+'>'+esc(first)+'</p>':'')+'<span class="more">'+sp(pl("ui",lang,"learnMore"),u.learnMore)+' '+arrow+'</span></a>';
 }
 
 /* ---------- pages ---------- */
 function pageHome(){
-  const u=U(), h=L(S.home), t=S.team[0];
-  const topics=S.expertise.topics.map(tp=>{const x=L(tp); const first=cardText(x); return '<a class="topic" href="'+href("expertise-"+tp.id)+'">'+topicVid(tp.id)+icon(tp.icon)+'<h3>'+esc(x.short||x.title)+'</h3>'+(first?'<p>'+esc(first)+'</p>':'')+'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
-  const feat=S.clients.featured.map(c=>{const x=L(c); return '<li>'+(x.body?'<a href="'+href("client-"+c.id)+'"><span class="cn">'+clogo(c.id)+'<span>'+esc(x.name)+'</span></span><small>'+esc(c.tag)+'</small></a>':'<span class="n"><span class="cn">'+clogo(c.id)+'<span>'+esc(x.name)+'</span></span><small>'+esc(c.tag)+'</small></span>')+'</li>';}).join("");
-  const ev=S.updates.events.map(e=>{const x=L(e); return '<a class="event" href="'+href("event-"+e.id)+'">'+(e.image?'<img src="'+escU(e.image)+'" alt="" loading="lazy">':'')+'<time>'+esc(e.date)+(x.place?' · '+esc(x.place):'')+'</time><h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
+  const u=U(), h=L(S.home), t=S.team[0], hp=pl("home",lang), up=pl("ui",lang);
+  const topics=S.expertise.topics.map((tp,i)=>topicCard(tp,i,true)).join("");
+  const feat=S.clients.featured.map((c,i)=>{const x=L(c); const inner='<span class="cn">'+clogo(c.id)+sp(pl("clients.featured",i,lang,"name"),x.name)+'</span><small'+ed(pl("clients.featured",i,"tag"))+'>'+esc(c.tag)+'</small>'; return '<li'+eli("clients.featured",i)+'>'+(x.body?'<a href="'+href("client-"+c.id)+'">'+inner+'</a>':'<span class="n">'+inner+'</span>')+'</li>';}).join("");
   return `
   <section class="band hero"><div class="bgv" aria-hidden="true">${vid("hero-situation-room")}</div><div class="wrap">
     <div>
-      ${h.eyebrow?'<div class="eyebrow">'+esc(h.eyebrow)+'</div>':''}
-      <h1>${esc(h.title)}</h1>
-      ${String(h.lede||"").split("\n").filter(l=>l.trim()).map(l=>'<p class="lede">'+esc(l)+'</p>').join("")}
-      ${h.lede2?'<p class="lede2">'+esc(h.lede2)+'</p>':''}
-      <div class="ctas"><a class="btn primary" href="${href("contact")}">${esc(u.talk)} ${arrow}</a><a class="btn ghost" href="${href("expertise")}">${esc(u.nav.expertise)}</a></div>
+      ${h.eyebrow||EDIT?'<div class="eyebrow"'+ed(pl(hp,"eyebrow"))+'>'+esc(h.eyebrow)+'</div>':''}
+      <h1${ed(pl(hp,"title"))}>${esc(h.title)}</h1>
+      ${String(h.lede||"").split("\n").filter(l=>l.trim()).map(l=>'<p class="lede"'+edm(pl(hp,"lede"))+'>'+esc(l)+'</p>').join("")}
+      ${h.lede2||EDIT?'<p class="lede2"'+ed(pl(hp,"lede2"))+'>'+esc(h.lede2)+'</p>':''}
+      <div class="ctas"><a class="btn primary" href="${href("contact")}">${sp(pl(up,"talk"),u.talk)} ${arrow}</a><a class="btn ghost" href="${href("expertise")}">${sp(pl(up,"nav","expertise"),u.nav.expertise)}</a></div>
     </div>
     <aside class="dossier" aria-label="${esc(h.contactName)}">
       <div class="tag">${esc(h.contactRole.split("–")[0].trim())}</div>
-      <h2>${esc(h.contactName)}</h2>
-      <div class="role">${esc(h.dossierOrg||"")}</div>
-      <dl>${(h.dossier||[]).map(d=>'<div><dt>'+esc(d.label)+'</dt><dd>'+esc(d.text)+'</dd></div>').join("")}</dl>
-      <p style="margin-top:14px"><a class="more" style="color:var(--signal)" href="${href("team-"+t.id)}">${esc(u.readMore)} ${arrow}</a></p>
+      <h2${ed(pl(hp,"contactName"))}>${esc(h.contactName)}</h2>
+      <div class="role"${ed(pl(hp,"dossierOrg"))}>${esc(h.dossierOrg||"")}</div>
+      <dl>${(h.dossier||[]).map((d,i)=>'<div'+eli(pl(hp,"dossier"),i)+'><dt'+ed(pl(hp,"dossier",i,"label"))+'>'+esc(d.label)+'</dt><dd'+ed(pl(hp,"dossier",i,"text"))+'>'+esc(d.text)+'</dd></div>').join("")}</dl>
+      <p style="margin-top:14px"><a class="more" style="color:var(--signal)" href="${href("team-"+t.id)}">${sp(pl(up,"readMore"),u.readMore)} ${arrow}</a></p>
     </aside>
   </div></section>
-  <section class="stats" aria-label="${esc(u.keyFacts)}"><div class="wrap">${h.stats.map(s=>'<div class="stat"><b>'+esc(s[0])+'</b><span>'+esc(s[1])+'</span></div>').join("")}</div></section>
+  <section class="stats" aria-label="${esc(u.keyFacts)}"><div class="wrap">${h.stats.map((s,i)=>'<div class="stat"'+eli(pl(hp,"stats"),i)+'><b'+ed(pl(hp,"stats",i,0))+'>'+esc(s[0])+'</b><span'+ed(pl(hp,"stats",i,1))+'>'+esc(s[1])+'</span></div>').join("")}</div></section>
   <section class="sec"><div class="wrap intro">
-    <div><div class="eyebrow">${esc(h.introEyebrow)}</div><h2>${esc(h.introTitle)}</h2><p class="lead">${esc(h.intro)}</p>
-      <p style="margin-top:22px"><a class="more" href="${href("about")}">${esc(u.nav.about)} ${arrow}</a></p></div>
-    <div class="why"><h3>${esc(h.whyTitle)}</h3><ol>${h.why.map(w=>'<li>'+esc(w)+'</li>').join("")}</ol></div>
+    <div><div class="eyebrow"${ed(pl(hp,"introEyebrow"))}>${esc(h.introEyebrow)}</div><h2${ed(pl(hp,"introTitle"))}>${esc(h.introTitle)}</h2><p class="lead"${ed(pl(hp,"intro"))}>${esc(h.intro)}</p>
+      <p style="margin-top:22px"><a class="more" href="${href("about")}">${sp(pl(up,"nav","about"),u.nav.about)} ${arrow}</a></p></div>
+    <div class="why"><h3${ed(pl(hp,"whyTitle"))}>${esc(h.whyTitle)}</h3><ol>${h.why.map((w,i)=>'<li'+eli(pl(hp,"why"),i)+ed(pl(hp,"why",i))+'>'+esc(w)+'</li>').join("")}</ol></div>
   </div></section>
   <section class="sec"><div class="wrap">
-    <div class="sechead"><div><div class="eyebrow">${esc(h.coreEyebrow||u.nav.expertise)}</div><h2>${esc(h.coreTitle)}</h2></div><p></p></div>
-    <div class="core">${h.core.map((c,i)=>'<div><span>'+String(i+1).padStart(2,"0")+'</span>'+esc(c)+'</div>').join("")}</div>
+    <div class="sechead"><div><div class="eyebrow"${ed(pl(hp,"coreEyebrow"))}>${esc(h.coreEyebrow||u.nav.expertise)}</div><h2${ed(pl(hp,"coreTitle"))}>${esc(h.coreTitle)}</h2></div><p></p></div>
+    <div class="core">${h.core.map((c,i)=>'<div'+eli(pl(hp,"core"),i)+'><span>'+String(i+1).padStart(2,"0")+'</span>'+sp(pl(hp,"core",i),c)+'</div>').join("")}</div>
   </div></section>
   ${methodSection()}
   <section class="sec"><div class="wrap">
-    <div class="sechead"><div><div class="eyebrow">${esc(L(S.expertise).title)}</div><h2>${esc(h.expertiseTitle)}</h2></div><p><a class="more" href="${href("expertise")}">${esc(u.allExpertise)} ${arrow}</a></p></div>
+    <div class="sechead"><div><div class="eyebrow"${ed(pl("expertise",lang,"title"))}>${esc(L(S.expertise).title)}</div><h2${ed(pl(hp,"expertiseTitle"))}>${esc(h.expertiseTitle)}</h2></div><p><a class="more" href="${href("expertise")}">${sp(pl(up,"allExpertise"),u.allExpertise)} ${arrow}</a></p></div>
     <div class="topics">${topics}</div>
   </div></section>
   <section class="band sec global-band"><div class="bgv" aria-hidden="true">${vid("clients-world-map")}</div><div class="wrap global">
-    <div><div class="eyebrow">${esc(h.globalTitle)}</div><h2 style="font-size:clamp(28px,3.6vw,40px);margin-top:14px">${esc(h.clientsTitle)}</h2><p class="lead" style="color:var(--deep-2)">${esc(h.global)}</p>
-      <div class="regions">${(h.regions||[]).map(r=>'<span>'+esc(r)+'</span>').join("")}</div>
-      <p style="margin-top:26px"><a class="btn ghost" href="${href("clients")}">${esc(u.allClients)} ${arrow}</a></p></div>
+    <div><div class="eyebrow"${ed(pl(hp,"globalTitle"))}>${esc(h.globalTitle)}</div><h2 style="font-size:clamp(28px,3.6vw,40px);margin-top:14px"${ed(pl(hp,"clientsTitle"))}>${esc(h.clientsTitle)}</h2><p class="lead" style="color:var(--deep-2)"${ed(pl(hp,"global"))}>${esc(h.global)}</p>
+      <div class="regions">${(h.regions||[]).map((r,i)=>'<span'+eli(pl(hp,"regions"),i)+ed(pl(hp,"regions",i))+'>'+esc(r)+'</span>').join("")}</div>
+      <p style="margin-top:26px"><a class="btn ghost" href="${href("clients")}">${sp(pl(up,"allClients"),u.allClients)} ${arrow}</a></p></div>
     <ul class="clientlist">${feat}</ul>
   </div></section>
-  ${carousel(h.updatesTitle, h.updatesEyebrow||"", "activity")}
+  ${carousel(h.updatesTitle, h.updatesEyebrow||"", "activity", pl(hp,"updatesTitle"), pl(hp,"updatesEyebrow"))}
   ${ctaBand()}`;
 }
 
 function pageAbout(){
-  const u=U(), a=L(S.about);
-  const people=S.team.map(p=>{const x=L(p); if(!x.name) return x.body?'<div class="person tnote"><p>'+esc(x.body)+'</p></div>':''; return '<a class="person" href="'+href("team-"+p.id)+'"><div class="mono-av" aria-hidden="true">'+esc(p.initials)+'</div><div class="r">'+esc(x.role)+'</div><h3>'+esc(x.name)+'</h3><p>'+esc(x.body.split("\n")[0])+'</p><span class="more">'+esc(u.readMore)+' '+arrow+'</span></a>';}).join("");
-  return pagehead([[u.nav.home,"home"],[a.title,"about"]], a.title, L(S.home).eyebrow)+
-  `<section class="sec"><div class="wrap layout"><div class="prose">${md(a.body)}</div><div class="aside">${contactCard()}</div></div></section>
+  const u=U(), a=L(S.about), ap=pl("about",lang);
+  const people=S.team.map((p,i)=>{const x=L(p), tp=pl("team",i,lang); if(!x.name) return x.body||EDIT?'<div class="person tnote"'+eli("team",i)+'><p'+edm(pl(tp,"body"))+'>'+esc(x.body)+'</p></div>':''; return '<a class="person" href="'+href("team-"+p.id)+'"'+eli("team",i)+'><div class="mono-av" aria-hidden="true"'+ed(pl("team",i,"initials"))+'>'+esc(p.initials)+'</div><div class="r"'+ed(pl(tp,"role"))+'>'+esc(x.role)+'</div><h3'+ed(pl(tp,"name"))+'>'+esc(x.name)+'</h3><p'+edm(pl(tp,"body"))+'>'+esc(x.body.split("\n")[0])+'</p><span class="more">'+sp(pl("ui",lang,"readMore"),u.readMore)+' '+arrow+'</span></a>';}).join("");
+  return pagehead([[u.nav.home,"home"],[a.title,"about"]], a.title, L(S.home).eyebrow, "", {t:pl(ap,"title"),s:pl("home",lang,"eyebrow")})+
+  `<section class="sec"><div class="wrap layout"><div class="prose"${edm(pl(ap,"body"))}>${md(a.body)}</div><div class="aside">${contactCard()}</div></div></section>
    ${aboutMoreSection()}
    <section class="sec" id="management"><div class="wrap">
-     <div class="sechead"><div>${a.mgmtEyebrow?'<div class="eyebrow">'+esc(a.mgmtEyebrow)+'</div>':''}<h2>${esc(a.mgmtTitle)}</h2></div><p>${esc(a.mgmtIntro||"")}</p></div>
+     <div class="sechead"><div>${a.mgmtEyebrow||EDIT?'<div class="eyebrow"'+ed(pl(ap,"mgmtEyebrow"))+'>'+esc(a.mgmtEyebrow)+'</div>':''}<h2${ed(pl(ap,"mgmtTitle"))}>${esc(a.mgmtTitle)}</h2></div><p${ed(pl(ap,"mgmtIntro"))}>${esc(a.mgmtIntro||"")}</p></div>
      <div class="team">${people}</div>
    </div></section>`+ctaBand();
 }
 function pageTeam(id){
-  const u=U(), a=L(S.about), p=S.team.find(t=>t.id===id); if(!p) return null; const x=L(p);
-  return pagehead([[u.nav.home,"home"],[a.title,"about"],[x.name,"team-"+id]], x.name, x.role)+
-  `<section class="sec"><div class="wrap layout"><div class="prose">${x.note?'<p class="pnote">'+esc(x.note)+'</p>':''}${md(x.body)}</div><div class="aside">${sideList(a.mgmtTitle, S.team.filter(t=>L(t).name).map(t=>[L(t).name,"team-"+t.id]), "team-"+id)}${contactCard()}</div></div></section>`+ctaBand();
+  const u=U(), a=L(S.about), i=S.team.findIndex(t=>t.id===id), p=S.team[i]; if(!p) return null; const x=L(p), tp=pl("team",i,lang);
+  return pagehead([[u.nav.home,"home"],[a.title,"about"],[x.name,"team-"+id]], x.name, x.role, "", {t:pl(tp,"name"),s:pl(tp,"role"),li:["team",i]})+
+  `<section class="sec"><div class="wrap layout"><div class="prose">${x.note||EDIT?'<p class="pnote"'+ed(pl(tp,"note"))+'>'+esc(x.note)+'</p>':''}<div${edm(pl(tp,"body"))}>${md(x.body)}</div></div><div class="aside">${sideList(a.mgmtTitle, S.team.filter(t=>L(t).name).map(t=>[L(t).name,"team-"+t.id]), "team-"+id)}${contactCard()}</div></div></section>`+ctaBand();
 }
 function pageExpertise(){
-  const u=U(), e=L(S.expertise), h=L(S.home);
-  const topics=S.expertise.topics.map(tp=>{const x=L(tp); const first=cardText(x); return '<a class="topic" href="'+href("expertise-"+tp.id)+'">'+topicVid(tp.id)+icon(tp.icon)+'<h3>'+esc(x.title)+'</h3>'+(first?'<p>'+esc(first)+'</p>':'')+'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
-  return pagehead([[u.nav.home,"home"],[e.title,"expertise"]], e.title, h.expertiseTitle)+
-  ((e.list||[]).filter(i=>i&&i.trim()).length?`<section class="sec"><div class="wrap"><div class="prose"><ul>${e.list.filter(i=>i&&i.trim()).map(i=>'<li>'+esc(i)+'</li>').join("")}</ul></div></div></section>`:'')+
+  const u=U(), e=L(S.expertise), h=L(S.home), epth=pl("expertise",lang);
+  const topics=S.expertise.topics.map((tp,i)=>topicCard(tp,i,false)).join("");
+  const list=withIdx(e.list,filled);
+  return pagehead([[u.nav.home,"home"],[e.title,"expertise"]], e.title, h.expertiseTitle, "", {t:pl(epth,"title"),s:pl("home",lang,"expertiseTitle")})+
+  (list.length?`<section class="sec"><div class="wrap"><div class="prose"><ul>${list.map(([it,i])=>'<li'+eli(pl(epth,"list"),i)+ed(pl(epth,"list",i))+'>'+esc(it)+'</li>').join("")}</ul></div></div></section>`:'')+
   `   ${methodSection()}
-   <section class="sec"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(e.title)}</div><h2>${esc(h.expertiseTitle)}</h2></div><p></p></div><div class="topics">${topics}</div></div></section>${threatsSection()}`+ctaBand();
+   <section class="sec"><div class="wrap"><div class="sechead"><div><div class="eyebrow"${ed(pl(epth,"title"))}>${esc(e.title)}</div><h2${ed(pl("home",lang,"expertiseTitle"))}>${esc(h.expertiseTitle)}</h2></div><p></p></div><div class="topics">${topics}</div></div></section>${threatsSection()}`+ctaBand();
 }
 function pageTopic(id){
-  const u=U(), e=L(S.expertise), tp=S.expertise.topics.find(t=>t.id===id); if(!tp) return null; const x=L(tp);
+  const u=U(), e=L(S.expertise), i=S.expertise.topics.findIndex(t=>t.id===id), tp=S.expertise.topics[i]; if(!tp) return null; const x=L(tp), tpp=pl("expertise.topics",i,lang);
   const body = x.body ? md(x.body) : '<div class="empty">'+(lang==="he"?"התוכן המלא לתחום זה יתווסף בקרוב. לפרטים נוספים צרו איתנו קשר.":"Full details for this area are coming soon. Contact us to learn more.")+'</div>';
-  return pagehead([[u.nav.home,"home"],[e.title,"expertise"],[x.title,"expertise-"+id]], x.title)+
-  `<section class="sec"><div class="wrap layout"><div class="prose">${hasV(TOPIC_VIDS[id])?'<div class="postvid" style="aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius);margin-bottom:26px;background:var(--deep)">'+vid(TOPIC_VIDS[id])+'</div>':''}${body}</div><div class="aside">${tp.image?imgFig(tp.image):''}${sideList(e.title, S.expertise.topics.map(t=>[L(t).title,"expertise-"+t.id]), "expertise-"+id)}${contactCard()}</div></div></section>`+ctaBand();
+  return pagehead([[u.nav.home,"home"],[e.title,"expertise"],[x.title,"expertise-"+id]], x.title, "", "", {t:pl(tpp,"title"),li:["expertise.topics",i]})+
+  `<section class="sec"><div class="wrap layout"><div class="prose">${hasV(TOPIC_VIDS[id])?'<div class="postvid" style="aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius);margin-bottom:26px;background:var(--deep)">'+vid(TOPIC_VIDS[id])+'</div>':''}<div${edm(pl(tpp,"body"))}>${body}</div></div><div class="aside">${tp.image?'<div'+eim(pl("expertise.topics",i,"image"))+'>'+imgFig(tp.image)+'</div>':''}${sideList(e.title, S.expertise.topics.map(t=>[L(t).title,"expertise-"+t.id]), "expertise-"+id)}${contactCard()}</div></div></section>`+ctaBand();
 }
 function pageClients(){
-  const u=U(), c=L(S.clients);
-  const rows=S.clients.featured.map(f=>{const x=L(f); const inner=(clogo(f.id)||'<span class="tag">'+esc(f.tag)+'</span>')+'<div><h3>'+esc(x.name)+'</h3>'+(x.teaser?'<p>'+esc(x.teaser)+'</p>':'')+'</div>'+(x.body?'<span class="more">'+esc(u.learnMore)+' '+arrow+'</span>':'<span></span>'); return x.body?'<a class="row" href="'+href("client-"+f.id)+'">'+inner+'</a>':'<div class="row">'+inner+'</div>';}).join("");
-  return pagehead([[u.nav.home,"home"],[c.title,"clients"]], c.title, c.intro)+
+  const u=U(), c=L(S.clients), cp=pl("clients",lang);
+  const rows=S.clients.featured.map((f,i)=>{const x=L(f), fp=pl("clients.featured",i,lang); const inner=(clogo(f.id)||'<span class="tag"'+ed(pl("clients.featured",i,"tag"))+'>'+esc(f.tag)+'</span>')+'<div><h3'+ed(pl(fp,"name"))+'>'+esc(x.name)+'</h3>'+(x.teaser||EDIT?'<p'+ed(pl(fp,"teaser"))+'>'+esc(x.teaser)+'</p>':'')+'</div>'+(x.body?'<span class="more">'+sp(pl("ui",lang,"learnMore"),u.learnMore)+' '+arrow+'</span>':'<span></span>'); return x.body?'<a class="row" href="'+href("client-"+f.id)+'"'+eli("clients.featured",i)+'>'+inner+'</a>':'<div class="row"'+eli("clients.featured",i)+'>'+inner+'</div>';}).join("");
+  return pagehead([[u.nav.home,"home"],[c.title,"clients"]], c.title, c.intro, "", {t:pl(cp,"title"),s:pl(cp,"intro")})+
   `<section class="sec"><div class="wrap"><div class="rows">${rows}</div>
-   <h2 style="font-size:26px;margin-top:64px">${esc(c.othersTitle)}</h2>
-   <div class="logos">${S.clients.others.map(o=>{const lg=clogo(o.en); return '<div'+(lg?' class="has"':'')+'>'+lg+'<span>'+esc(o[lang])+'</span></div>';}).join("")}</div></div></section>`+ctaBand();
+   <h2 style="font-size:26px;margin-top:64px"${ed(pl(cp,"othersTitle"))}>${esc(c.othersTitle)}</h2>
+   <div class="logos">${S.clients.others.map((o,i)=>{const lg=clogo(o.en); return '<div'+(lg?' class="has"':'')+eli("clients.others",i)+'>'+lg+sp(pl("clients.others",i,lang),o[lang])+'</div>';}).join("")}</div></div></section>`+ctaBand();
 }
 function pageClient(id){
-  const u=U(), c=L(S.clients), f=S.clients.featured.find(x=>x.id===id); if(!f) return null; const x=L(f);
+  const u=U(), c=L(S.clients), i=S.clients.featured.findIndex(x=>x.id===id), f=S.clients.featured[i]; if(!f) return null; const x=L(f), fp=pl("clients.featured",i,lang);
   const body=x.body?md(x.body):'<div class="empty">'+(lang==="he"?"פרטים נוספים יתווספו בקרוב.":"More details are coming soon.")+'</div>';
-  return pagehead([[u.nav.home,"home"],[c.title,"clients"],[x.name,"client-"+id]], x.name, x.teaser)+
-  `<section class="sec"><div class="wrap layout"><div class="prose">${body}</div><div class="aside">${clogo(id, x.name)}${sideList(c.title, S.clients.featured.filter(f=>L(f).body).map(f=>[L(f).name,"client-"+f.id]), "client-"+id)}${contactCard()}</div></div></section>`+ctaBand();
+  return pagehead([[u.nav.home,"home"],[c.title,"clients"],[x.name,"client-"+id]], x.name, x.teaser, "", {t:pl(fp,"name"),s:pl(fp,"teaser"),li:["clients.featured",i]})+
+  `<section class="sec"><div class="wrap layout"><div class="prose"${edm(pl(fp,"body"))}>${body}</div><div class="aside">${clogo(id, x.name)}${sideList(c.title, S.clients.featured.filter(f=>L(f).body).map(f=>[L(f).name,"client-"+f.id]), "client-"+id)}${contactCard()}</div></div></section>`+ctaBand();
 }
 function pageProjects(){
-  const u=U(), p=L(S.projects);
-  const rows=S.projects.items.map((it,i)=>{const x=L(it); return '<a class="row" href="'+href("project-"+it.id)+'"><span class="tag">'+String(i+1).padStart(2,"0")+'</span><div><h3>'+esc(x.title)+'</h3><p>'+esc(x.teaser)+'</p><p style="font-size:13px;margin-top:10px">'+esc(x.client)+'</p></div><span class="more">'+esc(u.learnMore)+' '+arrow+'</span></a>';}).join("");
-  return pagehead([[u.nav.home,"home"],[p.title,"projects"]], p.title, p.sub)+`<section class="sec"><div class="wrap"><div class="rows">${rows}</div></div></section>`+ctaBand();
+  const u=U(), p=L(S.projects), pp=pl("projects",lang);
+  const rows=S.projects.items.map((it,i)=>{const x=L(it), ip=pl("projects.items",i,lang); return '<a class="row" href="'+href("project-"+it.id)+'"'+eli("projects.items",i)+'><span class="tag">'+String(i+1).padStart(2,"0")+'</span><div><h3'+ed(pl(ip,"title"))+'>'+esc(x.title)+'</h3><p'+ed(pl(ip,"teaser"))+'>'+esc(x.teaser)+'</p><p style="font-size:13px;margin-top:10px"'+ed(pl(ip,"client"))+'>'+esc(x.client)+'</p></div><span class="more">'+sp(pl("ui",lang,"learnMore"),u.learnMore)+' '+arrow+'</span></a>';}).join("");
+  return pagehead([[u.nav.home,"home"],[p.title,"projects"]], p.title, p.sub, "", {t:pl(pp,"title"),s:pl(pp,"sub")})+`<section class="sec"><div class="wrap"><div class="rows">${rows}</div></div></section>`+ctaBand();
 }
 function pageProject(id){
-  const u=U(), p=L(S.projects), it=S.projects.items.find(x=>x.id===id); if(!it) return null; const x=L(it);
-  const vids=it.videos?'<div class="card"><h4>'+esc(u.videos)+'</h4><div class="vids">'+it.videos.map(v=>'<a href="'+escU(v[1])+'" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><span class="ltr">'+esc(v[0])+'</span></a>').join("")+'</div></div>':'';
-  return pagehead([[u.nav.home,"home"],[p.title,"projects"],[x.title,"project-"+id]], x.title, x.client)+
-  `<section class="sec"><div class="wrap layout"><div class="prose">${md(x.body)}</div><div class="aside">${vids}${sideList(p.title, S.projects.items.map(i=>[L(i).title,"project-"+i.id]), "project-"+id)}${contactCard()}</div></div></section>`+ctaBand();
+  const u=U(), p=L(S.projects), i=S.projects.items.findIndex(x=>x.id===id), it=S.projects.items[i]; if(!it) return null; const x=L(it), ip=pl("projects.items",i,lang);
+  const vids=it.videos?'<div class="card"><h4'+ed(pl("ui",lang,"videos"))+'>'+esc(u.videos)+'</h4><div class="vids">'+it.videos.map((v,j)=>'<a href="'+escU(v[1])+'" target="_blank" rel="noopener"'+eli(pl("projects.items",i,"videos"),j)+'><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg><span class="ltr"'+ed(pl("projects.items",i,"videos",j,0))+'>'+esc(v[0])+'</span></a>').join("")+'</div></div>':'';
+  return pagehead([[u.nav.home,"home"],[p.title,"projects"],[x.title,"project-"+id]], x.title, x.client, "", {t:pl(ip,"title"),s:pl(ip,"client"),li:["projects.items",i]})+
+  `<section class="sec"><div class="wrap layout"><div class="prose"${edm(pl(ip,"body"))}>${md(x.body)}</div><div class="aside">${vids}${sideList(p.title, S.projects.items.map(i=>[L(i).title,"project-"+i.id]), "project-"+id)}${contactCard()}</div></div></section>`+ctaBand();
 }
 function pageUpdates(){
-  const u=U(), up=L(S.updates);
-  const ev=S.updates.events.map(e=>{const x=L(e); return '<a class="event" href="'+href("event-"+e.id)+'">'+(e.image?'<img src="'+escU(e.image)+'" alt="" loading="lazy">':'')+'<time>'+esc(e.date)+(x.place?' · '+esc(x.place):'')+'</time><h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
-  const docs=(S.articlesFull||[]).map(a=>{const x=L(a); return '<a class="doc" href="'+href("article-"+a.id)+'"><span class="ic" aria-hidden="true">'+esc(T().article)+'</span><span><b>'+esc(x.title)+'</b><small>'+esc(x.author)+' · '+esc(a.date)+'</small></span></a>';}).join("")+S.updates.articles.map(a=>'<a class="doc" href="'+escU(a.url)+'" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">PDF</span><span><b>'+esc(a[lang])+'</b><small>'+esc(u.pdf)+'</small></span></a>').join("");
-  const faq=S.updates.faq.map(f=>{const x=L(f); return '<details><summary>'+esc(x.q)+'</summary><p>'+esc(x.a)+'</p></details>';}).join("");
-  return pagehead([[u.nav.home,"home"],[up.title,"updates"]], up.title, up.intro)+carousel(up.galleryTitle||"Activity gallery", up.title, "activity")+
-  `<section class="sec" id="events"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(up.title)}</div><h2>${esc(u.eventsTitle)}</h2></div><p></p></div><div class="events">${ev}</div></div></section>
-   <section class="sec" id="articles"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(up.title)}</div><h2>${esc(u.articlesTitle)}</h2></div><p></p></div><div style="max-width:640px;display:grid;gap:12px">${docs}</div></div></section>
-   <section class="sec" id="faq"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(up.title)}</div><h2>${esc(u.faqTitle)}</h2></div><p></p></div><div class="faq" style="max-width:820px;border-top:2px solid var(--ink)">${faq}</div></div></section>`+ctaBand();
+  const u=U(), up=L(S.updates), upp=pl("updates",lang), ui=pl("ui",lang);
+  const ev=S.updates.events.map((e,i)=>{const x=L(e), ep=pl("updates.events",i,lang); return '<a class="event" href="'+href("event-"+e.id)+'"'+eli("updates.events",i)+'>'+(e.image?'<img src="'+escU(e.image)+'" alt="" loading="lazy"'+eim(pl("updates.events",i,"image"))+'>':'')+'<time>'+sp(pl("updates.events",i,"date"),e.date)+(x.place||EDIT?' · '+sp(pl(ep,"place"),x.place):'')+'</time><h3'+ed(pl(ep,"title"))+'>'+esc(x.title)+'</h3>'+(x.body?'<p'+edm(pl(ep,"body"))+'>'+esc(firstPara(x.body))+'</p>':'')+'</a>';}).join("");
+  const docs=(S.articlesFull||[]).map((a,i)=>{const x=L(a), ap=pl("articlesFull",i,lang); return '<a class="doc" href="'+href("article-"+a.id)+'"'+eli("articlesFull",i)+'><span class="ic" aria-hidden="true">'+esc(T().article)+'</span><span><b'+ed(pl(ap,"title"))+'>'+esc(x.title)+'</b><small>'+sp(pl(ap,"author"),x.author)+' · '+sp(pl("articlesFull",i,"date"),a.date)+'</small></span></a>';}).join("")+S.updates.articles.map((a,i)=>'<a class="doc" href="'+escU(a.url)+'" target="_blank" rel="noopener"'+eli("updates.articles",i)+'><span class="ic" aria-hidden="true">PDF</span><span><b'+ed(pl("updates.articles",i,lang))+'>'+esc(a[lang])+'</b><small>'+esc(u.pdf)+'</small></span></a>').join("");
+  const faq=S.updates.faq.map((f,i)=>{const x=L(f), fp=pl("updates.faq",i,lang); return '<details'+eli("updates.faq",i)+(EDIT?' open':'')+'><summary'+ed(pl(fp,"q"))+'>'+esc(x.q)+'</summary><p'+ed(pl(fp,"a"))+'>'+esc(x.a)+'</p></details>';}).join("");
+  return pagehead([[u.nav.home,"home"],[up.title,"updates"]], up.title, up.intro, "", {t:pl(upp,"title"),s:pl(upp,"intro")})+carousel(up.galleryTitle||"Activity gallery", up.title, "activity", pl(upp,"galleryTitle"), pl(upp,"title"))+
+  `<section class="sec" id="events"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(up.title)}</div><h2${ed(pl(ui,"eventsTitle"))}>${esc(u.eventsTitle)}</h2></div><p></p></div><div class="events">${ev}</div></div></section>
+   <section class="sec" id="articles"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(up.title)}</div><h2${ed(pl(ui,"articlesTitle"))}>${esc(u.articlesTitle)}</h2></div><p></p></div><div style="max-width:640px;display:grid;gap:12px">${docs}</div></div></section>
+   <section class="sec" id="faq"><div class="wrap"><div class="sechead"><div><div class="eyebrow">${esc(up.title)}</div><h2${ed(pl(ui,"faqTitle"))}>${esc(u.faqTitle)}</h2></div><p></p></div><div class="faq" style="max-width:820px;border-top:2px solid var(--ink)">${faq}</div></div></section>`+ctaBand();
 }
 function pageEvent(id){
-  const u=U(), up=L(S.updates), e=S.updates.events.find(x=>x.id===id); if(!e) return null; const x=L(e);
-  const meta='<div class="meta"><span>'+esc(u.date)+': <b>'+esc(e.date)+'</b></span>'+(x.place?'<span>'+esc(u.place)+': <b>'+esc(x.place)+'</b></span>':'')+'</div>';
+  const u=U(), up=L(S.updates), i=S.updates.events.findIndex(x=>x.id===id), e=S.updates.events[i]; if(!e) return null; const x=L(e), ep=pl("updates.events",i,lang);
+  const meta='<div class="meta"><span>'+esc(u.date)+': <b'+ed(pl("updates.events",i,"date"))+'>'+esc(e.date)+'</b></span>'+(x.place||EDIT?'<span>'+esc(u.place)+': <b'+ed(pl(ep,"place"))+'>'+esc(x.place)+'</b></span>':'')+'</div>';
   const pdf = id==="hybrid-warfare-study" ? S.updates.articles.map(a=>'<a class="doc" href="'+escU(a.url)+'" target="_blank" rel="noopener"><span class="ic" aria-hidden="true">PDF</span><span><b>'+esc(a[lang])+'</b><small>'+esc(u.pdf)+'</small></span></a>').join("") : "";
   const post=posts().find(p=>p.event===id);
-  const pics = post ? gallery(post) : (e.image ? '<img class="figimg" src="'+escU(e.image)+'" alt="" loading="lazy">' : '');
-  const body = (x.body||pdf) ? (x.body?md(x.body):'')+(pdf?'<div style="display:grid;gap:12px">'+pdf+'</div>':'')+pics+(post?postLinks(Object.assign({},post,{event:null})):'') : '<div class="empty">'+(lang==="he"?"פרטים נוספים יתווספו בקרוב.":"More details are coming soon.")+'</div>';
-  return pagehead([[u.nav.home,"home"],[up.title,"updates"],[x.title,"event-"+id]], x.title, "", meta)+
+  const pics = post ? gallery(post) : (e.image ? '<img class="figimg" src="'+escU(e.image)+'" alt="" loading="lazy"'+eim(pl("updates.events",i,"image"))+'>' : '');
+  const body = (x.body||pdf||EDIT) ? '<div'+edm(pl(ep,"body"))+'>'+(x.body?md(x.body):'')+'</div>'+(pdf?'<div style="display:grid;gap:12px">'+pdf+'</div>':'')+pics+(post?postLinks(Object.assign({},post,{event:null})):'') : '<div class="empty">'+(lang==="he"?"פרטים נוספים יתווספו בקרוב.":"More details are coming soon.")+'</div>';
+  return pagehead([[u.nav.home,"home"],[up.title,"updates"],[x.title,"event-"+id]], x.title, "", meta, {t:pl(ep,"title"),li:["updates.events",i]})+
   `<section class="sec"><div class="wrap layout"><div class="prose">${body}</div><div class="aside">${sideList(u.eventsTitle, S.updates.events.map(v=>[L(v).title,"event-"+v.id]), "event-"+id)}</div></div></section>`+ctaBand();
 }
 function pagePost(id){
-  const p=findPost(id); if(!p) return null; const x=L(p), u=U(), up=L(S.updates);
+  const p=findPost(id); if(!p) return null; const i=posts().indexOf(p), x=L(p), u=U(), up=L(S.updates), pp=pl("posts",i,lang);
   const meta='<div class="meta"><span>LinkedIn</span></div>';
-  return pagehead([[u.nav.home,"home"],[up.title,"updates"],[x.title,"post-"+id]], x.title, "", meta)+
-  `<section class="sec"><div class="wrap layout"><div class="prose"><p>${esc(x.text)}</p>${p.video?'<div class="postvid" style="aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius);margin-top:22px;background:var(--deep)">'+vid(p.video, x.title)+'</div>':''}${gallery(p)}${postLinks(p)}</div><div class="aside">${contactCard()}</div></div></section>`+ctaBand();
+  return pagehead([[u.nav.home,"home"],[up.title,"updates"],[x.title,"post-"+id]], x.title, "", meta, {t:pl(pp,"title"),li:["posts",i]})+
+  `<section class="sec"><div class="wrap layout"><div class="prose"><p${edm(pl(pp,"text"))}>${esc(x.text)}</p>${p.video?'<div class="postvid" style="aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius);margin-top:22px;background:var(--deep)">'+vid(p.video, x.title)+'</div>':''}${gallery(p)}${postLinks(p)}</div><div class="aside">${contactCard()}</div></div></section>`+ctaBand();
 }
 function pageArticle(id){
-  const a=(S.articlesFull||[]).find(v=>v.id===id); if(!a) return null; const x=L(a), u=U(), up=L(S.updates);
-  const meta='<div class="meta"><span>'+esc(u.date)+': <b>'+esc(a.date)+'</b></span></div>';
-  return pagehead([[u.nav.home,"home"],[up.title,"updates"],[x.title,"article-"+id]], x.title, x.author, meta)+
-  `<section class="sec"><div class="wrap layout"><div class="prose">${md(x.body)}</div><div class="aside">${contactCard()}</div></div></section>`+ctaBand();
+  const i=(S.articlesFull||[]).findIndex(v=>v.id===id), a=(S.articlesFull||[])[i]; if(!a) return null; const x=L(a), u=U(), up=L(S.updates), ap=pl("articlesFull",i,lang);
+  const meta='<div class="meta"><span>'+esc(u.date)+': <b'+ed(pl("articlesFull",i,"date"))+'>'+esc(a.date)+'</b></span></div>';
+  return pagehead([[u.nav.home,"home"],[up.title,"updates"],[x.title,"article-"+id]], x.title, x.author, meta, {t:pl(ap,"title"),s:pl(ap,"author"),li:["articlesFull",i]})+
+  `<section class="sec"><div class="wrap layout"><div class="prose"${edm(pl(ap,"body"))}>${md(x.body)}</div><div class="aside">${contactCard()}</div></div></section>`+ctaBand();
 }
 function pageContact(){
-  const u=U(), f=u.form, c=L(S.contactPage), C=S.contact;
-  const li = C.linkedin ? '<a href="'+escU(C.linkedin)+'" target="_blank" rel="noopener">'+LI_SVG+esc(u.linkedin)+'</a>' : '';
-  return pagehead([[u.nav.home,"home"],[c.title,"contact"]], c.title, c.intro)+
+  const u=U(), f=u.form, c=L(S.contactPage), C=S.contact, ui=pl("ui",lang), fp=pl(ui,"form"), cp=pl("contactPage",lang);
+  const li = C.linkedin ? '<a href="'+escU(C.linkedin)+'" target="_blank" rel="noopener">'+LI_SVG+sp(pl(ui,"linkedin"),u.linkedin)+'</a>' : '';
+  return pagehead([[u.nav.home,"home"],[c.title,"contact"]], c.title, c.intro, "", {t:pl(cp,"title"),s:pl(cp,"intro")})+
   `<section class="sec"><div class="wrap contactgrid">
     <form class="cf" id="cf" novalidate>
-      <h2>${esc(f.title)}</h2><p class="fnote">${esc(f.note)}</p>
+      <h2${ed(pl(fp,"title"))}>${esc(f.title)}</h2><p class="fnote"${ed(pl(fp,"note"))}>${esc(f.note)}</p>
       <div class="fgrid">
-        <div class="field"><label for="f-name">${esc(f.name)} *</label><input id="f-name" name="name" autocomplete="name" required><span class="err" hidden></span></div>
-        <div class="field"><label for="f-company">${esc(f.company)}</label><input id="f-company" name="company" autocomplete="organization"></div>
-        <div class="field"><label for="f-phone">${esc(f.phone)} *</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required dir="ltr"><span class="err" hidden></span></div>
-        <div class="field"><label for="f-email">${esc(f.email)} *</label><input id="f-email" name="email" type="email" autocomplete="email" required dir="ltr"><span class="err" hidden></span></div>
+        <div class="field"><label for="f-name">${sp(pl(fp,"name"),f.name)} *</label><input id="f-name" name="name" autocomplete="name" required><span class="err" hidden></span></div>
+        <div class="field"><label for="f-company">${sp(pl(fp,"company"),f.company)}</label><input id="f-company" name="company" autocomplete="organization"></div>
+        <div class="field"><label for="f-phone">${sp(pl(fp,"phone"),f.phone)} *</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required dir="ltr"><span class="err" hidden></span></div>
+        <div class="field"><label for="f-email">${sp(pl(fp,"email"),f.email)} *</label><input id="f-email" name="email" type="email" autocomplete="email" required dir="ltr"><span class="err" hidden></span></div>
       </div>
-      <div class="field"><label for="f-msg">${esc(f.message)}</label><textarea id="f-msg" name="message"></textarea></div>
-      <div class="field"><label class="check" for="f-consent"><input type="checkbox" id="f-consent" name="consent"><span>${esc(f.consent).replace(/privacy policy|מדיניות הפרטיות/,m=>'<a href="'+href("privacy")+'">'+m+'</a>')}</span></label><span class="err" hidden></span></div>
-      <p class="fnote">${esc(f.notice)}</p>
-      <div><button class="btn primary" type="submit">${esc(f.send)}</button></div>
+      <div class="field"><label for="f-msg">${sp(pl(fp,"message"),f.message)}</label><textarea id="f-msg" name="message"></textarea></div>
+      <div class="field"><label class="check" for="f-consent"><input type="checkbox" id="f-consent" name="consent"><span${edm(pl(fp,"consent"))}>${esc(f.consent).replace(/privacy policy|מדיניות הפרטיות/,m=>'<a href="'+href("privacy")+'">'+m+'</a>')}</span></label><span class="err" hidden></span></div>
+      <p class="fnote"${ed(pl(fp,"notice"))}>${esc(f.notice)}</p>
+      <div><button class="btn primary" type="submit"><span${ed(pl(fp,"send"))}>${esc(f.send)}</span></button></div>
       <div class="fdone" id="fdone" role="status" hidden></div>
     </form>
     <div>
-      <div class="eyebrow">${esc(u.reachDirect)}</div>
+      <div class="eyebrow"${ed(pl(ui,"reachDirect"))}>${esc(u.reachDirect)}</div>
       <dl class="direct" style="margin-top:14px">
-        <div><dt>${esc(u.phoneL)}</dt><dd><a class="ltr" href="tel:+${phoneDigits()}">${esc(C.phone)}</a></dd></div>
-        <div><dt>${esc(u.emailL)}</dt><dd><a class="ltr" id="mail" href="mailto:${esc(C.email)}">${esc(C.email)}</a><button type="button" class="copy" id="copymail">${esc(u.copy)}</button></dd></div>
-        <div><dt>${esc(u.addressL)}</dt><dd>${esc(u.address)}</dd></div>
+        <div><dt${ed(pl(ui,"phoneL"))}>${esc(u.phoneL)}</dt><dd><a class="ltr" href="tel:+${phoneDigits()}"${ed("contact.phone")}>${esc(C.phone)}</a></dd></div>
+        <div><dt${ed(pl(ui,"emailL"))}>${esc(u.emailL)}</dt><dd><a class="ltr" id="mail" href="mailto:${esc(C.email)}"${ed("contact.email")}>${esc(C.email)}</a><button type="button" class="copy" id="copymail">${esc(u.copy)}</button></dd></div>
+        <div><dt${ed(pl(ui,"addressL"))}>${esc(u.addressL)}</dt><dd${ed(pl(ui,"address"))}>${esc(u.address)}</dd></div>
       </dl>
-      <div class="social"><a href="${waLink()}" target="_blank" rel="noopener">${WA_SVG.replace('<svg','<svg style="fill:var(--wa)"')}${esc(u.whatsapp)}</a>${li}</div>
+      <div class="social"><a href="${waLink()}" target="_blank" rel="noopener">${WA_SVG.replace('<svg','<svg style="fill:var(--wa)"')}${sp(pl(ui,"whatsapp"),u.whatsapp)}</a>${li}</div>
     </div>
   </div></section>`;
 }
 function pageCustom(id){
-  const pg=(S.pages||[]).find(p=>p.id===id); if(!pg) return null;
-  const x=L(pg)||{}, u=U();
-  return pagehead([[u.nav.home,"home"],[x.title,"page-"+id]], x.title, x.intro||"")+`<section class="sec"><div class="wrap"><div class="prose">${pg.image?(/\.pdf(\?|$)/i.test(pg.image)?'<p style="margin-bottom:24px"><a class="btn line" href="'+escU(pg.image)+'" target="_blank" rel="noopener">'+esc(x.fileText||"Download the PDF")+' '+arrow+'</a></p>':'<img class="figimg" src="'+escU(pg.image)+'" alt="" loading="lazy" style="margin-bottom:24px">'):''}${md(x.body)}</div></div></section>`+ctaBand();
+  const i=(S.pages||[]).findIndex(p=>p.id===id), pg=(S.pages||[])[i]; if(!pg) return null;
+  const x=L(pg)||{}, u=U(), pp=pl("pages",i,lang), ip=pl("pages",i,"image");
+  const top=pg.image?(/\.pdf(\?|$)/i.test(pg.image)?'<p style="margin-bottom:24px"'+eim(ip)+'><a class="btn line" href="'+escU(pg.image)+'" target="_blank" rel="noopener">'+sp(pl(pp,"fileText"),x.fileText||"Download the PDF")+' '+arrow+'</a></p>':'<img class="figimg" src="'+escU(pg.image)+'" alt="" loading="lazy" style="margin-bottom:24px"'+eim(ip)+'>'):'';
+  return pagehead([[u.nav.home,"home"],[x.title,"page-"+id]], x.title, x.intro||"", "", {t:pl(pp,"title"),s:pl(pp,"intro"),li:["pages",i]})+`<section class="sec"><div class="wrap"><div class="prose">${top}<div${edm(pl(pp,"body"))}>${md(x.body)}</div></div></div></section>`+ctaBand();
 }
 function openAdmin(){
   if(window.top!==window.self){ document.body.textContent="The admin panel cannot be opened inside another page."; return; } // no clickjacking
   document.documentElement.lang="en"; document.documentElement.dir="ltr";
-  window.ISRA={S,STATIC,CMS,HE_ON,route:()=>{location.hash="#home";}};
-  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=5"; document.body.appendChild(sc); }
+  window.ISRA={S,STATIC,CMS,HE_ON,route:()=>{location.hash="#home";},rerender:()=>route(),setEdit:on=>{EDIT=!!on;document.documentElement.classList.toggle("editing",EDIT);},editRoute:window.ISRA&&window.ISRA.editRoute};
+  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=6"; document.body.appendChild(sc); }
   else if(window.ISRA_ADMIN) window.ISRA_ADMIN.show();
 }
 function pageLegal(key){
   const u=U(), d=S[key], x=L(d);
   const upd=(lang==="he"?"עודכן לאחרונה: ":"Last updated: ")+d.updated;
-  return pagehead([[u.nav.home,"home"],[x.title,key]], x.title, upd)+`<section class="sec"><div class="wrap"><div class="prose">${md(x.body)}</div></div></section>`;
+  return pagehead([[u.nav.home,"home"],[x.title,key]], x.title, upd, "", {t:pl(key,lang,"title")})+`<section class="sec"><div class="wrap"><div class="prose"${edm(pl(key,lang,"body"))}>${md(x.body)}</div></div></section>`;
 }
 
 
 function activityItems(){
   const u=U(), out=[], linked=new Set();
-  posts().forEach(p=>{const x=L(p); if(p.event) linked.add(p.event); const im=p.images||[];
-    out.push({key:p.id,kind:"LinkedIn",date:"",title:x.title,text:x.text,img:im[0]||(p.video?'images/'+p.video+'.jpg':undefined),vid:p.video,count:im.length,post:p.id,url:href("post-"+p.id),icon:"doc"});});
-  S.updates.events.filter(e=>!linked.has(e.id)).forEach(e=>{const x=L(e); out.push({key:e.id,kind:u.eventsTitle,date:e.date,title:x.title,text:firstPara(x.body)||x.place,img:e.image,url:href("event-"+e.id),icon:"grid"});});
-  S.projects.items.forEach(p=>{const x=L(p); out.push({key:p.id,kind:u.nav.projects,date:"",title:x.title,text:x.teaser,url:href("project-"+p.id),icon:"layers"});});
-  S.updates.articles.forEach((a,i)=>out.push({key:"pdf-"+i,kind:"PDF",date:"",title:a[lang],text:u.pdf,url:a.url,ext:true,icon:"doc"}));
+  posts().forEach((p,i)=>{const x=L(p); if(p.event) linked.add(p.event); const im=p.images||[];
+    out.push({key:p.id,kind:"LinkedIn",date:"",title:x.title,text:x.text,img:im[0]||(p.video?'images/'+p.video+'.jpg':undefined),vid:p.video,count:im.length,post:p.id,url:href("post-"+p.id),icon:"doc",li:["posts",i],tp:pl("posts",i,lang,"title"),xp:pl("posts",i,lang,"text"),ip:im[0]?pl("posts",i,"images",0):""});});
+  S.updates.events.forEach((e,i)=>{ if(linked.has(e.id)) return; const x=L(e); out.push({key:e.id,kind:u.eventsTitle,date:e.date,title:x.title,text:firstPara(x.body)||x.place,img:e.image,url:href("event-"+e.id),icon:"grid",li:["updates.events",i],tp:pl("updates.events",i,lang,"title"),ip:e.image?pl("updates.events",i,"image"):""});});
+  S.projects.items.forEach((p,i)=>{const x=L(p); out.push({key:p.id,kind:u.nav.projects,date:"",title:x.title,text:x.teaser,url:href("project-"+p.id),icon:"layers",li:["projects.items",i],tp:pl("projects.items",i,lang,"title"),xp:pl("projects.items",i,lang,"teaser")});});
+  S.updates.articles.forEach((a,i)=>out.push({key:"pdf-"+i,kind:"PDF",date:"",title:a[lang],text:u.pdf,url:a.url,ext:true,icon:"doc",li:["updates.articles",i],tp:pl("updates.articles",i,lang)}));
   return out;
 }
-function carousel(title, eyebrow, id){
+function carousel(title, eyebrow, id, titleP, eyebrowP){
   const items=activityItems();
-  const slides=items.map(it=>'<a class="slide" href="'+escU(it.url)+'"'+(it.ext?' target="_blank" rel="noopener"':'')+(it.post?' data-post="'+esc(it.post)+'"':'')+'><div class="vis">'+(it.vid?vid(it.vid):it.img?'<img class="bg" src="'+escU(it.img)+'" alt="" aria-hidden="true" loading="lazy"><img class="fg" src="'+escU(it.img)+'" alt="" loading="lazy">':'<span class="cover">'+icon(it.icon)+'<b>'+esc(((S.covers||{})[it.key]||{})[lang]||it.title)+'</b></span>')+'<span class="kind">'+esc(it.kind)+'</span>'+(it.count>1?'<span class="cnt" dir="ltr">+'+(it.count-1)+'</span>':'')+'</div><div class="txt">'+(it.date?'<time>'+esc(it.date)+'</time>':'')+'<h3>'+esc(it.title)+'</h3>'+(it.text?'<p>'+esc(it.text)+'</p>':'')+'</div></a>').join("");
+  const slides=items.map(it=>'<a class="slide" href="'+escU(it.url)+'"'+(it.ext?' target="_blank" rel="noopener"':'')+(it.post?' data-post="'+esc(it.post)+'"':'')+eli(it.li[0],it.li[1])+'><div class="vis"'+(it.ip?eim(it.ip):'')+'>'+(it.vid?vid(it.vid):it.img?'<img class="bg" src="'+escU(it.img)+'" alt="" aria-hidden="true" loading="lazy"><img class="fg" src="'+escU(it.img)+'" alt="" loading="lazy">':'<span class="cover">'+icon(it.icon)+'<b>'+esc(((S.covers||{})[it.key]||{})[lang]||it.title)+'</b></span>')+'<span class="kind">'+esc(it.kind)+'</span>'+(it.count>1?'<span class="cnt" dir="ltr">+'+(it.count-1)+'</span>':'')+'</div><div class="txt">'+(it.date?'<time>'+esc(it.date)+'</time>':'')+'<h3'+ed(it.tp)+'>'+esc(it.title)+'</h3>'+(it.text?'<p'+(it.xp?edm(it.xp):'')+'>'+esc(it.text)+'</p>':'')+'</div></a>').join("");
   const li=S.contact.linkedin?'<a class="more" href="'+escU(S.contact.linkedin)+'" target="_blank" rel="noopener">'+esc(lang==="he"?"לפרופיל של אבי בלינקדאין":"Avi Bachar on LinkedIn")+' '+arrow+'</a>':'';
-  return '<section class="sec" id="'+id+'"><div class="wrap"><div class="carhead"><div><div class="eyebrow">'+esc(eyebrow)+'</div><h2>'+esc(title)+'</h2></div><div class="carnav">'+li+'<button type="button" data-car="prev" aria-label="'+(lang==="he"?"הקודם":"Previous")+'"><span aria-hidden="true">←</span></button><button type="button" data-car="next" aria-label="'+(lang==="he"?"הבא":"Next")+'"><span aria-hidden="true">→</span></button></div></div><div class="car" tabindex="0" role="region" aria-label="'+esc(title)+'">'+slides+'</div><div class="cardots" aria-hidden="true">'+items.map((_,i)=>'<i'+(i===0?' class="on"':'')+'></i>').join("")+'</div></div></section>';
+  return '<section class="sec" id="'+id+'"><div class="wrap"><div class="carhead"><div><div class="eyebrow"'+(eyebrowP?ed(eyebrowP):'')+'>'+esc(eyebrow)+'</div><h2'+(titleP?ed(titleP):'')+'>'+esc(title)+'</h2></div><div class="carnav">'+li+'<button type="button" data-car="prev" aria-label="'+(lang==="he"?"הקודם":"Previous")+'"><span aria-hidden="true">←</span></button><button type="button" data-car="next" aria-label="'+(lang==="he"?"הבא":"Next")+'"><span aria-hidden="true">→</span></button></div></div><div class="car" tabindex="0" role="region" aria-label="'+esc(title)+'">'+slides+'</div><div class="cardots" aria-hidden="true">'+items.map((_,i)=>'<i'+(i===0?' class="on"':'')+'></i>').join("")+'</div></div></section>';
 }
 function fitImg(img){
   const v=img.closest(".vis"), r=img.naturalWidth/img.naturalHeight; if(!v||!r) return;
@@ -973,6 +995,19 @@ function route(){
   const t=$("#main h1"); document.title=(h==="home"?"IsraTeam 98":(t?t.textContent+" · IsraTeam":"IsraTeam 98"));
   $("#nav").classList.remove("open"); $("#menubtn").setAttribute("aria-expanded","false");
   bindPage();
+  editButton(h);
+  if(window.ISRA_ADMIN&&window.ISRA_ADMIN.afterRender) window.ISRA_ADMIN.afterRender(h);
+}
+/* Signed-in editors get an "Edit this page" button on the site itself; visitors never see it. */
+function editButton(h){
+  let signed=false; try{ signed=!!localStorage.getItem("sb-hyknwhjqnpvotkxuxqxj-auth-token"); }catch(e){}
+  let b=$("#editbtn");
+  if(!signed||EDIT){ if(b) b.hidden=true; return; }
+  if(!b){ b=document.createElement("button"); b.id="editbtn"; b.type="button"; b.textContent="✎ Edit this page";
+    b.style.cssText="position:fixed;left:82px;bottom:24px;z-index:60;padding:10px 16px;border-radius:999px;border:0;background:var(--signal);color:var(--signal-ink);font:600 14px/1 var(--body,system-ui),sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer";
+    b.addEventListener("click",()=>{ window.ISRA=Object.assign(window.ISRA||{},{editRoute:curRoute}); if(window.ISRA_ADMIN&&window.ISRA_ADMIN.edit) window.ISRA_ADMIN.edit(curRoute); else openAdmin(); });
+    document.body.appendChild(b); }
+  b.hidden=false;
 }
 function bindPage(){
   bindCarousels(); playVisible();
