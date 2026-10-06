@@ -843,6 +843,11 @@ const later = () => { clearTimeout(veTimer); veTimer = setTimeout(rerender, 250)
 
 function enterEdit(route) {
   if (!me || me.role === "pending") { window.ISRA.editRoute = route; location.hash = "#admin"; return; }
+  if (typeof window.ISRA.setEdit !== "function") { /* the browser still has the previous version of the site page: load the fresh one once */
+    let tried = false; try { tried = sessionStorage.getItem("it-fresh") === "1"; sessionStorage.setItem("it-fresh", "1"); } catch (e) {}
+    if (!tried) { location.replace(location.pathname + "?fresh=" + Date.now() + "#admin"); return; }
+    return frame("Refresh the page to use editing on the page.");
+  }
   editing = true; window.ISRA.setEdit(true);
   for (const k of Object.keys(W)) S[k] = W[k];
   root.hidden = false; root.classList.add("ve"); siteEls.forEach(e => e.hidden = false);
