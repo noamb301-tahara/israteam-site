@@ -890,7 +890,7 @@ function openAdmin(){
   if(window.top!==window.self){ document.body.textContent="The admin panel cannot be opened inside another page."; return; } // no clickjacking
   document.documentElement.lang="en"; document.documentElement.dir="ltr";
   window.ISRA={S,STATIC,CMS,HE_ON,route:()=>{location.hash="#home";},rerender:()=>route(),setEdit:on=>{EDIT=!!on;document.documentElement.classList.toggle("editing",EDIT);},editRoute:window.ISRA&&window.ISRA.editRoute};
-  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=6"; document.body.appendChild(sc); }
+  if(!document.getElementById("adminjs")){ const sc=document.createElement("script"); sc.type="module"; sc.id="adminjs"; sc.src="admin.js?v=7"; document.body.appendChild(sc); }
   else if(window.ISRA_ADMIN) window.ISRA_ADMIN.show();
 }
 function pageLegal(key){
